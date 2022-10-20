@@ -41,6 +41,27 @@ const HelloWorldIntentHandler = {
   },
 };
 
+const ActivateSurveyIntentHandler = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) ===
+        'ActivateSurveyIntent'
+    );
+  },
+
+  handle(handlerInput) {
+    const speakOutput = 'Welcome to the Antaris health survey!';
+
+    return (
+      handlerInput.responseBuilder
+        .speak(speakOutput)
+        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+        .getResponse()
+    );
+  },
+};
+
 const HelpIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -129,7 +150,7 @@ const IntentReflectorHandler = {
   },
   handle(handlerInput) {
     const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
-    const speakOutput = `You just triggered ${intentName}`;
+    const speakOutput = `You just triggered the damn ${intentName}`;
 
     return (
       handlerInput.responseBuilder
@@ -157,27 +178,6 @@ const ErrorHandler = {
       .speak(speakOutput)
       .reprompt(speakOutput)
       .getResponse();
-  },
-};
-
-const ActivateSurveyIntentHandler = {
-  canHandle(handlerInput) {
-    return (
-      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) ===
-        'ActivateSurveyIntent'
-    );
-  },
-
-  handle(handlerInput) {
-    const speakOutput = 'Welcome to the Antaris health survey!';
-
-    return (
-      handlerInput.responseBuilder
-        .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
   },
 };
 
