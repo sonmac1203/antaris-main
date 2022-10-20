@@ -160,11 +160,12 @@ const ErrorHandler = {
   },
 };
 
-const ActivateIntentHandler = {
+const ActivateSurveyIntentHandler = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) === 'ActivateIntent'
+      Alexa.getIntentName(handlerInput.requestEnvelope) ===
+        'ActivateSurveyIntent'
     );
   },
 
@@ -189,12 +190,12 @@ exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
     HelloWorldIntentHandler,
+    ActivateSurveyIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
     SessionEndedRequestHandler,
-    IntentReflectorHandler,
-    ActivateIntentHandler
+    IntentReflectorHandler
   )
   .addErrorHandlers(ErrorHandler)
   .withCustomUserAgent('sample/hello-world/v1.2')
