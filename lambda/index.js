@@ -160,6 +160,26 @@ const ErrorHandler = {
   },
 };
 
+const ActivateIntentHandler = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) === 'ActivateIntent'
+    );
+  },
+
+  handle(handlerInput) {
+    const speakOutput = 'Welcome to the Antaris health survey!';
+
+    return (
+      handlerInput.responseBuilder
+        .speak(speakOutput)
+        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+        .getResponse()
+    );
+  },
+};
+
 /**
  * This handler acts as the entry point for your skill, routing all request and response
  * payloads to the handlers above. Make sure any new handlers or interceptors you've
@@ -173,7 +193,8 @@ exports.handler = Alexa.SkillBuilders.custom()
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
     SessionEndedRequestHandler,
-    IntentReflectorHandler
+    IntentReflectorHandler,
+    ActivateIntentHandler
   )
   .addErrorHandlers(ErrorHandler)
   .withCustomUserAgent('sample/hello-world/v1.2')
