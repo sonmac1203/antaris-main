@@ -52,7 +52,7 @@ const ActivateSurveyIntentHandler = {
 
   handle(handlerInput) {
     const speakOutput =
-      'Welcome to the Antaris health survey built by 23062 team!';
+      'Welcome to the Antaris health survey built by 23062 team. Edit from Khaled computer!';
 
     return (
       handlerInput.responseBuilder
