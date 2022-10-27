@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "antaris health surveys",
+      "invocationName": "health surveys",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -35,10 +35,24 @@
         {
           "name": "AMAZON.FallbackIntent",
           "samples": []
+        },
+        {
+          "name": "ActivateSurveyIntent",
+          "slots": [],
+          "samples": [
+            "beautiful",
+            "start survey",
+            "show me Antaris survey",
+            "let\u0027s start Antaris survey",
+            "Antaris survey",
+            "start my Antaris survey",
+            "start Antaris survey",
+            "start Antaris"
+          ]
         }
       ],
       "types": []
     }
   },
-  "version": "2"
+  "version": "7"
 }
