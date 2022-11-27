@@ -37,11 +37,11 @@ module.exports = {
 
   async fetchStudyInfo(studyID) {
     const apiRoute = `${host}/api/studies/${studyID}?fields=antaris_id,study_data`;
-    const config = {
-      timeout: 6500,
-    };
+    // const config = {
+    //   timeout: 6500,
+    // };
     try {
-      const response = await axios.get(apiRoute, config);
+      const response = await axios.get(apiRoute);
       return response.data;
     } catch (error) {
       console.log('ERROR', error);
