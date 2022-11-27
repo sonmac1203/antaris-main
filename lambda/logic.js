@@ -1,10 +1,10 @@
 const axios = require('axios');
 
-const hostname = 'http://localhost:3000';
+const host = 'https://7480-68-104-159-200.ngrok.io';
 
 module.exports = {
     async fetchParticipantInfo(participantID) {
-        const apiRoute = `${hostname}/api/participants/${participantID}?fields=antaris_id,name`;
+        const apiRoute = `${host}/api/participants/${participantID}?fields=antaris_id,name`;
         
         const config = {
             timeout: 6500
