@@ -5,7 +5,6 @@ const hostname = 'http://localhost:3000';
 module.exports = {
     async fetchParticipantInfo(participantID) {
         const apiRoute = `${hostname}/api/participants/${participantID}?fields=antaris_id,name`;
-        const response = await axios.get(apiRoute);
         
         const config = {
             timeout: 6500
