@@ -74,25 +74,24 @@ const UserVerificationIntent = {
   },
 
   async handle(handlerInput) {
-    const participantID =
-      handlerInput.requestEnvelope.request.intent.slots.participantID.value;
+    const { intent } = handlerInput.requestEnvelope.request;
+    const slots = intent.slots;
+    const { name, value } = slots.participantID;
 
-    const response = await logic.fetchParticipantInfo(participantID);
+    const response = await logic.fetchParticipantInfo(value);
 
     var speakOutput = '';
     if (response.success) {
       const participantData = response.data;
       speakOutput = `Hi ${participantData.name}. We are about to start the survey now.`;
+      return handlerInput.responseBuilder.speak(speakOutput).getResponse();
     } else {
       speakOutput = 'Sorry we could not find this participant.';
-    }
-
-    return (
-      handlerInput.responseBuilder
+      return handlerInput.responseBuilder
         .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
+        .addElicitSlotDirective(name)
+        .getResponse();
+    }
   },
 };
 
