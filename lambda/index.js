@@ -54,10 +54,9 @@ const UserVerificationIntentHandler = {
         studies.map((s) => s.antaris_id)
       );
 
-      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned. Which one do you want to do today?`;
+      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned. Say do the study selection to continue.`;
       return handlerInput.responseBuilder
         .speak(speakOutput)
-        .addElicitSlotDirective('studyID')
         .getResponse();
     } else {
       const speakOutput =
@@ -82,39 +81,27 @@ const ChooseStudyIntentHandler = {
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
     const { participantName, participantID, studies } = sessionAttributes;
-    const studyList = logic.getVerbalStudyList(
-      studies.map((s) => s.antaris_id)
-    );
+    // const studyList = logic.getVerbalStudyList(
+    //   studies.map((s) => s.antaris_id)
+    // );
 
     const { intent } = handlerInput.requestEnvelope.request;
     const slots = intent.slots;
     const { name: studyIDSlotName, value: studyIDSlotValue } = slots.studyID;
-
-    if (!studyIDSlotValue) {
-      const speakOutput = `I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
-      return (
-        handlerInput.responseBuilder
-          .speak(speakOutput)
-          //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-          .addElicitSlotDirective(studyIDSlotName)
-          .getResponse()
-      );
+    const studyExists = studies.map((s) => s.antaris_id === studyIDSlotValue);
+    if (studyExists) {
+    return handlerInput.responseBuilder
+      .speak(
+        `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
+      )
+      .getResponse();
     } else {
-      const studyExists = studies.map((s) => s.antaris_id === studyIDSlotValue);
-      if (studyExists) {
-        return handlerInput.responseBuilder
-          .speak(
-            `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
-          )
-          .getResponse();
-      } else {
-        return handlerInput.responseBuilder
-          .speak(
-            `That does not match with any of your assigned studies. What is the study ID again?`
-          )
-          .addElicitSlotDirective(studyIDSlotName)
-          .getResponse();
-      }
+    return handlerInput.responseBuilder
+      .speak(
+        `That does not match with any of your assigned studies. What is the study ID again?`
+      )
+      .addElicitSlotDirective(studyIDSlotName)
+      .getResponse();
     }
   },
 };
