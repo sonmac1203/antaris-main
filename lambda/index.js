@@ -39,6 +39,10 @@ const UserVerificationIntentHandler = {
 
     const response = await logic.fetchParticipantInfo(participantIDSlotValue);
     const { name: participantName, studies } = response.data;
+    
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();    
+    sessionAttributes.studies = studies;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     if (response.success) {
       const greeting = `Hi ${participantName}. Authorization has been completed`;
@@ -78,18 +82,9 @@ const ChooseStudyIntentHandler = {
     const { name: studyIDSlotName, value: studyIDSlotValue } = intent.slots.studyID;
     const studyExists = studies.map((s) => s.antaris_id === studyIDSlotValue);
     if (studyExists) {
-    return handlerInput.responseBuilder
-      .speak(
-        `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
-      )
-      .getResponse();
+        return handlerInput.responseBuilder.speak(`You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`).getResponse();
     } else {
-    return handlerInput.responseBuilder
-      .speak(
-        `That does not match with any of your assigned studies. What is the study ID again?`
-      )
-      .addElicitSlotDirective(studyIDSlotName)
-      .getResponse();
+        return handlerInput.responseBuilder.speak(`That does not match with any of your assigned studies. What is the study ID again?`).addElicitSlotDirective(studyIDSlotName).getResponse();
     }
   },
 };
