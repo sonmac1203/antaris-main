@@ -1,4 +1,5 @@
 const axios = require('axios');
+const utils = require('./util');
 
 const host = 'https://7480-68-104-159-200.ngrok.io';
 
@@ -21,7 +22,7 @@ module.exports = {
   getVerbalStudyList(studies) {
     const len = studies.length;
     if (len === 1) {
-        return studies.toString();
+      return studies.toString();
     }
     let speech = '';
     for (let i = 0; i < len; i++) {
@@ -32,5 +33,39 @@ module.exports = {
       }
     }
     return speech;
+  },
+
+  async fetchStudyInfo(studyID) {
+    const apiRoute = `${host}/api/participants/${studyID}?fields=antaris_id,study_data`;
+    const config = {
+      timeout: 6500,
+    };
+    try {
+      const response = await axios.get(apiRoute, config);
+      return response.data;
+    } catch (error) {
+      console.log('ERROR', error);
+      const response = error.response;
+      return response.data;
+    }
+  },
+
+  populateQuestions(studyData) {
+    const questionDefinitionArray =
+      studyData['ODM']['Study'][0]['MetaDataVersion'][0]['ItemDef'];
+    const questions = questionDefinitionArray.map(
+      ({ $: questionInfo, Question }) => {
+        const { OID, Name, DataType } = questionInfo;
+        const [question] = Question;
+        return {
+          name: Name,
+          questionID: OID,
+          dataType: DataType,
+          text: utils.getRawText(question.TranslatedText[0]),
+        };
+      }
+    );
+
+    return questions;
   },
 };
