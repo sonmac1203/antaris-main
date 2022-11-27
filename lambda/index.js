@@ -5,14 +5,7 @@
  * */
 const Alexa = require('ask-sdk-core');
 const axios = require('axios');
-
-const hostname = 'http://localhost:3000';
-
-const getParticipantInfo = async (parcipantID) => {
-  const apiRoute = `${hostname}/api/participants/${parcipantID}?fields=antaris_id,name`;
-  const response = await axios.get(apiRoute);
-  return response.data;
-};
+const logic = require('./logic');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -81,15 +74,14 @@ const UserVerificationIntent = {
   },
 
   async handle(handlerInput) {
-    const parcipantID =
+    const participantID =
       handlerInput.requestEnvelope.request.intent.slots.participantID.value;
       
-    const apiRoute = `${hostname}/api/participants/${parcipantID}?fields=antaris_id,name`;
-    const httpResponse = await getParticipantInfo(parcipantID);
+    const response = await logic.fetchParticipantInfo(participantID);
 
     var speakOutput = '';
-    if (httpResponse.success) {
-      const participantData = httpResponse.data;
+    if (response.success) {
+      const participantData = response.data;
       speakOutput = `Hi ${participantData.name}. We are about to start the survey now.`;
     } else {
       speakOutput = 'Sorry we could not find this participant.';
