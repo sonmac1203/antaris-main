@@ -40,6 +40,7 @@ module.exports = {
     // const config = {
     //   timeout: 6500,
     // };
+    
     try {
       const response = await axios.get(apiRoute);
       return response.data;
