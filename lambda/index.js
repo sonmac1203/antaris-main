@@ -63,7 +63,7 @@ const ActivateSurveyIntentHandler = {
   },
 };
 
-const StartSurveyIntent = {
+const UserVerificationIntent = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
@@ -211,8 +211,8 @@ exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
     HelloWorldIntentHandler,
-    StartSurveyIntent,
     ActivateSurveyIntentHandler,
+    UserVerificationIntent,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
