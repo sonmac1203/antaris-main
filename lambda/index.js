@@ -33,45 +33,25 @@ const UserVerificationIntentHandler = {
   },
 
   async handle(handlerInput) {
+    const sessionAttributes =
+      handlerInput.attributesManager.getSessionAttributes();
+
     const { intent } = handlerInput.requestEnvelope.request;
-    const slots = intent.slots;
     const { name: participantIDSlotName, value: participantIDSlotValue } =
-      slots.participantID;
-    const { name: studyIDSlotName, value: studyIDSlotValue } = slots.studyID;
+      intent.slots.participantID;
 
     const response = await logic.fetchParticipantInfo(participantIDSlotValue);
     const { name: participantName, studies } = response.data;
 
+    sessionAttributes.participantName = participantName;
+    sessionAttributes.participantID = participantIDSlotValue;
+    sessionAttributes.studies = studies;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
     if (response.success) {
-      if (!studyIDSlotValue) {
-        const greeting = `Hi ${participantName}. Authorization has been completed.`;
-        const studyList = logic.getVerbalStudyList(
-          studies.map((s) => s.antaris_id)
-        );
-        const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
-        return handlerInput.responseBuilder
-          .speak(speakOutput)
-          .addElicitSlotDirective(studyIDSlotName)
-          .getResponse();
-      } else {
-        const studyExists = studies.map(
-          (s) => s.antaris_id === studyIDSlotValue
-        );
-        if (studyExists) {
-          return handlerInput.responseBuilder
-            .speak(
-              `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
-            )
-            .getResponse();
-        } else {
-          return handlerInput.responseBuilder
-            .speak(
-              `That does not match with any of your assigned studies. What is the study ID again?`
-            )
-            .addElicitSlotDirective(studyIDSlotName)
-            .getResponse();
-        }
-      }
+      const greeting = `Hi ${participantName}. Authorization has been completed.`;
+      const speakOutput = `${greeting}. Say show all studies assigned to me to continue`;
+      return handlerInput.responseBuilder.speak(speakOutput).getResponse();
     } else {
       const speakOutput =
         'Sorry, no participant is associated with this id. What is your participant id again?';
@@ -79,6 +59,55 @@ const UserVerificationIntentHandler = {
         .speak(speakOutput)
         .addElicitSlotDirective(participantIDSlotName)
         .getResponse();
+    }
+  },
+};
+
+const ChooseStudyIntentHandler = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) === 'ChooseStudyIntent'
+    );
+  },
+
+  handle(handlerInput) {
+    const sessionAttributes =
+      handlerInput.attributesManager.getSessionAttributes();
+    const { participantName, participantID, studies } = sessionAttributes;
+    const studyList = logic.getVerbalStudyList(
+      studies.map((s) => s.antaris_id)
+    );
+
+    const { intent } = handlerInput.requestEnvelope.request;
+    const slots = intent.slots;
+    const { name: studyIDSlotName, value: studyIDSlotValue } = slots.studyID;
+
+    if (!studyIDSlotValue) {
+      const speakOutput = `I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
+      return (
+        handlerInput.responseBuilder
+          .speak(speakOutput)
+          //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+          .addElicitSlotDirective(studyIDSlotName)
+          .getResponse()
+      );
+    } else {
+      const studyExists = studies.map((s) => s.antaris_id === studyIDSlotValue);
+      if (studyExists) {
+        return handlerInput.responseBuilder
+          .speak(
+            `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
+          )
+          .getResponse();
+      } else {
+        return handlerInput.responseBuilder
+          .speak(
+            `That does not match with any of your assigned studies. What is the study ID again?`
+          )
+          .addElicitSlotDirective(studyIDSlotName)
+          .getResponse();
+      }
     }
   },
 };
@@ -232,6 +261,7 @@ exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
     UserVerificationIntentHandler,
+    ChooseStudyIntentHandler,
     BeginSurveyIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
