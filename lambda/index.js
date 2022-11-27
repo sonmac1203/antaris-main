@@ -81,10 +81,10 @@ const UserVerificationIntent = {
   },
 
   async handle(handlerInput) {
-    const parcipantID =
+    const participantID = 
       handlerInput.requestEnvelope.request.intent.slots.participantID.value;
      
-    const response = await axios.get(`${hostname}/api/participants/${parcipantID}?fields=antaris_id,name`);
+    const response = await axios.get(`${hostname}/api/participants/${participantID}?fields=antaris_id,name`);
     const httpResponse = response.data;
 
     var speakOutput = '';
