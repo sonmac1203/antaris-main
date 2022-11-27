@@ -86,7 +86,7 @@ const UserVerificationIntent = {
       speakOutput = `Hi ${participantData.name}. We are about to start the survey now.`;
       return handlerInput.responseBuilder.speak(speakOutput).getResponse();
     } else {
-      speakOutput = 'Sorry we could not find this participant.';
+      speakOutput = 'Sorry, no participant is associated with this id. What is your participant id again?';
       return handlerInput.responseBuilder
         .speak(speakOutput)
         .addElicitSlotDirective(name)
