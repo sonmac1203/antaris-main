@@ -50,7 +50,7 @@ const UserVerificationIntentHandler = {
         studies.map((s) => s.antaris_id)
       );
 
-      const speakOutput = `${greeting}.I see that you have ${studies.length} studies assigned, which are ${studyList}. Say do the study selection to continue.`;
+      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned, which are ${studyList}. Say do the study selection to continue.`;
       return handlerInput.responseBuilder
         .speak(speakOutput)
         .getResponse();

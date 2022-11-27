@@ -20,10 +20,13 @@ module.exports = {
 
   getVerbalStudyList(studies) {
     const len = studies.length;
+    if (len === 1) {
+        return studies.toString();
+    }
     let speech = '';
     for (let i = 0; i < len; i++) {
       if (i !== len - 1) {
-        speech += `, ${studies[i]}`;
+        speech += `${studies[i]}, `;
       } else {
         speech += `and ${studies[i]}`;
       }
