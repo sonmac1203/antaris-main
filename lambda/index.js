@@ -125,9 +125,11 @@ const BeginSurveyIntentHandler = {
     // sessionAttributes.questions = questions;
     // handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-    const speakOutput =
-      `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
-
+    // const speakOutput =
+    //   `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
+    
+    const speakOutput = `The first question is ${response.data.study_data['ODM']['$']['xmlns']} 
+`
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .reprompt('You can ask me to start reading the questions.')
