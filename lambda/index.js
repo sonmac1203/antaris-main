@@ -39,8 +39,9 @@ const UserVerificationIntentHandler = {
 
     const response = await logic.fetchParticipantInfo(participantIDSlotValue);
     const { name: participantName, studies } = response.data;
-    
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();    
+
+    const sessionAttributes =
+      handlerInput.attributesManager.getSessionAttributes();
     sessionAttributes.studies = studies;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
@@ -50,10 +51,10 @@ const UserVerificationIntentHandler = {
         studies.map((s) => s.antaris_id)
       );
 
-      const speakOutput = `${greeting}. I see that you have ${studies.length} ${studies.length > 1 ? 'studies' : 'study'} assigned, which are ${studyList}. Say do the study selection to continue.`;
-      return handlerInput.responseBuilder
-        .speak(speakOutput)
-        .getResponse();
+      const speakOutput = `${greeting}. I see that you have ${studies.length} ${
+        studies.length > 1 ? 'studies' : 'study'
+      } assigned, which are ${studyList}. Say do the study selection to continue.`;
+      return handlerInput.responseBuilder.speak(speakOutput).getResponse();
     } else {
       const speakOutput =
         'Sorry, no participant is associated with this id. What is your participant id again?';
@@ -79,12 +80,26 @@ const ChooseStudyIntentHandler = {
     const studies = sessionAttributes.studies;
 
     const { intent } = handlerInput.requestEnvelope.request;
-    const { name: studyIDSlotName, value: studyIDSlotValue } = intent.slots.studyID;
-    const studyExists = studies.map((s) => s.antaris_id).includes(studyIDSlotValue);
+    const { name: studyIDSlotName, value: studyIDSlotValue } =
+      intent.slots.studyID;
+    sessionAttributes.choosenStudyID = studyIDSlotValue;
+
+    const studyExists = studies
+      .map((s) => s.antaris_id)
+      .includes(studyIDSlotValue);
     if (studyExists) {
-        return handlerInput.responseBuilder.speak(`You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`).getResponse();
+      return handlerInput.responseBuilder
+        .speak(
+          `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
+        )
+        .getResponse();
     } else {
-        return handlerInput.responseBuilder.speak(`That does not match with any of your assigned studies. What is the study ID again?`).addElicitSlotDirective(studyIDSlotName).getResponse();
+      return handlerInput.responseBuilder
+        .speak(
+          `That does not match with any of your assigned studies. What is the study ID again?`
+        )
+        .addElicitSlotDirective(studyIDSlotName)
+        .getResponse();
     }
   },
 };
@@ -97,16 +112,23 @@ const BeginSurveyIntentHandler = {
     );
   },
 
-  handle(handlerInput) {
-    const speakOutput =
-      'Welcome to the Antaris health survey built by 23062 team. We are Khaled, Darianne, Son, Wesley and Julianne computer!';
+  async handle(handlerInput) {
+    const sessionAttributes =
+      handlerInput.attributesManager.getSessionAttributes();
+    const studyID = sessionAttributes.choosenStudyID;
 
-    return (
-      handlerInput.responseBuilder
-        .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
+    const response = await logic.fetchStudyInfo(studyID);
+    const questions = logic.populateQuestions(response.data.study_data);
+    console.log('I am in begin intent');
+    console.log(questions);
+
+    const speakOutput =
+      'Welcome to the Antaris health survey built by 23062 team. We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.';
+
+    return handlerInput.responseBuilder
+      .speak(speakOutput)
+      .reprompt('You can ask me to start reading the questions.')
+      .getResponse();
   },
 };
 
