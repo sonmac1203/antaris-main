@@ -81,21 +81,19 @@ const UserVerificationIntent = {
   },
 
   async handle(handlerInput) {
-    const participantID = 
+    const parcipantID =
       handlerInput.requestEnvelope.request.intent.slots.participantID.value;
-     
-    // const response = await axios.get(`${hostname}/api/participants/${participantID}?fields=antaris_id,name`);
-    // const httpResponse = response.data;
+      
+    const apiRoute = `${hostname}/api/participants/${parcipantID}?fields=antaris_id,name`;
+    const httpResponse = await getParticipantInfo(parcipantID);
 
-    // var speakOutput = '';
-    // if (httpResponse.success) {
-    //   const participantData = httpResponse.data;
-    //   speakOutput = `Hi ${participantData.name}. We are about to start the survey now.`;
-    // } else {
-    //   speakOutput = 'Sorry we could not find this participant.';
-    // }
-    
-    const speakOutput = `Hi ${participantID}. We are about to start the survey now.`;
+    var speakOutput = '';
+    if (httpResponse.success) {
+      const participantData = httpResponse.data;
+      speakOutput = `Hi ${participantData.name}. We are about to start the survey now.`;
+    } else {
+      speakOutput = 'Sorry we could not find this participant.';
+    }
 
     return (
       handlerInput.responseBuilder
