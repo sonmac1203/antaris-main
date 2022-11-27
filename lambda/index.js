@@ -54,7 +54,7 @@ const UserVerificationIntentHandler = {
         studies.map((s) => s.antaris_id)
       );
 
-      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
+      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned. Which one do you want to do today?`;
       return handlerInput.responseBuilder
         .speak(speakOutput)
         .addElicitSlotDirective('studyID')
