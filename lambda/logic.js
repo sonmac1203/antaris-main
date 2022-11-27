@@ -19,22 +19,6 @@ module.exports = {
     }
   },
 
-  getVerbalStudyList(studies) {
-    const len = studies.length;
-    if (len === 1) {
-      return studies.toString();
-    }
-    let speech = '';
-    for (let i = 0; i < len; i++) {
-      if (i !== len - 1) {
-        speech += `${studies[i]}, `;
-      } else {
-        speech += `and ${studies[i]}`;
-      }
-    }
-    return speech;
-  },
-
   async fetchStudyInfo(studyID) {
     const apiRoute = `${host}/api/studies/${studyID}?fields=antaris_id,study_data`;
     // const config = {
@@ -49,6 +33,22 @@ module.exports = {
       const response = error.response;
       return response.data;
     }
+  },
+  
+  getVerbalStudyList(studies) {
+    const len = studies.length;
+    if (len === 1) {
+      return studies.toString();
+    }
+    let speech = '';
+    for (let i = 0; i < len; i++) {
+      if (i !== len - 1) {
+        speech += `${studies[i]}, `;
+      } else {
+        speech += `and ${studies[i]}`;
+      }
+    }
+    return speech;
   },
 
   populateQuestions(studyData) {
