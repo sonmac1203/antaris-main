@@ -23,48 +23,7 @@ const LaunchRequestHandler = {
   },
 };
 
-const HelloWorldIntentHandler = {
-  canHandle(handlerInput) {
-    return (
-      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) === 'HelloWorldIntent'
-    );
-  },
-  handle(handlerInput) {
-    const speakOutput = 'Hello World!';
-
-    return (
-      handlerInput.responseBuilder
-        .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
-  },
-};
-
-const ActivateSurveyIntentHandler = {
-  canHandle(handlerInput) {
-    return (
-      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) ===
-        'ActivateSurveyIntent'
-    );
-  },
-
-  handle(handlerInput) {
-    const speakOutput =
-      'Welcome to the Antaris health survey built by 23062 team. We are Khaled, Darianne, Son, Wesley and Julianne computer!';
-
-    return (
-      handlerInput.responseBuilder
-        .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
-  },
-};
-
-const UserVerificationIntent = {
+const UserVerificationIntentHandler = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
@@ -84,7 +43,7 @@ const UserVerificationIntent = {
     if (response.success) {
       const participantData = response.data;
       speakOutput = `Hi ${participantData.name}. We are about to start the survey now.`;
-      return handlerInput.responseBuilder.speak(speakOutput).getResponse();
+      return handlerInput.responseBuilder.speak(speakOutput).reprompt('Say activate the fantastic health survey when you are ready.').getResponse();
     } else {
       speakOutput = 'Sorry, no participant is associated with this id. What is your participant id again?';
       return handlerInput.responseBuilder
@@ -94,6 +53,31 @@ const UserVerificationIntent = {
     }
   },
 };
+
+
+const BeginSurveyIntentHandler = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) ===
+        'BeginSurveyIntent'
+    );
+  },
+
+  handle(handlerInput) {
+    const speakOutput =
+      'Welcome to the Antaris health survey built by 23062 team. We are Khaled, Darianne, Son, Wesley and Julianne computer!';
+
+    return (
+      handlerInput.responseBuilder
+        .speak(speakOutput)
+        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+        .getResponse()
+    );
+  },
+};
+
+
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {
@@ -223,8 +207,8 @@ exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
     HelloWorldIntentHandler,
-    ActivateSurveyIntentHandler,
-    UserVerificationIntent,
+    UserVerificationIntentHandler,
+    BeginSurveyIntentHandler
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
