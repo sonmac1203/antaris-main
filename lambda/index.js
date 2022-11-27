@@ -128,8 +128,9 @@ const BeginSurveyIntentHandler = {
     // const speakOutput =
     //   `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
     
-    const speakOutput = `The first question is ${response.data.study_data['ODM']['$']['xmlns']} 
-`
+    const speakOutput = `The first question is ${response.data.study_data['ODM']['$']['xmlns']}`; 
+    console.log(response.data)
+    
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .reprompt('You can ask me to start reading the questions.')
