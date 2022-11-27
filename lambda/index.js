@@ -73,6 +73,7 @@ const UserVerificationIntent = {
 
   handle(handlerInput) {
     const speakOutput = "Let's start the survey!";
+    const parcipantID = handlerInput.requestEnvelope.request.intent.slots.participantID.value;
 
     return (
       handlerInput.responseBuilder
