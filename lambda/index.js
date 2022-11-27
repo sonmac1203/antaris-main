@@ -50,7 +50,7 @@ const UserVerificationIntentHandler = {
         studies.map((s) => s.antaris_id)
       );
 
-      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned, which are ${studyList}. Say do the study selection to continue.`;
+      const speakOutput = `${greeting}. I see that you have ${studies.length} ${studies.length > 1 ? 'studies' : 'study'} assigned, which are ${studyList}. Say do the study selection to continue.`;
       return handlerInput.responseBuilder
         .speak(speakOutput)
         .getResponse();
@@ -80,7 +80,7 @@ const ChooseStudyIntentHandler = {
 
     const { intent } = handlerInput.requestEnvelope.request;
     const { name: studyIDSlotName, value: studyIDSlotValue } = intent.slots.studyID;
-    const studyExists = studies.map((s) => s.antaris_id === studyIDSlotValue);
+    const studyExists = studies.map((s) => s.antaris_id).includes(studyIDSlotValue);
     if (studyExists) {
         return handlerInput.responseBuilder.speak(`You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`).getResponse();
     } else {
