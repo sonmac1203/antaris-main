@@ -3,7 +3,9 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "arn:aws:lambda:us-east-1:401042348185:function:04827d92-c247-4d56-9a23-6350943439fb:Release_0"
+          "sourceDir": "lambda",
+          "uri": "https://e6c5-68-104-159-200.ngrok.io",
+          "sslCertificateType": "Wildcard"
         },
         "interfaces": [],
         "regions": {
