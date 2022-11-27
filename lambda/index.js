@@ -41,12 +41,12 @@ const UserVerificationIntentHandler = {
     const { name: participantName, studies } = response.data;
 
     if (response.success) {
-      const greeting = `Hi ${participantName}. Authorization has been completed.`;
-    //   const studyList = logic.getVerbalStudyList(
-    //     studies.map((s) => s.antaris_id)
-    //   );
+      const greeting = `Hi ${participantName}. Authorization has been completed`;
+      const studyList = logic.getVerbalStudyList(
+        studies.map((s) => s.antaris_id)
+      );
 
-      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned. Say do the study selection to continue.`;
+      const speakOutput = `${greeting}.I see that you have ${studies.length} studies assigned, which are ${studyList}. Say do the study selection to continue.`;
       return handlerInput.responseBuilder
         .speak(speakOutput)
         .getResponse();
@@ -72,14 +72,10 @@ const ChooseStudyIntentHandler = {
   handle(handlerInput) {
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
-    const { participantName, participantID, studies } = sessionAttributes;
-    // const studyList = logic.getVerbalStudyList(
-    //   studies.map((s) => s.antaris_id)
-    // );
+    const studies = sessionAttributes.studies;
 
     const { intent } = handlerInput.requestEnvelope.request;
-    const slots = intent.slots;
-    const { name: studyIDSlotName, value: studyIDSlotValue } = slots.studyID;
+    const { name: studyIDSlotName, value: studyIDSlotValue } = intent.slots.studyID;
     const studyExists = studies.map((s) => s.antaris_id === studyIDSlotValue);
     if (studyExists) {
     return handlerInput.responseBuilder

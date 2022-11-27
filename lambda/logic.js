@@ -25,7 +25,7 @@ module.exports = {
       if (i !== len - 1) {
         speech += `, ${studies[i]}`;
       } else {
-        speech += `and ${studies[i]}.`;
+        speech += `and ${studies[i]}`;
       }
     }
     return speech;
