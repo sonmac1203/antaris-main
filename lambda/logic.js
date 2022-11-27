@@ -21,7 +21,7 @@ module.exports = {
   getVerbalStudyList(studies) {
     const len = studies.length;
     let speech = '';
-    for (const i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) {
       if (i !== len - 1) {
         speech += `, ${studies[i]}`;
       } else {

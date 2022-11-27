@@ -33,9 +33,6 @@ const UserVerificationIntentHandler = {
   },
 
   async handle(handlerInput) {
-    const sessionAttributes =
-      handlerInput.attributesManager.getSessionAttributes();
-
     const { intent } = handlerInput.requestEnvelope.request;
     const { name: participantIDSlotName, value: participantIDSlotValue } =
       intent.slots.participantID;
@@ -43,16 +40,11 @@ const UserVerificationIntentHandler = {
     const response = await logic.fetchParticipantInfo(participantIDSlotValue);
     const { name: participantName, studies } = response.data;
 
-    sessionAttributes.participantName = participantName;
-    sessionAttributes.participantID = participantIDSlotValue;
-    sessionAttributes.studies = studies;
-    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-
     if (response.success) {
       const greeting = `Hi ${participantName}. Authorization has been completed.`;
-      const studyList = logic.getVerbalStudyList(
-        studies.map((s) => s.antaris_id)
-      );
+    //   const studyList = logic.getVerbalStudyList(
+    //     studies.map((s) => s.antaris_id)
+    //   );
 
       const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned. Say do the study selection to continue.`;
       return handlerInput.responseBuilder
