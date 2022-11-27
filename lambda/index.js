@@ -76,7 +76,7 @@ const UserVerificationIntent = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) === 'StartSurveyIntent'
+      Alexa.getIntentName(handlerInput.requestEnvelope) === 'UserVerificationIntent'
     );
   },
 
