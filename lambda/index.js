@@ -50,8 +50,15 @@ const UserVerificationIntentHandler = {
 
     if (response.success) {
       const greeting = `Hi ${participantName}. Authorization has been completed.`;
-      const speakOutput = `${greeting}. Say show all studies assigned to me to continue`;
-      return handlerInput.responseBuilder.speak(speakOutput).getResponse();
+      const studyList = logic.getVerbalStudyList(
+        studies.map((s) => s.antaris_id)
+      );
+
+      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
+      return handlerInput.responseBuilder
+        .speak(speakOutput)
+        .addElicitSlotDirective('studyID')
+        .getResponse();
     } else {
       const speakOutput =
         'Sorry, no participant is associated with this id. What is your participant id again?';
