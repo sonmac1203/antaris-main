@@ -4,6 +4,15 @@
  * session persistence, api calls, and more.
  * */
 const Alexa = require('ask-sdk-core');
+const axios = require('axios');
+
+const hostname = 'http://localhost:3000';
+
+const getParticipantInfo = async (parcipantID) => {
+  const apiRoute = `${hostname}/api/participants/${parcipantID}?fields=antaris_id,name`;
+  const response = await axios.get(apiRoute);
+  return response.data;
+};
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -71,9 +80,18 @@ const UserVerificationIntent = {
     );
   },
 
-  handle(handlerInput) {
-    const speakOutput = "Let's start the survey!";
-    const parcipantID = handlerInput.requestEnvelope.request.intent.slots.participantID.value;
+  async handle(handlerInput) {
+    const parcipantID =
+      handlerInput.requestEnvelope.request.intent.slots.participantID.value;
+    const httpResponse = await getParticipantInfo(parcipantID);
+
+    var speakOutput = '';
+    if (httpResponse.success) {
+      const participantData = httpResponse.data;
+      speakOutput = `Hi ${participantData.name}. We are about to start the survey now.`;
+    } else {
+      speakOutput = 'Sorry we could not find this participant.';
+    }
 
     return (
       handlerInput.responseBuilder
