@@ -83,6 +83,7 @@ const ChooseStudyIntentHandler = {
     const { name: studyIDSlotName, value: studyIDSlotValue } =
       intent.slots.studyID;
     sessionAttributes.choosenStudyID = studyIDSlotValue;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     const studyExists = studies
       .map((s) => s.antaris_id)
