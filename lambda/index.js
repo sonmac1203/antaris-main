@@ -52,7 +52,27 @@ const ActivateSurveyIntentHandler = {
 
   handle(handlerInput) {
     const speakOutput =
-      'Welcome to the Antaris health survey built by 23062 team. Edit from Khaled and Darianne and Son and Wesley and Julianne computer!';
+      'Welcome to the Antaris health survey built by 23062 team. We are Khaled, Darianne, Son, Wesley and Julianne computer!';
+
+    return (
+      handlerInput.responseBuilder
+        .speak(speakOutput)
+        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+        .getResponse()
+    );
+  },
+};
+
+const StartSurveyIntent = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) === 'StartSurveyIntent'
+    );
+  },
+
+  handle(handlerInput) {
+    const speakOutput = "Let's start the survey!";
 
     return (
       handlerInput.responseBuilder
@@ -192,6 +212,7 @@ exports.handler = Alexa.SkillBuilders.custom()
     LaunchRequestHandler,
     HelloWorldIntentHandler,
     ActivateSurveyIntentHandler,
+    StartSurveyIntent,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
