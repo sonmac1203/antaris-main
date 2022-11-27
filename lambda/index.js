@@ -40,40 +40,39 @@ const UserVerificationIntentHandler = {
     const { name: studyIDSlotName, value: studyIDSlotValue } = slots.studyID;
 
     const response = await logic.fetchParticipantInfo(participantIDSlotValue);
-    const {name: participantName, studies} = response.data;
+    const { name: participantName, studies } = response.data;
 
     if (response.success) {
+      if (!studyIDSlotValue) {
         const greeting = `Hi ${participantName}. Authorization has been completed.`;
-        if (!studyIDSlotValue) {
-            const studyList = logic.getVerbalStudyList(
-                studies.map((s) => s.antaris_id)
-            );
-            const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .addElicitSlotDirective(studyIDSlotName)
-                .getResponse();
-          
+        const studyList = logic.getVerbalStudyList(
+          studies.map((s) => s.antaris_id)
+        );
+        const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
+        return handlerInput.responseBuilder
+          .speak(speakOutput)
+          .addElicitSlotDirective(studyIDSlotName)
+          .getResponse();
+      } else {
+        const studyExists = studies.map(
+          (s) => s.antaris_id === studyIDSlotValue
+        );
+        if (studyExists) {
+          return handlerInput.responseBuilder
+            .speak(
+              `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
+            )
+            .getResponse();
+        } else {
+          return handlerInput.responseBuilder
+            .speak(
+              `That does not match with any of your assigned studies. What is the study ID again?`
+            )
+            .addElicitSlotDirective(studyIDSlotName)
+            .getResponse();
         }
-        else {
-            const studyExists = studies.map((s) => s.antaris_id === studyIDSlotValue);
-             if (studyExists) {
-                return handlerInput.responseBuilder
-                  .speak(
-                    `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
-                  )
-                  .getResponse();
-            } else {
-                return handlerInput.responseBuilder
-                  .speak(
-                    `That does not match with any of your assigned studies. What is the study ID again?`
-                  )
-                  .addElicitSlotDirective(studyIDSlotName)
-                  .getResponse();
-            }
-        }
-    }
-    else {
+      }
+    } else {
       const speakOutput =
         'Sorry, no participant is associated with this id. What is your participant id again?';
       return handlerInput.responseBuilder
