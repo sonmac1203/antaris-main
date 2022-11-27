@@ -36,7 +36,7 @@ module.exports = {
   },
 
   async fetchStudyInfo(studyID) {
-    const apiRoute = `${host}/api/participants/${studyID}?fields=antaris_id,study_data`;
+    const apiRoute = `${host}/api/studies/${studyID}?fields=antaris_id,study_data`;
     const config = {
       timeout: 6500,
     };
