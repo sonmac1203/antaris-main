@@ -1,7 +1,7 @@
 const axios = require('axios');
 const utils = require('./util');
 
-const host = 'https://7480-68-104-159-200.ngrok.io';
+const host = 'https://ce94-70-164-249-125.ngrok.io';
 
 module.exports = {
   async fetchParticipantInfo(participantID) {
