@@ -211,8 +211,8 @@ exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
     HelloWorldIntentHandler,
-    ActivateSurveyIntentHandler,
     StartSurveyIntent,
+    ActivateSurveyIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
