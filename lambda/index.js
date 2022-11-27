@@ -117,6 +117,8 @@ const BeginSurveyIntentHandler = {
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
     const studyID = sessionAttributes.choosenStudyID;
+    
+    const response = await logic.fetchStudyInfo(studyID);
 
     // const response = await logic.fetchStudyInfo(studyID);
     // const questions = logic.populateQuestions(response.data.study_data);
