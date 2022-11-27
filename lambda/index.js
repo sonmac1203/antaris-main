@@ -129,6 +129,7 @@ const BeginSurveyIntentHandler = {
     //   `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
     
     const speakOutput = `The first question is ${response.data.study_data['ODM']['$']['xmlns']}`; 
+    console.log("I am in BeginSurveyIntent")
     console.log(response.data)
     
     return handlerInput.responseBuilder
