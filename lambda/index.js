@@ -118,7 +118,8 @@ const BeginSurveyIntentHandler = {
       handlerInput.attributesManager.getSessionAttributes();
     const studyID = sessionAttributes.choosenStudyID;
     
-    const response = await logic.fetchStudyInfo(studyID);
+    // const response = await logic.fetchStudyInfo(studyID);
+    const response = await logic.fetchParticipantInfo(studyID);
 
     // const response = await logic.fetchStudyInfo(studyID);
     // const questions = logic.populateQuestions(response.data.study_data);
@@ -128,7 +129,7 @@ const BeginSurveyIntentHandler = {
     // const speakOutput =
     //   `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
     
-    const speakOutput = `The first question is ${response.data.study_data['ODM']['$']['xmlns']}`; 
+    const speakOutput = `The first question is ${response.data.name}`; 
     console.log("I am in BeginSurveyIntent")
     console.log(response.data)
     
