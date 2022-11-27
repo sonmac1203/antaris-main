@@ -120,8 +120,8 @@ const BeginSurveyIntentHandler = {
 
     const response = await logic.fetchStudyInfo(studyID);
     const questions = logic.populateQuestions(response.data.study_data);
-    console.log('I am in begin intent');
-    console.log(questions);
+    sessionAttributes.questions = questions;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     const speakOutput =
       'Welcome to the Antaris health survey built by 23062 team. We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.';
