@@ -35,32 +35,58 @@ const UserVerificationIntentHandler = {
   async handle(handlerInput) {
     const { intent } = handlerInput.requestEnvelope.request;
     const slots = intent.slots;
-    const { name, value } = slots.participantID;
+    const { name: participantIDSlotName, value: participantIDSlotValue } =
+      slots.participantID;
+    const { name: studyIDSlotName, value: studyIDSlotValue } = slots.studyID;
 
-    const response = await logic.fetchParticipantInfo(value);
+    const response = await logic.fetchParticipantInfo(participantIDSlotValue);
 
-    var speakOutput = '';
-    if (response.success) {
+    if (response.success && !studyIDSlotValue) {
       const participantData = response.data;
-      speakOutput = `Hi ${participantData.name}. We are about to start the survey now.`;
-      return handlerInput.responseBuilder.speak(speakOutput).reprompt('Say activate the fantastic health survey when you are ready.').getResponse();
-    } else {
-      speakOutput = 'Sorry, no participant is associated with this id. What is your participant id again?';
+      const { name, studies } = participantData;
+
+      const greeting = `Hi ${name}. Authorization has been completed.`;
+      const studyList = logic.getVerbalStudyList(
+        studies.map((s) => s.antaris_id)
+      );
+
+      const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
       return handlerInput.responseBuilder
         .speak(speakOutput)
-        .addElicitSlotDirective(name)
+        .addElicitSlotDirective(studyIDSlotName)
+        .getResponse();
+    } else if (studyIDSlotValue) {
+      const studyExists = studies.map((s) => s.antaris_id === studyIDSlotValue);
+      if (studyExists) {
+        return handlerInput.responseBuilder
+          .speak(
+            `You chose study ${studyIDSlotValue}. Say activate fantastic health survey to start.`
+          )
+          .getResponse();
+      } else {
+        return handlerInput.responseBuilder
+          .speak(
+            `That does not match with any of your assigned studies. What is the study ID again?`
+          )
+          .addElicitSlotDirective(studyIDSlotName)
+          .getResponse();
+      }
+    } else {
+      const speakOutput =
+        'Sorry, no participant is associated with this id. What is your participant id again?';
+      return handlerInput.responseBuilder
+        .speak(speakOutput)
+        .addElicitSlotDirective(participantIDSlotName)
         .getResponse();
     }
   },
 };
 
-
 const BeginSurveyIntentHandler = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) ===
-        'BeginSurveyIntent'
+      Alexa.getIntentName(handlerInput.requestEnvelope) === 'BeginSurveyIntent'
     );
   },
 
@@ -76,8 +102,6 @@ const BeginSurveyIntentHandler = {
     );
   },
 };
-
-
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {
