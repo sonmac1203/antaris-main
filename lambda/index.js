@@ -40,17 +40,15 @@ const UserVerificationIntentHandler = {
     const { name: studyIDSlotName, value: studyIDSlotValue } = slots.studyID;
 
     const response = await logic.fetchParticipantInfo(participantIDSlotValue);
+    const {name: participantName, studies} = response.data;
 
     if (response.success && !studyIDSlotValue) {
-      const participantData = response.data;
-      const { name, studies } = participantData;
-
-      const greeting = `Hi ${name}. Authorization has been completed.`;
+      const greeting = `Hi ${participantName}. Authorization has been completed.`;
       const studyList = logic.getVerbalStudyList(
         studies.map((s) => s.antaris_id)
       );
-
       const speakOutput = `${greeting}. I see that you have ${studies.length} studies assigned which are ${studyList}. Which one do you want to do today?`;
+      
       return handlerInput.responseBuilder
         .speak(speakOutput)
         .addElicitSlotDirective(studyIDSlotName)
