@@ -40,19 +40,85 @@
           "name": "ActivateSurveyIntent",
           "slots": [],
           "samples": [
+            "open survey application",
             "beautiful",
-            "start survey",
             "show me Antaris survey",
-            "let\u0027s start Antaris survey",
-            "Antaris survey",
-            "start my Antaris survey",
-            "start Antaris survey",
-            "start Antaris"
+            "let's start Antaris survey",
+            "Antaris survey"
+          ]
+        },
+        {
+          "name": "UserVerificationIntent",
+          "slots": [
+            {
+              "name": "participantID",
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "{participantID}",
+                "Participant id is {participantID}",
+                "My participant id is {participantID}"
+              ]
+            }
+          ],
+          "samples": [
+            "launch the health study",
+            "start the health survey",
+            "start the health assessment",
+            "Do the health study",
+            "Activate the health study",
+            "Begin the health survey now",
+            "Start the survey for participant {participantID}",
+            "My id is {participantID}",
+            "My participant id is {participantID}"
           ]
         }
       ],
       "types": []
-    }
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "UserVerificationIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "participantID",
+              "type": "AMAZON.SearchQuery",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.764004223273.195629036659"
+              }
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Elicit.Slot.764004223273.195629036659",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Can you tell me your participant ID?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Participant ID?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Tell me your Antaris ID"
+          },
+          {
+            "type": "PlainText",
+            "value": "What is your participant ID?"
+          }
+        ]
+      }
+    ]
   },
-  "version": "7"
+  "version": "12"
 }

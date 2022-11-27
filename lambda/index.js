@@ -4,7 +4,6 @@
  * session persistence, api calls, and more.
  * */
 const Alexa = require('ask-sdk-core');
-const axios = require('axios');
 const logic = require('./logic');
 
 const LaunchRequestHandler = {
@@ -69,14 +68,15 @@ const UserVerificationIntent = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
-      Alexa.getIntentName(handlerInput.requestEnvelope) === 'UserVerificationIntent'
+      Alexa.getIntentName(handlerInput.requestEnvelope) ===
+        'UserVerificationIntent'
     );
   },
 
   async handle(handlerInput) {
     const participantID =
       handlerInput.requestEnvelope.request.intent.slots.participantID.value;
-      
+
     const response = await logic.fetchParticipantInfo(participantID);
 
     var speakOutput = '';
