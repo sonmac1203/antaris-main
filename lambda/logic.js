@@ -16,7 +16,8 @@ module.exports = {
         } 
         catch (error) {
             console.log('ERROR', error);
-            return ;
+            const response = error.response;
+            return response.data;
         }
     }
 }
