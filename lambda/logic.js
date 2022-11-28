@@ -32,6 +32,7 @@ module.exports = {
     try {
       const {data} = await axios.get(apiRoute, config);
       const stringifiedData = zlib.gunzipSync(data).toString();
+      console.log(stringifiedData);
       const jsonifiedData = stringifiedData.match(objectRegex).map(match => JSON.parse(match.replace(/'(.*?)':/g, '"$1":').replace(/'{/g, '{').replace(/\}'/g, '}')));
       return jsonifiedData;
     } catch (error) {
