@@ -30,13 +30,14 @@ module.exports = {
     try {
       const {data} = await axios.get(apiRoute, config);
       let result = ''
-      zlib.gunzip(data, (err, res) => {
+      zlib.gunzip(data, async (err, res) => {
         // result = res.toString();
+        result = await res.toString()
         // console.log(res.toString())
         return res.toString()
       })
-    //   console.log(result)
-    //   return result;
+      console.log(result)
+      return result;
     } catch (error) {
       console.log('ERROR', error);
       const response = error.response;
