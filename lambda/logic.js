@@ -1,5 +1,6 @@
 const axios = require('axios');
 const utils = require('./util');
+const zlib = require('node:zlib');
 
 const host = 'https://ce94-70-164-249-125.ngrok.io';
 
@@ -23,12 +24,17 @@ module.exports = {
     const apiRoute = `${host}/api/studies/${studyID}?fields=antaris_id,study_data`;
     const config = {
       timeout: 200000,
+        responseType: "arraybuffer",
+        decompress: true,
     };
     
     try {
-      const response = await axios.get(apiRoute, config);
-      console.log(response.data);
-      return response.data;
+      const {data} = await axios.get(apiRoute, config);
+      const res = zlib.gunzip(data, (error, result) => {
+          console.log(result);
+          return result;
+      })
+      return data;
     } catch (error) {
       console.log('ERROR', error);
       const response = error.response;
