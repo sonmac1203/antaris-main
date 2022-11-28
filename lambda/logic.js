@@ -25,15 +25,17 @@ module.exports = {
     const config = {
       timeout: 200000,
         responseType: "arraybuffer",
-        decompress: true,
     };
     
     try {
       const {data} = await axios.get(apiRoute, config);
-      const res = zlib.gunzip(data, (error, result) => {
-          console.log(result);
-          return result;
-      })
+    //   const res = zlib.gunzip(data, (error, result) => {
+    //       console.log(result);
+    //       return result;
+    //   })
+    zlib.gunzip(data, function (_err, output) {
+        console.log(output.toString())
+    })
       return data;
     } catch (error) {
       console.log('ERROR', error);
