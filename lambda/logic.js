@@ -29,11 +29,12 @@ module.exports = {
     
     try {
       const {data} = await axios.get(apiRoute, config);
-      let result = ''
-      zlib.gunzip(data, async (err, res) => {
-        result = JSON.parse(res.toString());
-        console.log(result);
-      })
+    //   let result = ''
+    //   zlib.gunzip(data, async (err, res) => {
+    //     result = JSON.parse(res.toString());
+    //     console.log(result);
+    //   })
+      const result = zlib.gunzipSync(data).toString();
       console.log(result)
       return result;
     } catch (error) {
