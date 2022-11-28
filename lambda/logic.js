@@ -1,6 +1,6 @@
 const axios = require('axios');
 const utils = require('./util');
-const zlib = require('node:zlib');
+const zlib = require('zlib');
 
 const host = 'https://ce94-70-164-249-125.ngrok.io';
 
