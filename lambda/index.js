@@ -121,6 +121,8 @@ const BeginSurveyIntentHandler = {
     // const response = await logic.fetchStudyInfo(studyID);
     // const response = await logic.fetchParticipantInfo(studyID);
     const response = await logic.fetchStudyInfo(studyID);
+    console.log("I am in BeginSurveyIntent");
+    console.log(response);
 
     // const response = await logic.fetchStudyInfo(studyID);
     // const questions = logic.populateQuestions(response.data.study_data);
