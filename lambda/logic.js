@@ -27,8 +27,7 @@ module.exports = {
     
     try {
       const response = await axios.get(apiRoute, { responseType: 'arraybuffer', 'decompress': true });
-      console.log("IM IN FETCH STUDY");
-      console.log(response);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log('ERROR', error);
