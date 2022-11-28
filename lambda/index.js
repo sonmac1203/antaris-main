@@ -31,26 +31,28 @@ const UserVerificationIntentHandler = {
         'UserVerificationIntent'
     );
   },
-
   async handle(handlerInput) {
+    // destructure attributes
     const { intent } = handlerInput.requestEnvelope.request;
     const { name: participantIDSlotName, value: participantIDSlotValue } =
       intent.slots.participantID;
 
+    // fetch participant data from database
     const response = await logic.fetchParticipantInfo(participantIDSlotValue);
     const { name: participantName, studies } = response.data;
 
+    // trigger session storage
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
     sessionAttributes.studies = studies;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
+    // determine response logics
     if (response.success) {
       const greeting = `Hi ${participantName}. Authorization has been completed`;
       const studyList = logic.getVerbalStudyList(
         studies.map((s) => s.antaris_id)
       );
-
       const speakOutput = `${greeting}. I see that you have ${studies.length} ${
         studies.length > 1 ? 'studies' : 'study'
       } assigned, which are ${studyList}. Say do the study selection to continue.`;
