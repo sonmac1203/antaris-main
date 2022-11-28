@@ -131,8 +131,7 @@ const BeginSurveyIntentHandler = {
     //   `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
     let speakOutput = ''
     if (response) {
-        speakOutput = `The first question is ${response.data.study_data['ODM']['$']['xmlns']}`; 
-        
+        speakOutput = `The first question`; 
     }
     else {
         speakOutput = 'undefined';
