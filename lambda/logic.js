@@ -35,8 +35,7 @@ module.exports = {
     //     console.log(result);
     //   })
       const result = zlib.gunzipSync(data).toString();
-      console.log(result)
-      return result;
+      return JSON.parse(result);
     } catch (error) {
       console.log('ERROR', error);
       const response = error.response;
