@@ -23,7 +23,7 @@ module.exports = {
   async fetchStudyInfo(studyID) {
     const apiRoute = `${host}/api/studies/${studyID}?fields=antaris_id,study_data`;
     const config = {
-      timeout: 200000,
+      timeout: 10000,
         responseType: "arraybuffer",
     };
     
@@ -31,8 +31,9 @@ module.exports = {
       const {data} = await axios.get(apiRoute, config);
       let result = {}
       zlib.gunzip(data, (err, res) => {
-        result = res
+        result = res.toString();
       })
+      console.log(result)
       return result;
     } catch (error) {
       console.log('ERROR', error);
