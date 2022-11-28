@@ -26,7 +26,7 @@ module.exports = {
     };
     
     try {
-      const response = await axios.get(apiRoute, { responseType: 'arraybuffer', 'decompress': true });
+      const response = await axios.get(apiRoute, config);
       console.log(response.data);
       return response.data;
     } catch (error) {
