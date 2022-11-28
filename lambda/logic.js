@@ -33,10 +33,11 @@ module.exports = {
       zlib.gunzip(data, async (err, res) => {
         // result = res.toString();
         // result = await res.toString()
-        return res.toString()
+        result = JSON.parse(res.toString());
+        console.log(result);
       })
     //   console.log(result)
-    //   return result;
+      return result;
     } catch (error) {
       console.log('ERROR', error);
       const response = error.response;
