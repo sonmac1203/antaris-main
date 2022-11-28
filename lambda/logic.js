@@ -27,7 +27,7 @@ module.exports = {
     
     try {
       const response = await axios.get(apiRoute);
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log('ERROR', error);
