@@ -33,9 +33,9 @@ module.exports = {
     //       console.log(result);
     //       return result;
     //   })
-    zlib.gunzip(data, function (_err, output) {
-        console.log(output.toString())
-    })
+        zlib.gunzip(data, function (_err, output) {
+            console.log(output.toString())
+        })
       return data;
     } catch (error) {
       console.log('ERROR', error);
