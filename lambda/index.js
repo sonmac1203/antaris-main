@@ -117,17 +117,9 @@ const BeginSurveyIntentHandler = {
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
     const studyID = sessionAttributes.choosenStudyID;
-    
-    // const response = await logic.fetchStudyInfo(studyID);
-    // const response = await logic.fetchParticipantInfo(studyID);
     const response = await logic.fetchStudyInfo(studyID);
     console.log("I am in BeginSurveyIntent");
     console.log(response);
-
-    // const response = await logic.fetchStudyInfo(studyID);
-    // const questions = logic.populateQuestions(response.data.study_data);
-    // sessionAttributes.questions = questions;
-    // handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     // const speakOutput =
     //   `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
