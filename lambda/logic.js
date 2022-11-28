@@ -26,7 +26,7 @@ module.exports = {
     };
     
     try {
-      const response = await axios.get(apiRoute, config);
+      const response = await axios.get(apiRoute);
       return response.data;
     } catch (error) {
       console.log('ERROR', error);
