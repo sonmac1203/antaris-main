@@ -2,7 +2,7 @@ const axios = require('axios');
 const utils = require('./util');
 const zlib = require('zlib');
 
-const host = 'https://ce94-70-164-249-125.ngrok.io';
+const host = 'https://6d98-150-135-165-49.ngrok.io';
 
 module.exports = {
   async fetchParticipantInfo(participantID) {
@@ -32,8 +32,9 @@ module.exports = {
       const {data} = await axios.get(apiRoute, config);
       const stringifiedData = zlib.gunzipSync(data).toString();
       console.log(stringifiedData);
-      const jsonifiedData = stringifiedData.match(objectRegex).map(match => JSON.parse(match.replace(/'(.*?)':/g, '"$1":').replace(/'{/g, '{').replace(/\}'/g, '}')));
-      return jsonifiedData;
+    //   const jsonifiedData = stringifiedData.match(objectRegex).map(match => JSON.parse(match.replace(/'(.*?)':/g, '"$1":').replace(/'{/g, '{').replace(/\}'/g, '}')));
+    //   return jsonifiedData;
+        return JSON.parse(stringifiedData);
     } catch (error) {
       console.log('ERROR', error);
       const response = error.response;
