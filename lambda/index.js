@@ -45,6 +45,7 @@ const UserAuthenticationIntentHandler = {
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
     sessionAttributes.studies = studies;
+    sessionAttributes.participantID = participantIDSlotValue;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     // determine response logics
@@ -148,7 +149,7 @@ const QuestionIntentHandler = {
   async handle(handlerInput) {
     const { question, index } = askQuestion(handlerInput);
 
-    const speakOutput = `Question ${index}: ${question}`;
+    const speakOutput = `Question ${index + 1}: ${question}`;
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .reprompt(question)
@@ -176,11 +177,11 @@ const AnswerIntentHandler = {
 
     if (currentQuestionIndex === numberOfQuestions) {
       console.log(sessionAttributes.question);
-      const speakOutput =
-        'You have answered all the questions. Say exit to stop.';
+      const apiResponse = logic.uploadResponses(sessionAttributes);
+      const speakOutput = `You have answered all the questions. ${apiResponse.message}. Say exit to stop.`;
       return handlerInput.responseBuilder.speak(speakOutput).getResponse();
     } else {
-      sessionAttributes.questions[currentQuestionIndex].answer =
+      sessionAttributes.questions[currentQuestionIndex - 1].answer =
         answerIDSlotValue;
       handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
@@ -319,10 +320,7 @@ const askQuestion = (handlerInput) => {
   console.log('I AM IN ASKQUESTION');
   const attributes = handlerInput.attributesManager.getSessionAttributes();
   const questionIndex = attributes.questionCounter;
-  console.log(questionIndex);
   const currentQuestion = attributes.questions[questionIndex];
-  console.log(currentQuestion);
-
   attributes.questionCounter += 1;
 
   handlerInput.attributesManager.setSessionAttributes(attributes);
