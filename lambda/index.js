@@ -119,9 +119,47 @@ const BeginSurveyIntentHandler = {
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
     const studyID = sessionAttributes.choosenStudyID;
-    const response = await logic.fetchStudyInfo(studyID);
+    const {data} = await logic.fetchStudyInfo(studyID);
+    const {global_variables: globalVariables, meta_data: metaData} = data.study_data;
+    
+    sessionAttributes.studyName = globalVariables.study_name;
+    sessionAttributes.questions = metaData.questions;
+    sessionAttributes.numberOfQuestions = metaData.questions.length;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+    
     const speakOutput =
-      `You chose ${studyID}. Say read the questions to continue.`;
+      `You chose ${studyID}. Welcome to the study ${globalVariables.study_name}. You have ${metaData.questions.length} questions in this survey. Please now say read all questions to start.`;
+    return handlerInput.responseBuilder
+      .speak(speakOutput)
+      .reprompt('You can ask me to start reading the questions.')
+      .getResponse();
+  },
+};
+
+const QuestionIntentHandler = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) === 'QuestionIntent'
+    );
+  },
+
+  async handle(handlerInput) {
+    const sessionAttributes =
+      handlerInput.attributesManager.getSessionAttributes();
+    
+    const questions = sessionAttributes.questions;
+    
+    const studyID = sessionAttributes.choosenStudyID;
+    const {data} = await logic.fetchStudyInfo(studyID);
+    const {global_variables: globalVariables, meta_data: metaData} = data.study_data;
+    
+    sessionAttributes.studyName = globalVariables.study_name;
+    sessionAttributes.questions = metaData.questions;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+    
+    const speakOutput =
+      `You chose ${studyID}. Welcome to the study ${globalVariables.study_name}. Say read the questions to continue.`;
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .reprompt('You can ask me to start reading the questions.')
