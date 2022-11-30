@@ -120,17 +120,8 @@ const BeginSurveyIntentHandler = {
       handlerInput.attributesManager.getSessionAttributes();
     const studyID = sessionAttributes.choosenStudyID;
     const response = await logic.fetchStudyInfo(studyID);
-
     const speakOutput =
-      `. You chose ${studyID}. Say read the questions to continue.`;
-    // let speakOutput = ''
-    // if (response) {
-    //     speakOutput = `The first question: ${response.data.study_data.global_variables.study_name}`; 
-    // }
-    // else {
-    //     speakOutput = 'undefined';
-    // }
-    
+      `You chose ${studyID}. Say read the questions to continue.`;
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .reprompt('You can ask me to start reading the questions.')
