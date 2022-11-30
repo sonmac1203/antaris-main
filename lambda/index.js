@@ -304,9 +304,12 @@ const ErrorHandler = {
 };
 
 const askQuestion = (handlerInput) => {
+    console.log("I AM IN ASKQUESTION");
   const attributes = handlerInput.attributesManager.getSessionAttributes();
   const questionIndex = attributes.questionCounter;
+  console.log(questionIndex)
   const currentQuestion = attributes.questions[questionIndex];
+  console.log(currentQuestion);
 
   attributes.questionCounter += 1;
 
