@@ -26,14 +26,12 @@ module.exports = {
         responseType: "arraybuffer",
     };
     
-    const objectRegex = /(\{(.*?)(\}('|")\}))/g;
     
     try {
       const {data} = await axios.get(apiRoute, config);
-      const stringifiedData = zlib.gunzipSync(data).toString();
+      const stringifiedData = zlib.gunzipSync(data).toString().replace('\"',"'");
       console.log(stringifiedData);
-    //   const jsonifiedData = stringifiedData.match(objectRegex).map(match => JSON.parse(match.replace(/'(.*?)':/g, '"$1":').replace(/'{/g, '{').replace(/\}'/g, '}')));
-    //   return jsonifiedData;
+      console.log(JSON.parse(stringifiedData))
         return JSON.parse(stringifiedData);
     } catch (error) {
       console.log('ERROR', error);
