@@ -127,7 +127,7 @@ const BeginSurveyIntentHandler = {
     //   `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
     let speakOutput = ''
     if (response) {
-        speakOutput = `The first question: ${response.message}`; 
+        speakOutput = `The first question: ${response.data.study_data.global_variables.study_name}`; 
     }
     else {
         speakOutput = 'undefined';
