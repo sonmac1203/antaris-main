@@ -30,7 +30,7 @@ module.exports = {
     try {
       const {data} = await axios.get(apiRoute, config);
       const stringifiedData = zlib.gunzipSync(data).toString();
-    //   console.log(stringifiedData);
+      console.log(stringifiedData);
       console.log(JSON.parse(stringifiedData))
         return JSON.parse(stringifiedData);
     } catch (error) {
