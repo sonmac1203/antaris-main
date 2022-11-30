@@ -38,7 +38,7 @@ module.exports = {
   },
 
   async uploadResponses(sessionStorage) {
-    const { studyName, participantID, questions, studyID } = sessionStorage;
+    const { studyName, participantID, questions, choosenStudyID } = sessionStorage;
     const responseData = {
       global_variables: {
         recorded_time: Date.now(),
@@ -63,7 +63,7 @@ module.exports = {
     try {
       const { data } = await axios.post(apiRoute, {
         participantID: participantID,
-        studyID: studyID,
+        studyID: choosenStudyID,
         responseData: responseData,
       });
       console.log(data);
