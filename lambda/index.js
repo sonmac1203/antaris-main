@@ -14,7 +14,7 @@ const LaunchRequestHandler = {
   },
   handle(handlerInput) {
     const speakOutput =
-      'Welcome, you can say Hello or Help. Which would you like to try?';
+      'Welcome to the Antaris health survey built by 23062 team. Say do authentication to continue.';
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
@@ -23,7 +23,7 @@ const LaunchRequestHandler = {
   },
 };
 
-const UserVerificationIntentHandler = {
+const UserAuthenticationIntentHandler = {
   canHandle(handlerInput) {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
@@ -120,18 +120,16 @@ const BeginSurveyIntentHandler = {
       handlerInput.attributesManager.getSessionAttributes();
     const studyID = sessionAttributes.choosenStudyID;
     const response = await logic.fetchStudyInfo(studyID);
-    console.log("I am in BeginSurveyIntent");
-    console.log(response);
 
-    // const speakOutput =
-    //   `Welcome to the Antaris health survey built by 23062 team. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
-    let speakOutput = ''
-    if (response) {
-        speakOutput = `The first question: ${response.data.study_data.global_variables.study_name}`; 
-    }
-    else {
-        speakOutput = 'undefined';
-    }
+    const speakOutput =
+      `. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
+    // let speakOutput = ''
+    // if (response) {
+    //     speakOutput = `The first question: ${response.data.study_data.global_variables.study_name}`; 
+    // }
+    // else {
+    //     speakOutput = 'undefined';
+    // }
     
     return handlerInput.responseBuilder
       .speak(speakOutput)
@@ -267,7 +265,7 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
-    UserVerificationIntentHandler,
+    UserAuthenticationIntentHandler,
     ChooseStudyIntentHandler,
     BeginSurveyIntentHandler,
     HelpIntentHandler,
