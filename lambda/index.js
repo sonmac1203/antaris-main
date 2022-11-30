@@ -168,15 +168,22 @@ const AnswerIntentHandler = {
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
 
+    const { intent } = handlerInput.requestEnvelope.request;
+    const { value: answerIDSlotValue } = intent.slots.answer;
+
     const currentQuestionIndex = sessionAttributes.questionCounter;
     const numberOfQuestions = sessionAttributes.numberOfQuestions;
 
     if (currentQuestionIndex === numberOfQuestions) {
-      const speakOutput = 'You have answered all the questions.';
-    return handlerInput.responseBuilder
-        .speak(speakOutput)
-        .getResponse();
+      console.log(sessionAttributes.question);
+      const speakOutput =
+        'You have answered all the questions. Say exit to stop.';
+      return handlerInput.responseBuilder.speak(speakOutput).getResponse();
     } else {
+      sessionAttributes.questions[currentQuestionIndex].answer =
+        answerIDSlotValue;
+      handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
       const { question, index } = askQuestion(handlerInput);
       const speakOutput = `Question ${index}: ${question}`;
       return handlerInput.responseBuilder
@@ -259,7 +266,9 @@ const SessionEndedRequestHandler = {
       `~~~~ Session ended: ${JSON.stringify(handlerInput.requestEnvelope)}`
     );
     // Any cleanup logic goes here.
-    return handlerInput.responseBuilder.getResponse(); // notice we send an empty response
+    return handlerInput.responseBuilder
+      .speak('Thank you for taking the survey. See you next time.')
+      .getResponse(); // notice we send an empty response
   },
 };
 /* *
@@ -307,10 +316,10 @@ const ErrorHandler = {
 };
 
 const askQuestion = (handlerInput) => {
-    console.log("I AM IN ASKQUESTION");
+  console.log('I AM IN ASKQUESTION');
   const attributes = handlerInput.attributesManager.getSessionAttributes();
   const questionIndex = attributes.questionCounter;
-  console.log(questionIndex)
+  console.log(questionIndex);
   const currentQuestion = attributes.questions[questionIndex];
   console.log(currentQuestion);
 
