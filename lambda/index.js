@@ -146,7 +146,7 @@ const QuestionIntentHandler = {
     );
   },
 
-  async handle(handlerInput) {
+  handle(handlerInput) {
     const { question, index } = askQuestion(handlerInput);
 
     const speakOutput = `Question ${index + 1}: ${question}`;
@@ -179,7 +179,7 @@ const AnswerIntentHandler = {
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     if (currentQuestionIndex === numberOfQuestions) {
-      const apiResponse = logic.uploadResponses(sessionAttributes);
+      const apiResponse = await logic.uploadResponses(sessionAttributes);
       console.log(apiResponse);
       const speakOutput = `You have answered all the questions. ${apiResponse.message}. Say exit to stop.`;
       return handlerInput.responseBuilder.speak(speakOutput).getResponse();
