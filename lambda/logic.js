@@ -41,7 +41,7 @@ module.exports = {
     const { studyName, participantID, questions, choosenStudyID } = sessionStorage;
     const responseData = {
       global_variables: {
-        recorded_time: Date.now(),
+        recorded_time: new Date(),
         study_name: studyName,
       },
     };
