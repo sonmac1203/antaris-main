@@ -23,21 +23,57 @@ module.exports = {
     const apiRoute = `${host}/api/studies/${studyID}?fields=antaris_id,study_data`;
     const config = {
       timeout: 10000,
-        responseType: "arraybuffer",
+      responseType: 'arraybuffer',
     };
-    
-    
+
     try {
-      const {data} = await axios.get(apiRoute, config);
+      const { data } = await axios.get(apiRoute, config);
       const stringifiedData = zlib.gunzipSync(data).toString();
-        return JSON.parse(stringifiedData);
+      return JSON.parse(stringifiedData);
     } catch (error) {
       console.log('ERROR', error);
       const response = error.response;
       return response.data;
     }
   },
-  
+
+  async uploadResponses(sessionStorage) {
+    const { studyName, participantID, questions, studyID } = sessionStorage;
+    const responseData = {
+      global_variables: {
+        recorded_time: Date.now(),
+        study_name: studyName,
+      },
+    };
+
+    responseData['responses'] = questions.map((q) => {
+      return {
+        question: {
+          question_id: q.question_id,
+          name: q.name,
+          text: q.text,
+        },
+        value: q.answer,
+      };
+    });
+
+    const apiRoute = `${host}/api/create_responses`;
+    console.log(responseData);
+
+    try {
+      const { data } = await axios.post(apiRoute, {
+        participantID: participantID,
+        studyID: studyID,
+        responseData: responseData,
+      });
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err.response.data);
+      return err.response.data;
+    }
+  },
+
   getVerbalStudyList(studies) {
     const len = studies.length;
     if (len === 1) {
