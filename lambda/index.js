@@ -122,7 +122,7 @@ const BeginSurveyIntentHandler = {
     const response = await logic.fetchStudyInfo(studyID);
 
     const speakOutput =
-      `. You chose ${studyID} We are Khaled, Darianne, Son, Wesley and Julianne! Say read the questions to continue.`;
+      `. You chose ${studyID}. Say read the questions to continue.`;
     // let speakOutput = ''
     // if (response) {
     //     speakOutput = `The first question: ${response.data.study_data.global_variables.study_name}`; 
