@@ -173,6 +173,9 @@ const AnswerIntentHandler = {
 
     if (currentQuestionIndex === numberOfQuestions) {
       const speakOutput = 'You have answered all the questions.';
+    return handlerInput.responseBuilder
+        .speak(speakOutput)
+        .getResponse();
     } else {
       const { question, index } = askQuestion(handlerInput);
       const speakOutput = `Question ${index}: ${question}`;
