@@ -119,16 +119,17 @@ const BeginSurveyIntentHandler = {
     const sessionAttributes =
       handlerInput.attributesManager.getSessionAttributes();
     const studyID = sessionAttributes.choosenStudyID;
-    const {data} = await logic.fetchStudyInfo(studyID);
-    const {global_variables: globalVariables, meta_data: metaData} = data.study_data;
-    
+    const { data } = await logic.fetchStudyInfo(studyID);
+    const { global_variables: globalVariables, meta_data: metaData } =
+      data.study_data;
+
     sessionAttributes.studyName = globalVariables.study_name;
     sessionAttributes.questions = metaData.questions;
     sessionAttributes.numberOfQuestions = metaData.questions.length;
+    sessionAttributes.questionCounter = 0;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-    
-    const speakOutput =
-      `You chose ${studyID}. Welcome to the study ${globalVariables.study_name}. You have ${metaData.questions.length} questions in this survey. Please now say read all questions to start.`;
+
+    const speakOutput = `You chose ${studyID}. Welcome to the study ${globalVariables.study_name}. You have ${metaData.questions.length} questions in this survey. Please now say read all questions to start.`;
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .reprompt('You can ask me to start reading the questions.')
@@ -145,25 +146,41 @@ const QuestionIntentHandler = {
   },
 
   async handle(handlerInput) {
-    const sessionAttributes =
-      handlerInput.attributesManager.getSessionAttributes();
-    
-    const questions = sessionAttributes.questions;
-    
-    const studyID = sessionAttributes.choosenStudyID;
-    const {data} = await logic.fetchStudyInfo(studyID);
-    const {global_variables: globalVariables, meta_data: metaData} = data.study_data;
-    
-    sessionAttributes.studyName = globalVariables.study_name;
-    sessionAttributes.questions = metaData.questions;
-    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-    
-    const speakOutput =
-      `You chose ${studyID}. Welcome to the study ${globalVariables.study_name}. Say read the questions to continue.`;
+    const { question, index } = askQuestion(handlerInput);
+
+    const speakOutput = `Question ${index}: ${question}`;
     return handlerInput.responseBuilder
       .speak(speakOutput)
-      .reprompt('You can ask me to start reading the questions.')
+      .reprompt(question)
       .getResponse();
+  },
+};
+
+const AnswerIntentHandler = {
+  canHandle(handlerInput) {
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) === 'AnswerIntent'
+    );
+  },
+
+  async handle(handlerInput) {
+    const sessionAttributes =
+      handlerInput.attributesManager.getSessionAttributes();
+
+    const currentQuestionIndex = sessionAttributes.questionCounter;
+    const numberOfQuestions = sessionAttributes.numberOfQuestions;
+
+    if (currentQuestionIndex === numberOfQuestions) {
+      const speakOutput = 'You have answered all the questions.';
+    } else {
+      const { question, index } = askQuestion(handlerInput);
+      const speakOutput = `Question ${index}: ${question}`;
+      return handlerInput.responseBuilder
+        .speak(speakOutput)
+        .reprompt(question)
+        .getResponse();
+    }
   },
 };
 
@@ -286,6 +303,18 @@ const ErrorHandler = {
   },
 };
 
+const askQuestion = (handlerInput) => {
+  const attributes = handlerInput.attributesManager.getSessionAttributes();
+  const questionIndex = attributes.questionCounter;
+  const currentQuestion = attributes.questions[questionIndex];
+
+  attributes.questionCounter += 1;
+
+  handlerInput.attributesManager.setSessionAttributes(attributes);
+
+  return { question: currentQuestion.text, index: questionIndex };
+};
+
 /**
  * This handler acts as the entry point for your skill, routing all request and response
  * payloads to the handlers above. Make sure any new handlers or interceptors you've
@@ -297,6 +326,8 @@ exports.handler = Alexa.SkillBuilders.custom()
     UserAuthenticationIntentHandler,
     ChooseStudyIntentHandler,
     BeginSurveyIntentHandler,
+    QuestionIntentHandler,
+    AnswerIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
@@ -306,5 +337,5 @@ exports.handler = Alexa.SkillBuilders.custom()
   .addErrorHandlers(ErrorHandler)
   .withCustomUserAgent('sample/hello-world/v1.2')
   .lambda();
-  
-  // The first question is ${response.data.study_data['ODM']['$']['xmlns']} 
+
+// The first question is ${response.data.study_data['ODM']['$']['xmlns']}
