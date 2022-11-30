@@ -28,7 +28,7 @@ const UserAuthenticationIntentHandler = {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
       Alexa.getIntentName(handlerInput.requestEnvelope) ===
-        'UserVerificationIntent'
+        'UserAuthenticationIntent'
     );
   },
   async handle(handlerInput) {
