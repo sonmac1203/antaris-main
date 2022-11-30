@@ -186,7 +186,7 @@ const AnswerIntentHandler = {
       handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
       const { question, index } = askQuestion(handlerInput);
-      const speakOutput = `Question ${index}: ${question}`;
+      const speakOutput = `Question ${index + 1}: ${question}`;
       return handlerInput.responseBuilder
         .speak(speakOutput)
         .reprompt(question)
