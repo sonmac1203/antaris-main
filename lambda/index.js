@@ -129,7 +129,7 @@ const BeginSurveyIntentHandler = {
     sessionAttributes.questionCounter = 0;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-    const speakOutput = `You chose ${studyID}. Welcome to the study ${globalVariables.study_name}. You have ${metaData.questions.length} questions in this survey. Please now say read all questions to start.`;
+    const speakOutput = `Welcome to the study ${globalVariables.study_name}. You have ${metaData.questions.length} questions in this survey. Please now say read all questions to start.`;
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .reprompt('You can ask me to start reading the questions.')
