@@ -142,8 +142,8 @@ const ChooseStudyIntentHandler = {
                     "title": "Hi Wesley",
                     "listItems": [
                         {
-                            "primaryText": "First item primary text",
-                            "secondaryText": "This is the secondary text",
+                            "primaryText": "SleepZ",
+                            "secondaryText": "SID: 3532532",
                             "secondaryTextPosition": "bottom",
                             "touchForward": true,
                             "id": "studyItem",
@@ -157,8 +157,8 @@ const ChooseStudyIntentHandler = {
                             ]
                         },
                         {
-                            "primaryText": "Ivy Lane Nursery and Tree Farm",
-                            "secondaryText": "This is the secondary text",
+                            "primaryText": "Drinking time",
+                            "secondaryText": "2352535",
                             "secondaryTextPosition": "bottom",
                             "touchForward": true,
                             "id": "studyItem",
