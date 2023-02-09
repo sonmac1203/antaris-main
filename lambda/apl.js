@@ -65,6 +65,7 @@ module.exports = {
             "textListData": {
                 "type": "object",
                 "objectId": "textListSample",
+                "id": "textListSample"
                 "backgroundImage": {
                     "contentDescription": null,
                     "smallSourceUrl": null,
