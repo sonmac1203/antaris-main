@@ -144,7 +144,7 @@ const StudyItemEventHandler = {
     },
     handle(handlerInput){
         console.log(handlerInput.requestEnvelope.request.arguments[0]);
-        const speakOutput = "Thank you for clicking the button! I imagine you already noticed that the text faded away. Tell me to start over to bring it back!";
+        const speakOutput = `Thank you for clicking the button ${handlerInput.requestEnvelope.request.arguments[0]}! I imagine you already noticed that the text faded away. Tell me to start over to bring it back!`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt("Tell me to start over if you want me to bring the text back into view. Or, you can just say hello again.")
