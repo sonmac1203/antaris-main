@@ -110,6 +110,74 @@ const ChooseStudyIntentHandler = {
     const studyExists = studies
       .map((s) => s.antaris_id)
       .includes(studyIDSlotValue);
+      
+    if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
+        // generate the APL RenderDocument directive that will be returned from your skill
+        const aplDirective = apl.createDirectivePayload({
+            
+        });
+        // add the RenderDocument directive to the responseBuilder
+        handlerInput.responseBuilder.addDirective({
+            type: 'Alexa.Presentation.APL.RenderDocument',
+            token: 'documentToken',
+            document: {
+                src: 'doc://alexa/apl/documents/TestStudyList',
+                type: 'Link'
+            },
+            datasource: {
+                "textListData": {
+                    "type": "object",
+                    "objectId": "textListSample",
+                    "backgroundImage": {
+                        "contentDescription": null,
+                        "smallSourceUrl": null,
+                        "largeSourceUrl": null,
+                        "sources": [
+                            {
+                                "url": "https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/textlist/AlexaTextListBackground_Dark.png",
+                                "size": "large"
+                            }
+                        ]
+                    },
+                    "title": "Hi Wesley",
+                    "listItems": [
+                        {
+                            "primaryText": "First item primary text",
+                            "secondaryText": "This is the secondary text",
+                            "secondaryTextPosition": "bottom",
+                            "touchForward": true,
+                            "id": "studyItem",
+                            "primaryAction": [
+                                {
+                                    "type": "SendEvent",
+                                    "arguments": [
+                                        "${ordinal}"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "primaryText": "Ivy Lane Nursery and Tree Farm",
+                            "secondaryText": "This is the secondary text",
+                            "secondaryTextPosition": "bottom",
+                            "touchForward": true,
+                            "id": "studyItem",
+                            "primaryAction": [
+                                {
+                                    "type": "SendEvent",
+                                    "arguments": [
+                                        "${ordinal}"
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "logoUrl": "https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/logo/logo-modern-botanical-white.png",
+                }
+            }
+        })
+    }
+      
     if (studyExists) {
       return handlerInput.responseBuilder
         .speak(
