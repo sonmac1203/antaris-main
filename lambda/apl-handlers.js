@@ -3,7 +3,7 @@ const Alexa = require('ask-sdk-core');
 const StudyItemEventHandler = {
     canHandle(handlerInput){
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent'
-            && handlerInput.requestEnvelope.request.source.id === 'fadeHelloTextButton';
+            && handlerInput.requestEnvelope.request.source.id === 'studyItem';
     },
     handle(handlerInput){
         console.log(handlerInput.requestEnvelope.request);
