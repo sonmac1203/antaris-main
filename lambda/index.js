@@ -112,10 +112,7 @@ const ChooseStudyIntentHandler = {
       .includes(studyIDSlotValue);
       
     if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
-        // generate the APL RenderDocument directive that will be returned from your skill
-        const aplDirective = apl.createDirectivePayload({
-            
-        });
+
         // add the RenderDocument directive to the responseBuilder
         handlerInput.responseBuilder.addDirective({
             type: 'Alexa.Presentation.APL.RenderDocument',
@@ -194,6 +191,21 @@ const ChooseStudyIntentHandler = {
     }
   },
 };
+
+const StudyItemEventHandler = {
+    canHandle(handlerInput){
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent'
+            && handlerInput.requestEnvelope.request.source.id === 'studyItem';
+    },
+    handle(handlerInput){
+        console.log(handlerInput.requestEnvelope.request);
+        const speakOutput = "Thank you for clicking the button! I imagine you already noticed that the text faded away. Tell me to start over to bring it back!";
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt("Tell me to start over if you want me to bring the text back into view. Or, you can just say hello again.")
+            .getResponse();
+    }
+}
 
 const BeginSurveyIntentHandler = {
   canHandle(handlerInput) {
@@ -431,7 +443,8 @@ exports.handler = Alexa.SkillBuilders.custom()
     CancelAndStopIntentHandler,
     FallbackIntentHandler,
     SessionEndedRequestHandler,
-    IntentReflectorHandler
+    IntentReflectorHandler,
+    StudyItemEventHandler
   )
   .addErrorHandlers(ErrorHandler)
   .withCustomUserAgent('sample/hello-world/v1.2')
