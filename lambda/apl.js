@@ -77,6 +77,13 @@ module.exports = {
                     ]
                 },
                 "title": "Hi Wesley",
+                "primaryAction": {
+                  "type": "SendEvent",
+                  "arguments": [
+                    "ListItemSelected",
+                    "${ordinal}"
+                  ]
+                },
                 "listItems": [
                     {
                         "primaryText": "First item primary text",
@@ -84,14 +91,6 @@ module.exports = {
                         "secondaryTextPosition": "bottom",
                         "touchForward": true,
                         "id": "studyItem",
-                        "primaryAction": [
-                            {
-                                "type": "SendEvent",
-                                "arguments": [
-                                    "${ordinal}"
-                                ]
-                            }
-                        ]
                     },
                     {
                         "primaryText": "Ivy Lane Nursery and Tree Farm",
@@ -99,14 +98,6 @@ module.exports = {
                         "secondaryTextPosition": "bottom",
                         "touchForward": true,
                         "id": "studyItem",
-                        "primaryAction": [
-                            {
-                                "type": "SendEvent",
-                                "arguments": [
-                                    "${ordinal}"
-                                ]
-                            }
-                        ]
                     }
                 ],
                 "logoUrl": "https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/logo/logo-modern-botanical-white.png",
