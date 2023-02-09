@@ -21,4 +21,15 @@ module.exports = {
     const rawText = text.replace(/\r|\n/g, '');
     return rawText;
   },
+    createDirectivePayload(aplDocumentId, dataSources = {}, tokenId = "documentToken") {
+        return {
+            type: "Alexa.Presentation.APL.RenderDocument",
+            token: tokenId,
+            document: {
+                type: "Link",
+                src: "doc://alexa/apl/documents/" + aplDocumentId
+            },
+            datasources: dataSources
+        }
+    }
 };
