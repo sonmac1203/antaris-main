@@ -15,13 +15,13 @@ const LaunchRequestHandler = {
     );
   },
   handle(handlerInput) {
-    const greetingAplResponse = apl.TEST_APL;
+    const aplResponse = apl.launchRequest;
     const speakOutput =
       'Welcome to the Antaris health survey built by 23062 team. Say do authentication to continue.';
     
     if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
         // generate the APL RenderDocument directive that will be returned from your skill
-        const aplDirective = utils.createDirectivePayload(greetingAplResponse.DOCUMENT_ID, greetingAplResponse.datasource);
+        const aplDirective = utils.createDirectivePayload(aplResponse.DOCUMENT_ID, aplResponse.datasource);
         // add the RenderDocument directive to the responseBuilder
         handlerInput.responseBuilder.addDirective(aplDirective);
     }
@@ -57,6 +57,15 @@ const UserAuthenticationIntentHandler = {
     sessionAttributes.studies = studies;
     sessionAttributes.participantID = participantIDSlotValue;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+    
+    const aplResponse = apl.authenticationIntent;
+    
+    if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
+        // generate the APL RenderDocument directive that will be returned from your skill
+        const aplDirective = utils.createDirectivePayload(aplResponse.DOCUMENT_ID, aplResponse.datasource);
+        // add the RenderDocument directive to the responseBuilder
+        handlerInput.responseBuilder.addDirective(aplDirective);
+    }
 
     // determine response logics
     if (response.success) {
