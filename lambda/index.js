@@ -141,11 +141,10 @@ const StudyItemEventHandler = {
     canHandle(handlerInput){
         console.log("IM HERE IN EVENT HANDLER");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent'
-            && handlerInput.requestEnvelope.request.source.id === 'textListSample';
     },
     handle(handlerInput){
         console.log("IM HERE IN EVENT HANDLER");
-        console.log(handlerInput.requestEnvelope.request.arguments[0]);
+        console.log(handlerInput.requestEnvelope.request.arguments);
         const speakOutput = `Thank you for clicking the button ${handlerInput.requestEnvelope.request.arguments[0]}! I imagine you already noticed that the text faded away. Tell me to start over to bring it back!`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
