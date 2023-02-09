@@ -139,7 +139,7 @@ const ChooseStudyIntentHandler = {
                             }
                         ]
                     },
-                    "title": "Hi Wesley",
+                    "title": "Hi Wesley Chiu",
                     "listItems": [
                         {
                             "primaryText": "SleepZ",
