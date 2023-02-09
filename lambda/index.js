@@ -140,10 +140,10 @@ const ChooseStudyIntentHandler = {
 const StudyItemEventHandler = {
     canHandle(handlerInput){
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent'
-            && handlerInput.requestEnvelope.request.source.id === 'studyItem';
+            && handlerInput.requestEnvelope.request.source.id === 'textListSample';
     },
     handle(handlerInput){
-        console.log(handlerInput.requestEnvelope.request);
+        console.log(handlerInput.requestEnvelope.request.arguments);
         const speakOutput = "Thank you for clicking the button! I imagine you already noticed that the text faded away. Tell me to start over to bring it back!";
         return handlerInput.responseBuilder
             .speak(speakOutput)
