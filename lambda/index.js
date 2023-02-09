@@ -143,7 +143,7 @@ const StudyItemEventHandler = {
             && handlerInput.requestEnvelope.request.source.id === 'textListSample';
     },
     handle(handlerInput){
-        console.log(handlerInput.requestEnvelope.request.arguments);
+        console.log(handlerInput.requestEnvelope.request.arguments[0]);
         const speakOutput = "Thank you for clicking the button! I imagine you already noticed that the text faded away. Tell me to start over to bring it back!";
         return handlerInput.responseBuilder
             .speak(speakOutput)
