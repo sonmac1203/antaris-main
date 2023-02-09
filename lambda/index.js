@@ -15,8 +15,16 @@ const LaunchRequestHandler = {
     );
   },
   handle(handlerInput) {
+    const greetingAplResponse = apl.TEST_APL;
     const speakOutput =
       'Welcome to the Antaris health survey built by 23062 team. Say do authentication to continue.';
+    
+    if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
+        // generate the APL RenderDocument directive that will be returned from your skill
+        const aplDirective = utils.createDirectivePayload(greetingAplResponse.DOCUMENT_ID, greetingAplResponse.datasource);
+        // add the RenderDocument directive to the responseBuilder
+        handlerInput.responseBuilder.addDirective(aplDirective);
+    }
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
