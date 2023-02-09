@@ -139,7 +139,8 @@ const ChooseStudyIntentHandler = {
 
 const StudyItemEventHandler = {
     canHandle(handlerInput){
-        console.log("IM HERE IN EVENT HANDLER");
+        console.log("IM HERE IN EVENT HANDLERWW");
+        console.log(handlerInput.requestEnvelope.request)
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent'
     },
     handle(handlerInput){
