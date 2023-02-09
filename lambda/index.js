@@ -111,68 +111,13 @@ const ChooseStudyIntentHandler = {
       .map((s) => s.antaris_id)
       .includes(studyIDSlotValue);
       
+    const aplResponse = apl.testIntent;
+      
     if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
-
+        // generate the APL RenderDocument directive that will be returned from your skill
+        const aplDirective = utils.createDirectivePayload(aplResponse.DOCUMENT_ID, aplResponse.datasource);
         // add the RenderDocument directive to the responseBuilder
-        handlerInput.responseBuilder.addDirective({
-            type: 'Alexa.Presentation.APL.RenderDocument',
-            token: 'documentToken',
-            document: {
-                src: 'doc://alexa/apl/documents/TestStudyList',
-                type: 'Link'
-            },
-            datasource: {
-                "textListData": {
-                    "type": "object",
-                    "objectId": "textListSample",
-                    "backgroundImage": {
-                        "contentDescription": null,
-                        "smallSourceUrl": null,
-                        "largeSourceUrl": null,
-                        "sources": [
-                            {
-                                "url": "https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/textlist/AlexaTextListBackground_Dark.png",
-                                "size": "large"
-                            }
-                        ]
-                    },
-                    "title": "Hi Wesley Chiu",
-                    "listItems": [
-                        {
-                            "primaryText": "SleepZ",
-                            "secondaryText": "SID: 3532532",
-                            "secondaryTextPosition": "bottom",
-                            "touchForward": true,
-                            "id": "studyItem",
-                            "primaryAction": [
-                                {
-                                    "type": "SendEvent",
-                                    "arguments": [
-                                        "${ordinal}"
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "primaryText": "Drinking time",
-                            "secondaryText": "2352535",
-                            "secondaryTextPosition": "bottom",
-                            "touchForward": true,
-                            "id": "studyItem",
-                            "primaryAction": [
-                                {
-                                    "type": "SendEvent",
-                                    "arguments": [
-                                        "${ordinal}"
-                                    ]
-                                }
-                            ]
-                        }
-                    ],
-                    "logoUrl": "https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/logo/logo-modern-botanical-white.png",
-                }
-            }
-        })
+        handlerInput.responseBuilder.addDirective(aplDirective);
     }
       
     if (studyExists) {
