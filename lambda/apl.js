@@ -50,11 +50,11 @@ module.exports = {
                     "textContent": {
                         "primaryText": {
                             "type": "PlainText",
-                            "text": "Welcome to Antaris Health survey"
+                            "text": "What is your participant id?"
                         }
                     },
                     "logoUrl": "",
-                    "hintText": "Try, \"Alexa, start my fantastic health survey\""
+                    "hintText": "Provide your participant id to continue"
                 }
             }
         },
