@@ -63,6 +63,7 @@ module.exports = {
         DOCUMENT_ID: "TestStudyList",
         datasource: {
             "textListData": {
+                "id": "sonmac",
                 "headerTitle": "Alexa text list header title",
                 "headerSubtitle": "Header subtitle",
                 "headerAttributionImage": "https://s3.amazonaws.com/ask-skills-assets/apl-layout-assets/attribution_dark_hub_prime.png",
