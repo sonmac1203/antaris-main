@@ -207,31 +207,29 @@ const StudySelectionEventHandler = {
         console.log(handlerInput.requestEnvelope.request.arguments);
         return (
             Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'Alexa.Presentation.APL.UserEvent'
+                'Alexa.Presentation.APL.UserEvent' && handlerInput.requestEnvelope.request.arguments[0] === 'StudySelectionListItemSelected'
         );
     },
     handle(handlerInput) {
         const sessionAttributes =
             handlerInput.attributesManager.getSessionAttributes();
         const studies = sessionAttributes.studies;
-        const chosenIndex = handlerInput.requestEnvelope.request.arguments[1];
+        const chosenIndex = handlerInput.requestEnvelope.request.arguments[1] - 1;
         const chosenStudy = studies[chosenIndex];
-        console.log("IM IN HANDLER");
-        console.log(studies, chosenIndex, chosenStudy);
 
-        // if (
-        //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-        //         'Alexa.Presentation.APL'
-        //     ]
-        // ) {
-        //     const statement = `You chose study ${chosenStudy.antaris_id}.`;
-        //     const subStatement = `Say \"Activate fantastic health survey\" to start.`;
-        //     const aplDirective = utils.getBasicAnnouncementAplDirective(
-        //         statement,
-        //         subStatement
-        //     );
-        //     handlerInput.responseBuilder.addDirective(aplDirective);
-        // }
+        if (
+            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                'Alexa.Presentation.APL'
+            ]
+        ) {
+            const statement = `You chose study ${chosenStudy.antaris_id}.`;
+            const subStatement = `Say \"Activate fantastic health survey\" to start.`;
+            const aplDirective = utils.getBasicAnnouncementAplDirective(
+                statement,
+                subStatement
+            );
+            handlerInput.responseBuilder.addDirective(aplDirective);
+        }
         return handlerInput.responseBuilder
             .speak(
                 `You chose study ${chosenStudy.antaris_id}. Say activate fantastic health survey to start.`
