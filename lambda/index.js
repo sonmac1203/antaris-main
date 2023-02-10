@@ -351,7 +351,20 @@ const AnswerIntentHandler = {
 
         if (currentQuestionIndex === numberOfQuestions) {
             const apiResponse = await logic.uploadResponses(sessionAttributes);
-            console.log(apiResponse);
+            if (
+                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                    'Alexa.Presentation.APL'
+                ]
+            ) {
+                const statement = 'You have answered all the questions.';
+                const subStatement = `Say \"Exit\" to stop the survey.`;
+                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                    statement,
+                    subStatement
+                );
+                handlerInput.responseBuilder.addDirective(aplDirective);
+            }
+
             const speakOutput = `You have answered all the questions. ${apiResponse.message}. Say exit to stop.`;
             return handlerInput.responseBuilder
                 .speak(speakOutput)
