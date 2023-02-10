@@ -31,5 +31,47 @@ module.exports = {
             },
             datasources: dataSources
         }
+    },
+    
+    getBasicAnnouncementAplDirective(text, hintText) {
+        const DOCUMENT_ID = "BasicAnnouncement";
+        const dataSources = {
+            "headlineTemplateData": {
+                "type": "object",
+                "objectId": "headlineSample",
+                "properties": {
+                    "backgroundImage": {
+                        "contentDescription": null,
+                        "smallSourceUrl": null,
+                        "largeSourceUrl": null,
+                        "sources": [
+                            {
+                                "url": "https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png",
+                                "size": "large"
+                            }
+                        ]
+                    },
+                    "textContent": {
+                        "primaryText": {
+                            "type": "PlainText",
+                            "text": text
+                        }
+                    },
+                    "logoUrl": "",
+                    "hintText": hintText
+                }
+            }
+        };
+        
+        return {
+            type: "Alexa.Presentation.APL.RenderDocument",
+            token: 'documentToken',
+            document: {
+                type: "Link",
+                src: "doc://alexa/apl/documents/" + DOCUMENT_ID
+            },
+            datasources: dataSources
+        }
+
     }
 };
