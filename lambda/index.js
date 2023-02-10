@@ -10,6 +10,7 @@ const utils = require('./util');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
+        console.log(handlerInput.requestEnvelope.request.arguments);
         return (
             Alexa.getRequestType(handlerInput.requestEnvelope) ===
             'LaunchRequest'
@@ -206,7 +207,9 @@ const StudySelectionEventHandler = {
     canHandle(handlerInput) {
         return (
             Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'Alexa.Presentation.APL.UserEvent'
+                'Alexa.Presentation.APL.UserEvent' &&
+            handlerInput.requestEnvelope.request.arguments[0] ===
+                'StudySelectionListItemSelected'
         );
     },
     handle(handlerInput) {
