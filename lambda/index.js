@@ -216,20 +216,22 @@ const StudySelectionEventHandler = {
         const studies = sessionAttributes.studies;
         const chosenIndex = handlerInput.requestEnvelope.request.arguments[1];
         const chosenStudy = studies[chosenIndex];
+        console.log("IM IN HANDLER");
+        console.log(studies, chosenIndex, chosenStudy);
 
-        if (
-            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                'Alexa.Presentation.APL'
-            ]
-        ) {
-            const statement = `You chose study ${chosenStudy.antaris_id}.`;
-            const subStatement = `Say \"Activate fantastic health survey\" to start.`;
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
-                statement,
-                subStatement
-            );
-            handlerInput.responseBuilder.addDirective(aplDirective);
-        }
+        // if (
+        //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+        //         'Alexa.Presentation.APL'
+        //     ]
+        // ) {
+        //     const statement = `You chose study ${chosenStudy.antaris_id}.`;
+        //     const subStatement = `Say \"Activate fantastic health survey\" to start.`;
+        //     const aplDirective = utils.getBasicAnnouncementAplDirective(
+        //         statement,
+        //         subStatement
+        //     );
+        //     handlerInput.responseBuilder.addDirective(aplDirective);
+        // }
         return handlerInput.responseBuilder
             .speak(
                 `You chose study ${chosenStudy.antaris_id}. Say activate fantastic health survey to start.`
