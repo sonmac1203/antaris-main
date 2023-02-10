@@ -176,7 +176,7 @@ const ChooseStudyIntentHandler = {
                 handlerInput.responseBuilder.addDirective(aplDirective);
             }
             return handlerInput.responseBuilder
-                .speak(`${statement} $${subStatement}`)
+                .speak(`${statement} ${subStatement}`)
                 .getResponse();
         } else {
             const statement = 'I cannot find any assigned study with that id.';
