@@ -58,12 +58,36 @@ const UserAuthenticationIntentHandler = {
     sessionAttributes.participantID = participantIDSlotValue;
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
     
+
+    
     const aplResponse = apl.authenticationIntent;
     
     if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
-        // generate the APL RenderDocument directive that will be returned from your skill
-        const aplDirective = utils.createDirectivePayload(aplResponse.DOCUMENT_ID, aplResponse.datasource);
-        // add the RenderDocument directive to the responseBuilder
+        
+        const studySelectionList = studies.map((study) => 
+        ({
+            primaryText: study.antaris_id,
+            secondaryText: `Assigned by ${study.added_by}`,
+        }));
+        
+        const aplDirective = {
+            type: "Alexa.Presentation.APL.RenderDocument",
+            token: "documentToken",
+            document: {
+                type: "Link",
+                src: "doc://alexa/apl/documents/StudySelectionList"
+            },
+            datasources: {
+                "studySelectionListData": {
+                    "participantName": participantName,
+                    "numberOfActiveStudies": studies.length,
+                    "backgroundImageSource": "https://d2o906d8ln7ui1.cloudfront.net/images/BT6_Background.png",
+                    "listItemsToShow": studySelectionList,
+                }
+            }
+        }
+
+        
         handlerInput.responseBuilder.addDirective(aplDirective);
     }
 
