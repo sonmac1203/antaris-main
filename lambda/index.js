@@ -300,8 +300,24 @@ const QuestionIntentHandler = {
     },
 
     handle(handlerInput) {
+        const sessionAttributes =
+            handlerInput.attributesManager.getSessionAttributes();
+        const studyName = sessionAttributes.study_name;
         const { question, index } = askQuestion(handlerInput);
-
+        if (
+            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                'Alexa.Presentation.APL'
+            ]
+        ) {
+            const aplDirective = utils.getBasicQuestionAplDirective(
+                {
+                    questionNumber: index + 1,
+                    questionText: question,
+                },
+                studyName
+            );
+            handlerInput.responseBuilder.addDirective(aplDirective);
+        }
         const speakOutput = `Question ${index + 1}: ${question}`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -480,7 +496,6 @@ const ErrorHandler = {
 };
 
 const askQuestion = (handlerInput) => {
-    console.log('I AM IN ASKQUESTION');
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const questionIndex = attributes.questionCounter;
     const currentQuestion = attributes.questions[questionIndex];
