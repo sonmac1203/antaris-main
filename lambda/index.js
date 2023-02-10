@@ -204,18 +204,23 @@ const ChooseStudyIntentHandler = {
 
 const StudySelectionEventHandler = {
     canHandle(handlerInput) {
-        console.log(handlerInput.requestEnvelope.request.arguments);
         return (
             Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'Alexa.Presentation.APL.UserEvent' && handlerInput.requestEnvelope.request.arguments[0] === 'StudySelectionListItemSelected'
+                'Alexa.Presentation.APL.UserEvent' &&
+            handlerInput.requestEnvelope.request.arguments[0] ===
+                'StudySelectionListItemSelected'
         );
     },
     handle(handlerInput) {
         const sessionAttributes =
             handlerInput.attributesManager.getSessionAttributes();
         const studies = sessionAttributes.studies;
-        const chosenIndex = handlerInput.requestEnvelope.request.arguments[1] - 1;
+        const chosenIndex =
+            handlerInput.requestEnvelope.request.arguments[1] - 1;
         const chosenStudy = studies[chosenIndex];
+
+        sessionAttributes.choosenStudyID = chosenStudy.antaris_id;
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         if (
             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -261,6 +266,20 @@ const BeginSurveyIntentHandler = {
         sessionAttributes.numberOfQuestions = metaData.questions.length;
         sessionAttributes.questionCounter = 0;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+        if (
+            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                'Alexa.Presentation.APL'
+            ]
+        ) {
+            const statement = `Welcome to ${globalVariables.study_name}. There are ${metaData.questions.length} questions in this survey.`;
+            const subStatement = `Say \"Read all questions\" to start.`;
+            const aplDirective = utils.getBasicAnnouncementAplDirective(
+                statement,
+                subStatement
+            );
+            handlerInput.responseBuilder.addDirective(aplDirective);
+        }
 
         const speakOutput = `Welcome to the study ${globalVariables.study_name}. You have ${metaData.questions.length} questions in this survey. Please now say read all questions to start.`;
         return handlerInput.responseBuilder
