@@ -62,37 +62,33 @@ const UserAuthenticationIntentHandler = {
     
     const aplResponse = apl.authenticationIntent;
     
-    if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
-        
-        const studySelectionList = studies.map((study) => 
-        ({
-            primaryText: study.antaris_id,
-            secondaryText: `Assigned by ${study.added_by}`,
-        }));
-        
-        const aplDirective = {
-            type: "Alexa.Presentation.APL.RenderDocument",
-            token: "documentToken",
-            document: {
-                type: "Link",
-                src: "doc://alexa/apl/documents/StudySelectionList"
-            },
-            datasources: {
-                "studySelectionListData": {
-                    "participantName": participantName,
-                    "numberOfActiveStudies": studies.length,
-                    "backgroundImageSource": "https://d2o906d8ln7ui1.cloudfront.net/images/BT6_Background.png",
-                    "listItemsToShow": studySelectionList,
-                }
-            }
-        }
-
-        
-        handlerInput.responseBuilder.addDirective(aplDirective);
-    }
 
     // determine response logics
     if (response.success) {
+        if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
+            const studySelectionList = studies.map((study) => 
+            ({
+                primaryText: study.antaris_id,
+                secondaryText: `Assigned by ${study.added_by}`,
+            }));
+            const aplDirective = {
+                type: "Alexa.Presentation.APL.RenderDocument",
+                token: "documentToken",
+                document: {
+                    type: "Link",
+                    src: "doc://alexa/apl/documents/StudySelectionList"
+                },
+                datasources: {
+                    "studySelectionListData": {
+                        "participantName": participantName,
+                        "numberOfActiveStudies": studies.length,
+                        "backgroundImageSource": "https://d2o906d8ln7ui1.cloudfront.net/images/BT6_Background.png",
+                        "listItemsToShow": studySelectionList,
+                    }
+                }
+            }
+            handlerInput.responseBuilder.addDirective(aplDirective);
+        }
       const greeting = `Hi ${participantName}. Authorization has been completed`;
       const studyList = logic.getVerbalStudyList(
         studies.map((s) => s.antaris_id)
@@ -102,6 +98,11 @@ const UserAuthenticationIntentHandler = {
       } assigned, which are ${studyList}. Say do the study selection to continue.`;
       return handlerInput.responseBuilder.speak(speakOutput).getResponse();
     } else {
+        if (Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)['Alexa.Presentation.APL']) {
+            const aplDirective = utils.getBasicAnnouncementAplDirective('Sorry, no participant is associated with this id.', 'Try telling me your participant id again.');
+            handlerInput.responseBuilder.addDirective(aplDirective);
+        }
+        
       const speakOutput =
         'Sorry, no participant is associated with this id. What is your participant id again?';
       return handlerInput.responseBuilder
