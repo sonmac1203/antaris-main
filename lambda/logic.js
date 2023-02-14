@@ -30,7 +30,7 @@ module.exports = {
       console.log('IM IN FETCHSTUDY');
       console.log(apiRoute);
       const { data } = await axios.get(apiRoute, config);
-      conso.log(data)''
+      console.log(data);
       const stringifiedData = zlib.gunzipSync(data).toString();
       return JSON.parse(stringifiedData);
     } catch (error) {
