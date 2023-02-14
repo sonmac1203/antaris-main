@@ -260,6 +260,9 @@ const BeginSurveyIntentHandler = {
         const { data } = await logic.fetchStudyInfo(studyID);
         const { global_variables: globalVariables, meta_data: metaData } =
             data.study_data;
+        console.log("IM HERE");
+        console.log(studyID);
+        console.log(data);
 
         sessionAttributes.studyName = globalVariables.study_name;
         sessionAttributes.questions = metaData.questions;
