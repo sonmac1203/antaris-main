@@ -22,7 +22,7 @@ module.exports = {
   async fetchStudyInfo(studyID) {
     const apiRoute = `${host}/api/studies/${studyID}?fields=antaris_id,study_data`;
     const config = {
-      timeout: 10000,
+      timeout: 20000,
       responseType: 'arraybuffer',
     };
 
