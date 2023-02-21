@@ -18,7 +18,7 @@ const LaunchRequestHandler = {
     handle(handlerInput) {
         const aplResponse = apl.launchRequest;
         const speakOutput =
-            'Welcome to the Antaris health survey built by ' +  utils.getVerbalFormat('23062') + ' team. Say do authentication to continue.';
+            'Welcome to the Antaris health survey built by ' +  logic.getVerbalFormat('23062') + ' team. Say do authentication to continue.';
 
         if (
             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
