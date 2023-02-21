@@ -115,9 +115,5 @@ module.exports = {
             },
             datasources: dataSources,
         };
-    },
-    
-    getVerbalFormat(number) {
-        return number.split('').join(' ');
     }
 };
