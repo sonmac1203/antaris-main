@@ -164,9 +164,10 @@ const ChooseStudyIntentHandler = {
             .includes(studyIDSlotValue);
 
         if (studyExists) {
-            const statement = `You chose study ${logic.getVerbalFormat(
+            const visualStatement = `You chose study ${logic.getVerbalFormat(
                 studyIDSlotValue
             )}.`;
+            const verbalStatement = `You chose study ${studyIDSlotValue}.`;
             const subStatement = `Say \"Activate fantastic health survey\" to start.`;
             if (
                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -174,13 +175,13 @@ const ChooseStudyIntentHandler = {
                 ]
             ) {
                 const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    statement,
+                    visualStatement,
                     subStatement
                 );
                 handlerInput.responseBuilder.addDirective(aplDirective);
             }
             return handlerInput.responseBuilder
-                .speak(`${statement} ${subStatement}`)
+                .speak(`${verbalStatement} ${subStatement}`)
                 .getResponse();
         } else {
             const statement = 'I cannot find any assigned study with that id.';
