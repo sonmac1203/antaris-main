@@ -17,21 +17,22 @@ const LaunchRequestHandler = {
     },
     handle(handlerInput) {
         const aplResponse = apl.launchRequest;
-        const verbalStatement = `Welcome to the Antaris health survey by ${logic.getVerbalFormat('23062')} team.`;
-        const visualStatement = 'Welcome to the Antaris health survey.';
-        const subStatement = 'Say "Do authentication" to continue.';
-        
-        const speakOutput = `${verbalStatement} ${subStatement}`;
+        const speakOutput =
+            'Welcome to the Antaris health survey built by ' +
+            logic.getVerbalFormat('23062') +
+            ' team. Say do authentication to continue.';
 
         if (
             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
                 'Alexa.Presentation.APL'
             ]
         ) {
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
-                visualStatement,
-                subStatement
+            // generate the APL RenderDocument directive that will be returned from your skill
+            const aplDirective = utils.createDirectivePayload(
+                aplResponse.DOCUMENT_ID,
+                aplResponse.datasource
             );
+            // add the RenderDocument directive to the responseBuilder
             handlerInput.responseBuilder.addDirective(aplDirective);
         }
 
@@ -231,8 +232,10 @@ const StudySelectionEventHandler = {
                 'Alexa.Presentation.APL'
             ]
         ) {
-            const statement = `You chose study ${chosenStudy.antaris_id}.`;
-            const subStatement = `Say "Activate fantastic health survey" to start.`;
+            const statement = `You chose study ${logic.getVerbalFormat(
+                chosenStudy.antaris_id
+            )}.`;
+            const subStatement = `Say \"Activate fantastic health survey\" to start.`;
             const aplDirective = utils.getBasicAnnouncementAplDirective(
                 statement,
                 subStatement
