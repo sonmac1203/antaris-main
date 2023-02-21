@@ -168,7 +168,7 @@ const ChooseStudyIntentHandler = {
                 studyIDSlotValue
             )}.`;
             const verbalStatement = `You chose study ${studyIDSlotValue}.`;
-            const subStatement = `Say \"Activate fantastic health survey\" to start.`;
+            const subStatement = `Say "Activate fantastic health survey" to start.`;
             if (
                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
                     'Alexa.Presentation.APL'
