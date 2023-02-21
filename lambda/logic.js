@@ -81,8 +81,8 @@ module.exports = {
             return this.getVerbalFormat(studies.toString());
         }
         let speech = '';
-        const formattedStudyId = this.getVerbalFormat(studies[i]);
         for (let i = 0; i < len; i++) {
+            const formattedStudyId = this.getVerbalFormat(studies[i]);
             if (i !== len - 1) {
                 speech += `${formattedStudyId}, `;
             } else {
