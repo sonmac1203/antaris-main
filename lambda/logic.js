@@ -108,4 +108,8 @@ module.exports = {
 
     return questions;
   },
+  
+    getVerbalFormat(number) {
+        return number.split('').join(' ');
+    }
 };
