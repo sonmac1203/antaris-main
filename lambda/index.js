@@ -18,7 +18,9 @@ const LaunchRequestHandler = {
     handle(handlerInput) {
         const aplResponse = apl.launchRequest;
         const speakOutput =
-            'Welcome to the Antaris health survey built by ' +  logic.getVerbalFormat('23062') + ' team. Say do authentication to continue.';
+            'Welcome to the Antaris health survey built by ' +
+            logic.getVerbalFormat('23062') +
+            ' team. Say do authentication to continue.';
 
         if (
             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -162,7 +164,9 @@ const ChooseStudyIntentHandler = {
             .includes(studyIDSlotValue);
 
         if (studyExists) {
-            const statement = `You chose study ${studyIDSlotValue}.`;
+            const statement = `You chose study ${logic.getVerbalFormat(
+                studyIDSlotValue
+            )}.`;
             const subStatement = `Say \"Activate fantastic health survey\" to start.`;
             if (
                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -227,7 +231,9 @@ const StudySelectionEventHandler = {
                 'Alexa.Presentation.APL'
             ]
         ) {
-            const statement = `You chose study ${chosenStudy.antaris_id}.`;
+            const statement = `You chose study ${logic.getVerbalFormat(
+                chosenStudy.antaris_id
+            )}.`;
             const subStatement = `Say \"Activate fantastic health survey\" to start.`;
             const aplDirective = utils.getBasicAnnouncementAplDirective(
                 statement,
@@ -237,7 +243,9 @@ const StudySelectionEventHandler = {
         }
         return handlerInput.responseBuilder
             .speak(
-                `You chose study ${chosenStudy.antaris_id}. Say activate fantastic health survey to start.`
+                `You chose study ${logic.getVerbalFormat(
+                    chosenStudy.antaris_id
+                )}. Say activate fantastic health survey to start.`
             )
             .getResponse();
     },
@@ -260,9 +268,6 @@ const BeginSurveyIntentHandler = {
         const { data } = await logic.fetchStudyInfo(studyID);
         const { global_variables: globalVariables, meta_data: metaData } =
             data.study_data;
-        console.log("IM HERE");
-        console.log(studyID);
-        console.log(data);
 
         sessionAttributes.studyName = globalVariables.study_name;
         sessionAttributes.questions = metaData.questions;
