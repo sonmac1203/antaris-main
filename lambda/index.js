@@ -21,6 +21,10 @@ const LaunchRequestHandler = {
         const visualStatement = 'Welcome to the Antaris health survey.';
         const subStatement = `Say "Do authentication" to continue.`;
         
+        const accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
+        console.log("TEST ACCESS TOKEN HEREEEEE");
+        console.log(accessToken);
+        
         const speakOutput = `${verbalStatement} ${subStatement}`;
 
         if (
