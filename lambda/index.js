@@ -17,14 +17,17 @@ const LaunchRequestHandler = {
     },
     handle(handlerInput) {
         const aplResponse = apl.launchRequest;
-        const verbalStatement = `Welcome to the Antaris health survey by ${logic.getVerbalFormat('23062')} team.`;
+        const verbalStatement = `Welcome to the Antaris health survey by ${logic.getVerbalFormat(
+            '23062'
+        )} team.`;
         const visualStatement = 'Welcome to the Antaris health survey.';
         const subStatement = `Say "Do authentication" to continue.`;
-        
-        const accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
-        console.log("TEST ACCESS TOKEN HEREEEEE");
+
+        const accessToken =
+            handlerInput.requestEnvelope.context.System.user.accessToken;
+        console.log('TEST ACCESS TOKEN HEREEEEE');
         console.log(accessToken);
-        
+
         const speakOutput = `${verbalStatement} ${subStatement}`;
 
         if (
@@ -405,6 +408,36 @@ const AnswerIntentHandler = {
     },
 };
 
+const ProactiveEventHandler = {
+    canHandle(handlerInput) {
+        console.log(handlerInput);
+
+        return (
+            handlerInput.requestEnvelope.request.type ===
+            'AlexaSkillEvent.ProactiveSubscriptionChanged'
+        );
+    },
+
+    handle(handlerInput) {
+        console.log(
+            'AWS User ' +
+                handlerInput.requestEnvelope.context.System.user.userId
+        );
+
+        console.log(
+            'API Endpoint ' +
+                handlerInput.requestEnvelope.context.System.apiEndpoint
+        );
+
+        console.log(
+            'Permissions' +
+                JSON.stringify(
+                    handlerInput.requestEnvelope.request.body.subscriptions
+                )
+        );
+    },
+};
+
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return (
@@ -557,6 +590,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         BeginSurveyIntentHandler,
         QuestionIntentHandler,
         AnswerIntentHandler,
+        ProactiveEventHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         FallbackIntentHandler,
