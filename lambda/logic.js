@@ -2,7 +2,7 @@ const axios = require('axios');
 const utils = require('./util');
 const zlib = require('zlib');
 
-const host = 'https://3d06-68-230-48-163.ngrok.io';
+const host = 'https://a08a-68-230-48-163.ngrok.io';
 
 module.exports = {
     async fetchParticipantInfo(participantID) {
@@ -81,8 +81,8 @@ module.exports = {
             return this.getVerbalFormat(studies.toString());
         }
         let speech = '';
-        const formattedStudyId = this.getVerbalFormat(studies[i]);
         for (let i = 0; i < len; i++) {
+            const formattedStudyId = this.getVerbalFormat(studies[i]);
             if (i !== len - 1) {
                 speech += `${formattedStudyId}, `;
             } else {

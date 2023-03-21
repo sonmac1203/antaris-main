@@ -17,22 +17,28 @@ const LaunchRequestHandler = {
     },
     handle(handlerInput) {
         const aplResponse = apl.launchRequest;
-        const speakOutput =
-            'Welcome to the Antaris health survey built by ' +
-            logic.getVerbalFormat('23062') +
-            ' team. Say do authentication to continue.';
+        const verbalStatement = `Welcome to the Antaris health survey by ${logic.getVerbalFormat(
+            '23062'
+        )} team.`;
+        const visualStatement = 'Welcome to the Antaris health survey.';
+        const subStatement = `Say "Do authentication" to continue.`;
+
+        const accessToken =
+            handlerInput.requestEnvelope.context.System.user.accessToken;
+        console.log('TEST ACCESS TOKEN HEREEEEE');
+        console.log(accessToken);
+
+        const speakOutput = `${verbalStatement} ${subStatement}`;
 
         if (
             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
                 'Alexa.Presentation.APL'
             ]
         ) {
-            // generate the APL RenderDocument directive that will be returned from your skill
-            const aplDirective = utils.createDirectivePayload(
-                aplResponse.DOCUMENT_ID,
-                aplResponse.datasource
+            const aplDirective = utils.getBasicAnnouncementAplDirective(
+                visualStatement,
+                subStatement
             );
-            // add the RenderDocument directive to the responseBuilder
             handlerInput.responseBuilder.addDirective(aplDirective);
         }
 
@@ -164,23 +170,24 @@ const ChooseStudyIntentHandler = {
             .includes(studyIDSlotValue);
 
         if (studyExists) {
-            const statement = `You chose study ${logic.getVerbalFormat(
+            const visualStatement = `You chose study ${logic.getVerbalFormat(
                 studyIDSlotValue
             )}.`;
-            const subStatement = `Say \"Activate fantastic health survey\" to start.`;
+            const verbalStatement = `You chose study ${studyIDSlotValue}.`;
+            const subStatement = `Say "Activate fantastic health survey" to start.`;
             if (
                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
                     'Alexa.Presentation.APL'
                 ]
             ) {
                 const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    statement,
+                    visualStatement,
                     subStatement
                 );
                 handlerInput.responseBuilder.addDirective(aplDirective);
             }
             return handlerInput.responseBuilder
-                .speak(`${statement} ${subStatement}`)
+                .speak(`${verbalStatement} ${subStatement}`)
                 .getResponse();
         } else {
             const statement = 'I cannot find any assigned study with that id.';
@@ -231,10 +238,8 @@ const StudySelectionEventHandler = {
                 'Alexa.Presentation.APL'
             ]
         ) {
-            const statement = `You chose study ${logic.getVerbalFormat(
-                chosenStudy.antaris_id
-            )}.`;
-            const subStatement = `Say \"Activate fantastic health survey\" to start.`;
+            const statement = `You chose study ${chosenStudy.antaris_id}.`;
+            const subStatement = `Say "Activate fantastic health survey" to start.`;
             const aplDirective = utils.getBasicAnnouncementAplDirective(
                 statement,
                 subStatement
@@ -403,6 +408,36 @@ const AnswerIntentHandler = {
     },
 };
 
+const ProactiveEventHandler = {
+    canHandle(handlerInput) {
+        console.log(handlerInput);
+
+        return (
+            handlerInput.requestEnvelope.request.type ===
+            'AlexaSkillEvent.ProactiveSubscriptionChanged'
+        );
+    },
+
+    handle(handlerInput) {
+        console.log(
+            'AWS User ' +
+                handlerInput.requestEnvelope.context.System.user.userId
+        );
+
+        console.log(
+            'API Endpoint ' +
+                handlerInput.requestEnvelope.context.System.apiEndpoint
+        );
+
+        console.log(
+            'Permissions' +
+                JSON.stringify(
+                    handlerInput.requestEnvelope.request.body.subscriptions
+                )
+        );
+    },
+};
+
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return (
@@ -555,6 +590,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         BeginSurveyIntentHandler,
         QuestionIntentHandler,
         AnswerIntentHandler,
+        ProactiveEventHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         FallbackIntentHandler,
