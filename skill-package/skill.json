@@ -6,6 +6,7 @@
           "uri": "arn:aws:lambda:us-east-1:401042348185:function:04827d92-c247-4d56-9a23-6350943439fb:Release_0"
         },
         "interfaces": [],
+        "locales": {},
         "regions": {
           "NA": {
             "endpoint": {
@@ -25,54 +26,13 @@
         }
       }
     },
-    "manifestVersion": "1.0",
-    "publishingInformation": {
-      "distributionCountries": [],
-      "isAvailableWorldwide": true,
-      "locales": {
-        "en-US": {
-          "description": "Sample Full Description",
-          "examplePhrases": [
-            "Alexa open hello world",
-            "hello",
-            "help"
-          ],
-          "keywords": [],
-          "name": "Antaris",
-          "summary": "Sample Short Description"
-        }
-      },
-      "testingInstructions": "Sample Testing Instructions."
-    },
-    "permissions": [
-      {
-        "name": "alexa::devices:all:notifications:write"
-      }
-    ],
     "events": {
-      "publications": [
-        {
-          "eventName": "AMAZON.MessageAlert.Activated"
-        }
-      ],
       "endpoint": {
         "uri": "arn:aws:lambda:us-east-1:401042348185:function:04827d92-c247-4d56-9a23-6350943439fb:Release_0"
       },
-      "subscriptions": [
+      "publications": [
         {
-          "eventName": "SKILL_PROACTIVE_SUBSCRIPTION_CHANGED"
-        },
-        {
-          "eventName": "SKILL_ENABLED"
-        },
-        {
-          "eventName": "SKILL_DISABLED"
-        },
-        {
-          "eventName": "SKILL_PERMISSION_ACCEPTED"
-        },
-        {
-          "eventName": "SKILL_PERMISSION_CHANGED"
+          "eventName": "AMAZON.MessageAlert.Activated"
         }
       ],
       "regions": {
@@ -91,7 +51,48 @@
             "uri": "arn:aws:lambda:us-west-2:401042348185:function:04827d92-c247-4d56-9a23-6350943439fb:Release_0"
           }
         }
+      },
+      "subscriptions": [
+        {
+          "eventName": "SKILL_PROACTIVE_SUBSCRIPTION_CHANGED"
+        },
+        {
+          "eventName": "SKILL_ENABLED"
+        },
+        {
+          "eventName": "SKILL_DISABLED"
+        },
+        {
+          "eventName": "SKILL_PERMISSION_ACCEPTED"
+        },
+        {
+          "eventName": "SKILL_PERMISSION_CHANGED"
+        }
+      ]
+    },
+    "manifestVersion": "1.0",
+    "permissions": [
+      {
+        "name": "alexa::devices:all:notifications:write"
       }
+    ],
+    "publishingInformation": {
+      "distributionCountries": [],
+      "isAvailableWorldwide": true,
+      "locales": {
+        "en-US": {
+          "description": "Sample Full Description",
+          "examplePhrases": [
+            "Alexa open hello world",
+            "hello",
+            "help"
+          ],
+          "keywords": [],
+          "name": "Antaris",
+          "summary": "Sample Short Description"
+        }
+      },
+      "testingInstructions": "Sample Testing Instructions."
     }
   }
 }

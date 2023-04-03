@@ -13,7 +13,13 @@
         },
         {
           "name": "AMAZON.StopIntent",
-          "samples": []
+          "samples": [
+            "End the health survey",
+            "Please exit the health study",
+            "Exit health survey",
+            "Exit the skill",
+            "Stop the skill"
+          ]
         },
         {
           "name": "HelloWorldIntent",
@@ -37,18 +43,7 @@
           "samples": []
         },
         {
-          "name": "ActivateSurveyIntent",
-          "slots": [],
-          "samples": [
-            "open survey application",
-            "beautiful",
-            "show me Antaris survey",
-            "let's start Antaris survey",
-            "Antaris survey"
-          ]
-        },
-        {
-          "name": "UserVerificationIntent",
+          "name": "UserAuthenticationIntent",
           "slots": [
             {
               "name": "participantID",
@@ -61,15 +56,89 @@
             }
           ],
           "samples": [
-            "launch the health study",
-            "start the health survey",
-            "start the health assessment",
-            "Do the health study",
-            "Activate the health study",
-            "Begin the health survey now",
+            "authenticate me",
+            "please authenticate me",
+            "sign me in for the health study",
+            "start authentication",
+            "do authentication",
+            "do the health study authentication",
+            "authenticate me for the health study",
+            "identify me for the health survey",
+            "do the health survey identification",
             "Start the survey for participant {participantID}",
             "My id is {participantID}",
             "My participant id is {participantID}"
+          ]
+        },
+        {
+          "name": "BeginSurveyIntent",
+          "slots": [],
+          "samples": [
+            "activate the health study",
+            "start the health assessment survey",
+            "play the health survey",
+            "show the fantastic health survey",
+            "release the fantastic survey",
+            "Read the fantastic survey",
+            "Launch the fantastic survey",
+            "Begin the fantastic survey",
+            "Begin the health survey",
+            "Read the health survey"
+          ]
+        },
+        {
+          "name": "ChooseStudyIntent",
+          "slots": [
+            {
+              "name": "studyID",
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "Do study {studyID}",
+                "Please start with study {studyID}",
+                "I would choose study {studyID}",
+                "{studyID}",
+                "I choose study {studyID}"
+              ]
+            }
+          ],
+          "samples": [
+            "Ask me to provide the study id",
+            "Ask me which study I want to choose",
+            "Study selection",
+            "Ask me the study I want to choose",
+            "Do the study selection"
+          ]
+        },
+        {
+          "name": "QuestionIntent",
+          "slots": [],
+          "samples": [
+            "begin to play the questions",
+            "start to play the questions",
+            "play the questions",
+            "can you start to play the questions",
+            "can you begin to play the questions",
+            "Start the questions",
+            "Start reading the questions",
+            "Read the questions",
+            "Read all the questions to me",
+            "Start reading all the questions"
+          ]
+        },
+        {
+          "name": "AnswerIntent",
+          "slots": [
+            {
+              "name": "answer",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "{answer} is my answer to the question",
+            "My answer to the question is {answer}",
+            "My answer is {answer}",
+            "{answer} is my answer",
+            "The answer is {answer}"
           ]
         }
       ],
@@ -78,7 +147,7 @@
     "dialog": {
       "intents": [
         {
-          "name": "UserVerificationIntent",
+          "name": "UserAuthenticationIntent",
           "confirmationRequired": false,
           "prompts": {},
           "slots": [
@@ -90,6 +159,36 @@
               "prompts": {
                 "elicitation": "Elicit.Slot.764004223273.195629036659"
               }
+            }
+          ]
+        },
+        {
+          "name": "ChooseStudyIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "studyID",
+              "type": "AMAZON.SearchQuery",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.841821656419.371271348422"
+              }
+            }
+          ]
+        },
+        {
+          "name": "AnswerIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "answer",
+              "type": "AMAZON.SearchQuery",
+              "elicitationRequired": false,
+              "confirmationRequired": false,
+              "prompts": {}
             }
           ]
         }
@@ -117,8 +216,54 @@
             "value": "What is your participant ID?"
           }
         ]
+      },
+      {
+        "id": "Elicit.Slot.841821656419.371271348422",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "What study ID do you want to choose?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Which study do you choose?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Tell me what study you choose"
+          },
+          {
+            "type": "PlainText",
+            "value": "Which study do you want to choose?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Let me know the study ID"
+          },
+          {
+            "type": "PlainText",
+            "value": "Tell me the study ID"
+          },
+          {
+            "type": "PlainText",
+            "value": "What is the study identification number?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.1548307368837",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Please confirm your answer to the question"
+          },
+          {
+            "type": "PlainText",
+            "value": "Can you confirm your answer?"
+          }
+        ]
       }
     ]
   },
-  "version": "12"
+  "version": "37"
 }
