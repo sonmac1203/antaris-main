@@ -79,22 +79,37 @@ module.exports = {
         }
     },
 
-    getVerbalStudyList(studies) {
-        const len = studies.length;
-        if (len === 1) {
-            return this.getVerbalFormat(studies.toString());
-        }
-        let speech = '';
-        for (let i = 0; i < len; i++) {
-            const formattedStudyId = this.getVerbalFormat(studies[i]);
-            if (i !== len - 1) {
-                speech += `${formattedStudyId}, `;
-            } else {
-                speech += `and ${formattedStudyId}`;
-            }
-        }
-        return speech;
+    // getVerbalStudyList(studies) {
+    //     const len = studies.length;
+    //     if (len === 1) {
+    //         return this.getVerbalFormat(studies.toString());
+    //     }
+    //     let speech = '';
+    //     for (let i = 0; i < len; i++) {
+    //         const formattedStudyId = this.getVerbalFormat(studies[i]);
+    //         if (i !== len - 1) {
+    //             speech += `${formattedStudyId}, `;
+    //         } else {
+    //             speech += `and ${formattedStudyId}`;
+    //         }
+    //     }
+    //     return speech;
+    // },
+    
+    getVerbalSurveyList(surveys) {
+        const surveyNames = surveys.reduce((acc, survey, index) => {
+          if (index === 0) {
+            return survey.name;
+          } else if (index === surveys.length - 1) {
+            return `${acc}, and ${survey.name}`;
+          } else {
+            return `${acc}, ${survey.name}`;
+          }
+        }, "");
+        return surveyNames;
     },
+    
+    
 
     populateQuestions(studyData) {
         const questionDefinitionArray =
