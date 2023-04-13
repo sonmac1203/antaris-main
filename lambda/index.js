@@ -61,84 +61,82 @@ const UserAuthenticationIntentHandler = {
     async handle(handlerInput) {
         // destructure attributes
         const { intent } = handlerInput.requestEnvelope.request;
-        const { name: participantIDSlotName, value: participantIDSlotValue } =
-            intent.slots.participantID;
+        const { name: secondaryIdSlotName, value: secondaryIdSlotValue } =
+            intent.slots.secondaryId;
+            
+        const {userId} = handlerInput.requestEnvelope.context.System.user;
 
         // fetch participant data from database
-        const response = await logic.fetchParticipantInfo(
-            participantIDSlotValue
-        );
-        const { name: participantName, studies } = response.data;
+        const response = await logic.fetchParticipantInfo(secondaryIdSlotValue, userId);
+        
 
-        // trigger session storage
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        sessionAttributes.studies = studies;
-        sessionAttributes.participantID = participantIDSlotValue;
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         const aplResponse = apl.authenticationIntent;
 
         // determine response logics
         if (response.success) {
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const studySelectionList = studies.map((study) => ({
-                    primaryText: study.antaris_id,
-                    secondaryText: `Assigned by ${study.added_by}`,
-                }));
-                const aplDirective = {
-                    type: 'Alexa.Presentation.APL.RenderDocument',
-                    token: 'documentToken',
-                    document: {
-                        type: 'Link',
-                        src: 'doc://alexa/apl/documents/StudySelectionList',
-                    },
-                    datasources: {
-                        studySelectionListData: {
-                            participantName: participantName,
-                            numberOfActiveStudies: studies.length,
-                            backgroundImageSource:
-                                'https://d2o906d8ln7ui1.cloudfront.net/images/BT6_Background.png',
-                            listItemsToShow: studySelectionList,
-                        },
-                    },
-                };
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
-            const greeting = `Hi ${participantName}. Authorization has been completed`;
-            const studyList = logic.getVerbalStudyList(
-                studies.map((s) => s.antaris_id)
-            );
-            const speakOutput = `${greeting}. I see that you have ${
-                studies.length
-            } ${
-                studies.length > 1 ? 'studies' : 'study'
-            } assigned, which are ${studyList}. Say do the study selection to continue.`;
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .getResponse();
+            const { demographics, assigned_surveys: surveys } = response.data;
+            const participantFullname = `${demographics.first_name} ${demographics.last_name}`;
+            
+            // trigger session storage
+            const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+            sessionAttributes.surveys = surveys;
+            sessionAttributes.secondaryId = secondaryIdSlotValue;
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+            
+            // if (
+            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+            //         'Alexa.Presentation.APL'
+            //     ]
+            // ) { // TODO: fix this APL
+            //     const studySelectionList = studies.map((study) => ({
+            //         primaryText: study.antaris_id,
+            //         secondaryText: `Assigned by ${study.added_by}`,
+            //     }));
+            //     const aplDirective = {
+            //         type: 'Alexa.Presentation.APL.RenderDocument',
+            //         token: 'documentToken',
+            //         document: {
+            //             type: 'Link',
+            //             src: 'doc://alexa/apl/documents/StudySelectionList',
+            //         },
+            //         datasources: {
+            //             studySelectionListData: {
+            //                 participantName: participantName,
+            //                 numberOfActiveStudies: studies.length,
+            //                 backgroundImageSource:
+            //                     'https://d2o906d8ln7ui1.cloudfront.net/images/BT6_Background.png',
+            //                 listItemsToShow: studySelectionList,
+            //             },
+            //         },
+            //     };
+            //     handlerInput.responseBuilder.addDirective(aplDirective);
+            // }
+            const greeting = `Hi ${participantFullname}. Authorization has been completed`;
+            const surveyList = logic.getVerbalSurveyList(surveys);
+            const numberOfSurveys = surveys.length;
+            const plural = numberOfSurveys === 1 ? '' : 's';
+            
+            const speakOutput = `${greeting}. I see that you have ${numberOfSurveys} survey${plural} assigned, which are ${surveyList}. Say do the study selection to continue.`;
+            return handlerInput.responseBuilder.speak(speakOutput).getResponse();
         } else {
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    'Sorry, no participant is associated with this id.',
-                    'Try telling me your participant id again.'
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
+            // if (
+            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+            //         'Alexa.Presentation.APL'
+            //     ]
+            // ) {
+            //     const aplDirective = utils.getBasicAnnouncementAplDirective(
+            //         'Sorry, no participant is associated with this id.',
+            //         'Try telling me your participant id again.'
+            //     );
+            //     handlerInput.responseBuilder.addDirective(aplDirective);
+            // }
 
             const speakOutput =
                 'Sorry, no participant is associated with this id. What is your participant id again?';
             return handlerInput.responseBuilder
                 .speak(speakOutput)
-                .addElicitSlotDirective(participantIDSlotName)
+                .addElicitSlotDirective(secondaryIdSlotName)
                 .getResponse();
         }
     },
