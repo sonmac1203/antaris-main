@@ -2,16 +2,20 @@ const axios = require('axios');
 const utils = require('./util');
 const zlib = require('zlib');
 
-const host = 'https://a08a-68-230-48-163.ngrok.io';
+const host = 'https://c348-98-186-218-175.ngrok-free.app';
 
 module.exports = {
-    async fetchParticipantInfo(participantID) {
-        const apiRoute = `${host}/api/participants/${participantID}?fields=antaris_id,name,studies`;
+    async fetchParticipantInfo(secondaryId, userId) {
+        // const apiRoute = `${host}/api/participants/${participantID}?fields=antaris_id,name,studies`;
+        const route = `${host}/api/dev/skill/participants/${secondaryId}`;
         const config = {
+            params: {
+                user_id: userId, 
+            },
             timeout: 6500,
         };
         try {
-            const response = await axios.get(apiRoute, config);
+            const response = await axios.get(route, config);
             return response.data;
         } catch (error) {
             console.log('ERROR', error);
