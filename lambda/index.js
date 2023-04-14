@@ -328,20 +328,21 @@ const QuestionIntentHandler = {
         const surveyName = sessionAttributes.choosenSurveyName;
         
         const { question, index } = askQuestion(handlerInput);
-        if (
-            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                'Alexa.Presentation.APL'
-            ]
-        ) {
-            const aplDirective = utils.getBasicQuestionAplDirective(
-                {
-                    questionNumber: index + 1,
-                    questionText: question,
-                },
-                studyName
-            );
-            handlerInput.responseBuilder.addDirective(aplDirective);
-        }
+        // TODO: Fix this APL
+        // if (
+        //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+        //         'Alexa.Presentation.APL'
+        //     ]
+        // ) {
+        //     const aplDirective = utils.getBasicQuestionAplDirective(
+        //         {
+        //             questionNumber: index + 1,
+        //             questionText: question,
+        //         },
+        //         studyName
+        //     );
+        //     handlerInput.responseBuilder.addDirective(aplDirective);
+        // }
         const speakOutput = `Question ${index + 1}: ${question}`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
