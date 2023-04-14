@@ -153,59 +153,62 @@ const ChooseStudyIntentHandler = {
     },
 
     handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        const studies = sessionAttributes.studies;
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const surveys = sessionAttributes.surveys;
 
         const { intent } = handlerInput.requestEnvelope.request;
-        const { name: studyIDSlotName, value: studyIDSlotValue } =
-            intent.slots.studyID;
-        sessionAttributes.choosenStudyID = studyIDSlotValue;
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        const { name: surveyNameSlotName, value: surveyNameSlotValue } = intent.slots.surveyName;
+        
 
-        const studyExists = studies
-            .map((s) => s.antaris_id)
-            .includes(studyIDSlotValue);
+        
+        const surveyExists = surveys.some(survey => survey.name === surveyNameSlotValue);
 
-        if (studyExists) {
-            const visualStatement = `You chose study ${logic.getVerbalFormat(
-                studyIDSlotValue
-            )}.`;
-            const verbalStatement = `You chose study ${studyIDSlotValue}.`;
+        // const studyExists = studies
+        //     .map((s) => s.antaris_id)
+        //     .includes(studyIDSlotValue);
+
+        if (surveyExists) {
+            sessionAttributes.choosenSurveyName = surveyNameSlotValue;
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+            
+            const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
+            const verbalStatement = `You chose study ${surveyNameSlotValue}.`;
             const subStatement = `Say "Activate fantastic health survey" to start.`;
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    visualStatement,
-                    subStatement
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
+            // TODO: Fix this APL
+            // if (
+            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+            //         'Alexa.Presentation.APL'
+            //     ]
+            // ) {
+            //     const aplDirective = utils.getBasicAnnouncementAplDirective(
+            //         visualStatement,
+            //         subStatement
+            //     );
+            //     handlerInput.responseBuilder.addDirective(aplDirective);
+            // }
+            
             return handlerInput.responseBuilder
                 .speak(`${verbalStatement} ${subStatement}`)
                 .getResponse();
         } else {
             const statement = 'I cannot find any assigned study with that id.';
             const subStatement = 'What is the study id again?';
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    statement,
-                    subStatement
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
+            // if (
+            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+            //         'Alexa.Presentation.APL'
+            //     ]
+            // ) {
+            //     const aplDirective = utils.getBasicAnnouncementAplDirective(
+            //         statement,
+            //         subStatement
+            //     );
+            //     handlerInput.responseBuilder.addDirective(aplDirective);
+            // }
             return handlerInput.responseBuilder
                 .speak(
                     `That does not match with any of your assigned studies. What is the study ID again?`
                 )
-                .addElicitSlotDirective(studyIDSlotName)
+                .addElicitSlotDirective(surveyNameSlotName);
                 .getResponse();
         }
     },
