@@ -167,8 +167,7 @@ const ChooseStudyIntentHandler = {
         //     .includes(studyIDSlotValue);
 
         if (existingSurvey) {
-            sessionAttributes.choosenSurveyName = surveyNameSlotValue;
-            sessionAttributes.chosenSurveyId = existingSurvey.surveyID;
+            sessionAttributes.chosenSurvey = existingSurvey;
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
             
             const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
@@ -268,10 +267,8 @@ const BeginSurveyIntentHandler = {
 
     async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        const surveyName = sessionAttributes.choosenSurveyName;
-        const surveys = sessionAttributes.surveys;
         
-        const chosenSurvey = surveys.find(survey => survey.name.toLowerCase() === surveyName);
+        const {name: surveyName, content} = sessionAttributes.chosenSurvey;
         
         // const { data } = await logic.fetchStudyInfo(studyID);
         // const { global_variables: globalVariables, meta_data: metaData } =
@@ -280,10 +277,11 @@ const BeginSurveyIntentHandler = {
         // sessionAttributes.studyName = globalVariables.study_name;
         // sessionAttributes.questions = metaData.questions;
         
-        const questions = chosenSurvey.content.questions;
+        const questions = content.questions;
         const numberOfQuestions = questions.length;
         
-        sessionAttributes.questions = questions;
+        // sessionAttributes.questions = questions;
+        
         sessionAttributes.numberOfQuestions = numberOfQuestions;
         sessionAttributes.questionCounter = 0;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
@@ -581,9 +579,9 @@ const ErrorHandler = {
 const askQuestion = (handlerInput) => {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const questionIndex = attributes.questionCounter;
-    const currentQuestion = attributes.questions[questionIndex];
+    const {content} = attributes.chosenSurvey;
+    const currentQuestion = content.questions[questionIndex];
     attributes.questionCounter += 1;
-
     handlerInput.attributesManager.setSessionAttributes(attributes);
 
     return { question: currentQuestion.text, index: questionIndex, identifier: currentQuestion.identifier };
