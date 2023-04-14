@@ -158,6 +158,7 @@ const ChooseStudyIntentHandler = {
 
         const { intent } = handlerInput.requestEnvelope.request;
         const { name: surveyNameSlotName, value: surveyNameSlotValue } = intent.slots.surveyName;
+        console.log(surveyNameSlotValue);
         
 
         
