@@ -371,6 +371,7 @@ const AnswerIntentHandler = {
 
         sessionAttributes.questions[currentQuestionIndex - 1]['answer'] = answerIDSlotValue;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        
 
         if (currentQuestionIndex === numberOfQuestions) {
             const apiResponse = await logic.uploadResponses(sessionAttributes);
