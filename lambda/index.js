@@ -208,8 +208,7 @@ const ChooseStudyIntentHandler = {
                 .speak(
                     `That does not match with any of your assigned studies. What is the study ID again?`
                 )
-                .addElicitSlotDirective(surveyNameSlotName)
-                .getResponse();
+                .addElicitSlotDirective(surveyNameSlotName).getResponse();
         }
     },
 };
