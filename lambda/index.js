@@ -324,9 +324,9 @@ const QuestionIntentHandler = {
     },
 
     handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        const studyName = sessionAttributes.studyName;
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const surveyName = sessionAttributes.choosenSurveyName;
+        
         const { question, index } = askQuestion(handlerInput);
         if (
             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -585,7 +585,7 @@ const askQuestion = (handlerInput) => {
 
     handlerInput.attributesManager.setSessionAttributes(attributes);
 
-    return { question: currentQuestion.text, index: questionIndex };
+    return { question: currentQuestion.text, index: questionIndex, identifier: currentQuestion.identifier };
 };
 
 /**
