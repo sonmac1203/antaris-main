@@ -361,8 +361,7 @@ const AnswerIntentHandler = {
     },
 
     async handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         const { intent } = handlerInput.requestEnvelope.request;
         const { value: answerIDSlotValue } = intent.slots.answer;
@@ -376,19 +375,21 @@ const AnswerIntentHandler = {
 
         if (currentQuestionIndex === numberOfQuestions) {
             const apiResponse = await logic.uploadResponses(sessionAttributes);
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const statement = 'You have answered all the questions.';
-                const subStatement = `Say \"Exit\" to stop the survey.`;
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    statement,
-                    subStatement
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
+            
+            // TODO: Fix this APL
+            // if (
+            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+            //         'Alexa.Presentation.APL'
+            //     ]
+            // ) {
+            //     const statement = 'You have answered all the questions.';
+            //     const subStatement = `Say \"Exit\" to stop the survey.`;
+            //     const aplDirective = utils.getBasicAnnouncementAplDirective(
+            //         statement,
+            //         subStatement
+            //     );
+            //     handlerInput.responseBuilder.addDirective(aplDirective);
+            // }
 
             const speakOutput = `You have answered all the questions. ${apiResponse.message}. Say exit to stop.`;
             return handlerInput.responseBuilder
