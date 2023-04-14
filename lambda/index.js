@@ -369,8 +369,7 @@ const AnswerIntentHandler = {
         const currentQuestionIndex = sessionAttributes.questionCounter;
         const numberOfQuestions = sessionAttributes.numberOfQuestions;
 
-        sessionAttributes.questions[currentQuestionIndex - 1].answer =
-            answerIDSlotValue;
+        sessionAttributes.questions[currentQuestionIndex - 1]['answer'] = answerIDSlotValue;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         if (currentQuestionIndex === numberOfQuestions) {
