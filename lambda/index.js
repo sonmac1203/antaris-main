@@ -162,7 +162,7 @@ const ChooseStudyIntentHandler = {
         
 
         
-        const surveyExists = surveys.some(survey => survey.name === surveyNameSlotValue);
+        const surveyExists = surveys.some(survey => survey.name.toLowerCase() === surveyNameSlotValue);
 
         // const studyExists = studies
         //     .map((s) => s.antaris_id)
@@ -268,34 +268,44 @@ const BeginSurveyIntentHandler = {
     },
 
     async handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        const studyID = sessionAttributes.choosenStudyID;
-        const { data } = await logic.fetchStudyInfo(studyID);
-        const { global_variables: globalVariables, meta_data: metaData } =
-            data.study_data;
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const surveyName = sessionAttributes.choosenSurveyName;
+        const surveys = sessionAttributes.surveys;
+        
+        const chosenSurvey = surveys.find(survey => survey.name.toLowerCase() === surveyName);
+        
+        // const { data } = await logic.fetchStudyInfo(studyID);
+        // const { global_variables: globalVariables, meta_data: metaData } =
+        //     data.study_data;
 
-        sessionAttributes.studyName = globalVariables.study_name;
-        sessionAttributes.questions = metaData.questions;
-        sessionAttributes.numberOfQuestions = metaData.questions.length;
+        // sessionAttributes.studyName = globalVariables.study_name;
+        // sessionAttributes.questions = metaData.questions;
+        
+        const questions = chosenSurvey.content.questions;
+        const numberOfQuestions = questions.length;
+        
+        sessionAttributes.questions = questions;
+        sessionAttributes.numberOfQuestions = numberOfQuestions;
         sessionAttributes.questionCounter = 0;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        
+        // TODO: Fix this APL
 
-        if (
-            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                'Alexa.Presentation.APL'
-            ]
-        ) {
-            const statement = `Welcome to ${globalVariables.study_name}. There are ${metaData.questions.length} questions in this survey.`;
-            const subStatement = `Say \"Read all questions\" to start.`;
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
-                statement,
-                subStatement
-            );
-            handlerInput.responseBuilder.addDirective(aplDirective);
-        }
+        // if (
+        //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+        //         'Alexa.Presentation.APL'
+        //     ]
+        // ) {
+        //     const statement = `Welcome to ${globalVariables.study_name}. There are ${metaData.questions.length} questions in this survey.`;
+        //     const subStatement = `Say \"Read all questions\" to start.`;
+        //     const aplDirective = utils.getBasicAnnouncementAplDirective(
+        //         statement,
+        //         subStatement
+        //     );
+        //     handlerInput.responseBuilder.addDirective(aplDirective);
+        // }
 
-        const speakOutput = `Welcome to the study ${globalVariables.study_name}. You have ${metaData.questions.length} questions in this survey. Please now say read all questions to start.`;
+        const speakOutput = `Welcome to the ${surveyName}. You have ${numberOfQuestions} questions in this survey. Please now say read all questions to start.`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt('You can ask me to start reading the questions.')
