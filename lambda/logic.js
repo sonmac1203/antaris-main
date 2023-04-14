@@ -100,7 +100,7 @@ module.exports = {
             console.log(err.response.data);
             return err.response.data;
         }
-    }
+    },
 
     // getVerbalStudyList(studies) {
     //     const len = studies.length;
