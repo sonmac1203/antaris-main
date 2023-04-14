@@ -78,6 +78,20 @@ module.exports = {
             return err.response.data;
         }
     },
+    
+    async uploadResponse(question, surveyId, participantId, projectId) {
+        const {text: question_text, identifier: question_identifier, answer: answer_text} = question;
+        
+        const requestBody = {answer_text, question_text, question_identifier};
+        const requestParams = {
+            params: {
+                survey_id: surveyId,
+                participant_identifier: participantId,
+                project_id: projectId
+            }
+        }
+        
+    }
 
     // getVerbalStudyList(studies) {
     //     const len = studies.length;
