@@ -75,13 +75,14 @@ const UserAuthenticationIntentHandler = {
 
         // determine response logics
         if (response.success) {
-            const { demographics, assigned_surveys: surveys } = response.data;
+            const { demographics, assigned_surveys: surveys, project_id: projectId } = response.data;
             const participantFullname = `${demographics.first_name} ${demographics.last_name}`;
             
             // trigger session storage
             const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
             sessionAttributes.surveys = surveys;
             sessionAttributes.secondaryId = secondaryIdSlotValue;
+            sessionAttributes.projectId = projectId;
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
             
             // if (
@@ -158,18 +159,16 @@ const ChooseStudyIntentHandler = {
 
         const { intent } = handlerInput.requestEnvelope.request;
         const { name: surveyNameSlotName, value: surveyNameSlotValue } = intent.slots.surveyName;
-        console.log(surveyNameSlotValue);
+        const existingSurvey = surveys.find(survey => survey.name.toLowerCase() === surveyNameSlotValue);
         
-
-        
-        const surveyExists = surveys.some(survey => survey.name.toLowerCase() === surveyNameSlotValue);
 
         // const studyExists = studies
         //     .map((s) => s.antaris_id)
         //     .includes(studyIDSlotValue);
 
-        if (surveyExists) {
+        if (existingSurvey) {
             sessionAttributes.choosenSurveyName = surveyNameSlotValue;
+            sessionAttributes.chosenSurveyId = existingSurvey.surveyID;
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
             
             const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
