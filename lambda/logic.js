@@ -91,6 +91,15 @@ module.exports = {
             }
         }
         
+        const route = `${host}/api/dev/skill/responses/save`;
+        
+        try {
+            const { data } = await axios.post(route, requestBody, requestParams);
+            return data;
+        } catch (err) {
+            console.log(err.response.data);
+            return err.response.data;
+        }
     }
 
     // getVerbalStudyList(studies) {
