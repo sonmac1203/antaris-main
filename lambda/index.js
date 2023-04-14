@@ -75,7 +75,7 @@ const UserAuthenticationIntentHandler = {
 
         // determine response logics
         if (response.success) {
-            const { demographics, assigned_surveys: surveys, project_id: projectId } = response.data;
+            const { demographics, assigned_surveys: surveys, project_id: projectId, participant_identifier } = response.data;
             const participantFullname = `${demographics.first_name} ${demographics.last_name}`;
             
             // trigger session storage
@@ -83,6 +83,7 @@ const UserAuthenticationIntentHandler = {
             sessionAttributes.surveys = surveys;
             sessionAttributes.secondaryId = secondaryIdSlotValue;
             sessionAttributes.projectId = projectId;
+            sessionAttributes.participantId = participant_identifier;
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
             
             // if (
@@ -366,12 +367,20 @@ const AnswerIntentHandler = {
         const currentQuestionIndex = sessionAttributes.questionCounter;
         const numberOfQuestions = sessionAttributes.numberOfQuestions;
 
-        sessionAttributes.questions[currentQuestionIndex - 1]['answer'] = answerIDSlotValue;
+        sessionAttributes.chosenSurvey.content.questions[currentQuestionIndex - 1]['answer'] = answerIDSlotValue;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        
+        const question = sessionAttributes.chosenSurvey.content.questions[currentQuestionIndex - 1];
+        const surveyId = sessionAttributes.chosenSurvey.surveyID;
+        const projectId = sessionAttributes.projectId;
+        const participantId = sessionAttributes.participantId;
+        
+        
+        const apiResponse = await logic.uploadResponse(question, surveyId, participantId, projectId);
         
 
         if (currentQuestionIndex === numberOfQuestions) {
-            const apiResponse = await logic.uploadResponses(sessionAttributes);
+            // const apiResponse = await logic.uploadResponses(sessionAttributes);
             
             // TODO: Fix this APL
             // if (
