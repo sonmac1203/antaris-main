@@ -16,7 +16,6 @@ module.exports = {
         };
         try {
             const response = await axios.get(route, config);
-            console.log(response);
             return response.data;
         } catch (error) {
             console.log('ERROR', error);
