@@ -13,15 +13,17 @@ module.exports = {
             params: {
                 user_id: userId, 
             },
-            timeout: 6500,
+            timeout: 20000,
+            responseType: 'arraybuffer',
         };
         try {
-            const response = await axios.get(route, config);
+            const { data } = await axios.get(route, config);
+            const stringifiedData = zlib.gunzipSync(data).toString();
             console.log("IM IN FETCH");
-            console.log(response.data);
-            return response.data;
+            console.log(JSON.parse(stringifiedData));
+            return JSON.parse(stringifiedData);
         } catch (error) {
-            console.log("IM IN FETCH");
+            console.log("IM IN FETCH ERROR");
             console.log('ERROR', error);
             return error.response.data;
         }
