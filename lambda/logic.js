@@ -6,6 +6,7 @@ const host = 'https://c348-98-186-218-175.ngrok-free.app';
 
 module.exports = {
     async fetchParticipantInfo(secondaryId, userId) {
+        console.log(secondaryId);
         // const apiRoute = `${host}/api/participants/${participantID}?fields=antaris_id,name,studies`;
         const route = `${host}/api/dev/skill/participants/${secondaryId}`;
         const config = {
@@ -16,6 +17,7 @@ module.exports = {
         };
         try {
             const response = await axios.get(route, config);
+            console.log(response);
             return response.data;
         } catch (error) {
             console.log('ERROR', error);
