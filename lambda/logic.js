@@ -6,6 +6,7 @@ const host = 'https://c348-98-186-218-175.ngrok-free.app';
 
 module.exports = {
     async fetchParticipantInfo(secondaryId, userId) {
+        console.log("IM IN PARTI INFO")
         console.log(secondaryId);
         // const apiRoute = `${host}/api/participants/${participantID}?fields=antaris_id,name,studies`;
         const route = `${host}/api/dev/skill/participants/${secondaryId}`;
