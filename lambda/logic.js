@@ -16,8 +16,11 @@ module.exports = {
         };
         try {
             const response = await axios.get(route, config);
+            console.log("IM IN FETCH");
+            console.log(response.data);
             return response.data;
         } catch (error) {
+            console.log("IM IN FETCH");
             console.log('ERROR', error);
             return error.response.data;
         }
