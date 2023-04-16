@@ -74,7 +74,7 @@ const UserAuthenticationIntentHandler = {
         // determine response logics
         if (response.success) {
             const { demographics, assigned_surveys: surveys, project_id: projectId, participant_identifier } = response.data;
-            const participantFullname = `${demographics.first_name} ${demographics.last_name}`;
+            const name = `${demographics.first_name}`;
             
             // trigger session storage
             const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
@@ -112,12 +112,12 @@ const UserAuthenticationIntentHandler = {
             //     };
             //     handlerInput.responseBuilder.addDirective(aplDirective);
             // }
-            const greeting = `Hi ${participantFullname}.`;
+            const greeting = `Hi ${name}.`;
             const surveyList = logic.getVerbalSurveyList(surveys);
             const numberOfSurveys = surveys.length;
             const plural = numberOfSurveys === 1 ? '' : 's';
             
-            const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${plural ? 'are' : 'is'} ${surveyList}. Say do the study selection to continue.`;
+            const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${plural ? 'are' : 'is'} ${surveyList}. Say do survey selection to continue.`;
             return handlerInput.responseBuilder.speak(speakOutput).getResponse();
         } else {
             // if (
