@@ -112,12 +112,12 @@ const UserAuthenticationIntentHandler = {
             //     };
             //     handlerInput.responseBuilder.addDirective(aplDirective);
             // }
-            const greeting = `Hi ${participantFullname}. Authorization has been completed`;
+            const greeting = `Hi ${participantFullname}.`;
             const surveyList = logic.getVerbalSurveyList(surveys);
             const numberOfSurveys = surveys.length;
             const plural = numberOfSurveys === 1 ? '' : 's';
             
-            const speakOutput = `${greeting}. I see that you have ${numberOfSurveys} survey${plural} assigned, which are ${surveyList}. Say do the study selection to continue.`;
+            const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${plural ? 'are' : 'is'} ${surveyList}. Say do the study selection to continue.`;
             return handlerInput.responseBuilder.speak(speakOutput).getResponse();
         } else {
             // if (
