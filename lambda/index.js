@@ -25,8 +25,6 @@ const LaunchRequestHandler = {
 
         const accessToken =
             handlerInput.requestEnvelope.context.System.user.accessToken;
-        console.log('TEST ACCESS TOKEN HEREEEEE');
-        console.log(accessToken);
 
         const speakOutput = `${verbalStatement} ${subStatement}`;
 
