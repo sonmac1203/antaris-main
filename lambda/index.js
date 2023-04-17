@@ -309,28 +309,26 @@ const QuestionIntentHandler = {
 
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        const surveyName = sessionAttributes.choosenSurveyName;
+        const {name: surveyName} = sessionAttributes.chosenSurvey;
         
-        const { question, index } = askQuestion(handlerInput);
+        const { question: questionText, index } = askQuestion(handlerInput);
         // TODO: Fix this APL
-        // if (
-        //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-        //         'Alexa.Presentation.APL'
-        //     ]
-        // ) {
-        //     const aplDirective = utils.getBasicQuestionAplDirective(
-        //         {
-        //             questionNumber: index + 1,
-        //             questionText: question,
-        //         },
-        //         studyName
-        //     );
-        //     handlerInput.responseBuilder.addDirective(aplDirective);
-        // }
-        const speakOutput = `Question ${index + 1}: ${question}`;
+        if (
+            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                'Alexa.Presentation.APL'
+            ]
+        ) {
+            const questionObj = {
+                questionNumber: index + 1,
+                questionText,
+            }
+            const aplDirective = utils.getBasicQuestionAplDirective(questionObj, surveyName);
+            handlerInput.responseBuilder.addDirective(aplDirective);
+        }
+        const speakOutput = `Question ${index + 1}: ${questionText}`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt(question)
+            .reprompt(questionText)
             .getResponse();
     },
 };
@@ -352,6 +350,8 @@ const AnswerIntentHandler = {
 
         const currentQuestionIndex = sessionAttributes.questionCounter;
         const numberOfQuestions = sessionAttributes.numberOfQuestions;
+        
+        const {name: surveyName} = sessionAttributes.chosenSurvey;
 
         sessionAttributes.chosenSurvey.content.questions[currentQuestionIndex - 1]['answer'] = answerIDSlotValue;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
@@ -369,45 +369,42 @@ const AnswerIntentHandler = {
             // const apiResponse = await logic.uploadResponses(sessionAttributes);
             
             // TODO: Fix this APL
-            // if (
-            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-            //         'Alexa.Presentation.APL'
-            //     ]
-            // ) {
-            //     const statement = 'You have answered all the questions.';
-            //     const subStatement = `Say \"Exit\" to stop the survey.`;
-            //     const aplDirective = utils.getBasicAnnouncementAplDirective(
-            //         statement,
-            //         subStatement
-            //     );
-            //     handlerInput.responseBuilder.addDirective(aplDirective);
-            // }
+            if (
+                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                    'Alexa.Presentation.APL'
+                ]
+            ) {
+                const statement = 'You have answered all the questions.';
+                const subStatement = 'Say "Exit" to stop the survey.';
+                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                    statement,
+                    subStatement
+                );
+                handlerInput.responseBuilder.addDirective(aplDirective);
+            }
 
             const speakOutput = `You have answered all the questions. ${apiResponse.message}. Say exit to stop.`;
             return handlerInput.responseBuilder
                 .speak(speakOutput)
                 .getResponse();
         } else {
-            const studyName = sessionAttributes.studyName;
-            const { question, index } = askQuestion(handlerInput);
-            // if (
-            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-            //         'Alexa.Presentation.APL'
-            //     ]
-            // ) {
-            //     const aplDirective = utils.getBasicQuestionAplDirective(
-            //         {
-            //             questionNumber: index + 1,
-            //             questionText: question,
-            //         },
-            //         studyName
-            //     );
-            //     handlerInput.responseBuilder.addDirective(aplDirective);
-            // }
-            const speakOutput = `Question ${index + 1}: ${question}`;
+            const { question: questionText, index } = askQuestion(handlerInput);
+            if (
+                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                    'Alexa.Presentation.APL'
+                ]
+            ) {
+                const questionObj = {
+                    questionNumber: index + 1,
+                    questionText,
+                }
+                const aplDirective = utils.getBasicQuestionAplDirective(questionObj, surveyName);
+                handlerInput.responseBuilder.addDirective(aplDirective);
+            }
+            const speakOutput = `Question ${index + 1}: ${questionText}`;
             return handlerInput.responseBuilder
                 .speak(speakOutput)
-                .reprompt(question)
+                .reprompt(questionText)
                 .getResponse();
         }
     },
