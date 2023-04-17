@@ -77,7 +77,6 @@ module.exports = {
                 },
             },
         };
-        
         const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, 'documentToken');
         return payload;
     },
