@@ -134,8 +134,10 @@ module.exports = {
         //             ]
         //         }
         // }))
-        // const surveyNumber = surveys.length;
-        // const plural = surveyNumber > 1 ? 's' : '';
+        const surveyNumber = surveys.length;
+        const plural = surveyNumber > 1 ? 's' : '';
+        const surveyNumberInText = `${surveyNumber} survey${plural}`;
+        
         const DOCUMENT_ID = 'SurveySelection';
         
         const dataSources = {
@@ -155,7 +157,7 @@ module.exports = {
                 },
                 "headerContent": {
                     "participantName": participantName,
-                    "surveyNumber": "3 surveys"
+                    "surveyNumber": surveyNumberInText,
                 },
                 "listItems": [
                     {
