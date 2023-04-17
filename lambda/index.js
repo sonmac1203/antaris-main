@@ -119,17 +119,17 @@ const UserAuthenticationIntentHandler = {
             const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${plural ? 'are' : 'is'} ${surveyList}. Say do survey selection to continue.`;
             return handlerInput.responseBuilder.speak(speakOutput).getResponse();
         } else {
-            // if (
-            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-            //         'Alexa.Presentation.APL'
-            //     ]
-            // ) {
-            //     const aplDirective = utils.getBasicAnnouncementAplDirective(
-            //         'Sorry, no participant is associated with this id.',
-            //         'Try telling me your participant id again.'
-            //     );
-            //     handlerInput.responseBuilder.addDirective(aplDirective);
-            // }
+            if (
+                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                    'Alexa.Presentation.APL'
+                ]
+            ) {
+                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                    'No articipant is associated with this id.',
+                    'Try telling me your participant id again.'
+                );
+                handlerInput.responseBuilder.addDirective(aplDirective);
+            }
 
             const speakOutput =
                 'Sorry, no participant is associated with this I D. What is your participant I D again?';
