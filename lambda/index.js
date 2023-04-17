@@ -250,7 +250,7 @@ const StudySelectionEventHandler = {
             Alexa.getRequestType(handlerInput.requestEnvelope) ===
                 'Alexa.Presentation.APL.UserEvent' &&
             handlerInput.requestEnvelope.request.arguments[0] ===
-                'StudySelectionListItemSelected'
+                'SurveySelected'
         );
     },
     handle(handlerInput) {
