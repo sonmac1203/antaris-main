@@ -15,7 +15,7 @@ module.exports = {
                 user_id: userId, 
             },
             timeout: 6500,
-            responseType: 'arraybuffer', 
+            responseType: 'json', 
             decompress: true,
             headers: {
                 'Content-Type': 'application/json',
