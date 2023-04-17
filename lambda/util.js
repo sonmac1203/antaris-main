@@ -134,60 +134,67 @@ module.exports = {
                     ]
                 }
         }))
-        console.log("IM IN API UTILS");
-        console.log(listItems);
         const surveyNumber = surveys.length;
         const plural = surveyNumber > 1 ? 's' : '';
         const DOCUMENT_ID = 'SurveySelection';
+        
         const dataSources = {
-            surveyListData: {
-                type: "object",
-                objectId: "SurveySelectionList",
-                properties: {
-                    backgroundImage: {
-                        "contentDescription": null,
-                        "smallSourceUrl": null,
-                        "largeSourceUrl": null,
-                        "sources": [
-                            {
-                                url: THIRD_BACKGROUND_PHOTO_URL,
-                                "size": "large"
-                            }
-                        ]
-                    },
-                    "headerContent": {
-                        "participantName": "Wesley",
-                        "surveyNumber": "3 surveys"
-                    },
-                    "listItems": [
+            "surveyListData": {
+                "type": "object",
+                "objectId": "SurveySelectionList",
+                "backgroundImage": {
+                    "contentDescription": null,
+                    "smallSourceUrl": null,
+                    "largeSourceUrl": null,
+                    "sources": [
                         {
-                            "primaryText": "Peonies & Petals Nursery",
-                            "primaryAction": {
-                                "type": "SendEvent",
-                                "arguments": [
-                                    "SurveySelected",
-                                    "${ordinal}"
-                                ]
-                            }
-                        },
-                        {
-                            "primaryText": "Peonies & Petals Nursery",
-                            "primaryAction": {
-                                "type": "SendEvent",
-                                "arguments": [
-                                    "SurveySelected",
-                                    "${ordinal}"
-                                ]
-                            }
+                            "url": "https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_",
+                            "size": "large"
                         }
-                    ],
-                    logoUrl: LOGO_URL,
+                    ]
                 },
+                "headerContent": {
+                    "participantName": "Wesley",
+                    "surveyNumber": "3 surveys"
+                },
+                "listItems": [
+                    {
+                        "primaryText": "Peonies & Petals Nursery",
+                        "primaryAction": {
+                            "type": "SendEvent",
+                            "arguments": [
+                                "SurveySelected",
+                                "${ordinal}"
+                            ]
+                        }
+                    },
+                    {
+                        "primaryText": "Peonies & Petals Nursery",
+                        "primaryAction": {
+                            "type": "SendEvent",
+                            "arguments": [
+                                "SurveySelected",
+                                "${ordinal}"
+                            ]
+                        }
+                    }
+                ],
+                "logoUrl": "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI"
             }
         };
         
-        const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, "documentToken");
-        return payload;
+        const aplDirective = {
+            type: "Alexa.Presentation.APL.RenderDocument",
+            token: 'documentToken',
+            document: {
+                type: "Link",
+                src: "doc://alexa/apl/documents/" + "SurveySelection"
+            },
+            datasources: dataSources,
+        };
+        
+        // const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, "documentToken");
+        return aplDirective;
     }
     
     
