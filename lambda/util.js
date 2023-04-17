@@ -7,6 +7,7 @@ const s3SigV4Client = new AWS.S3({
 
 const LOGO_URL = "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI";
 const BACKGROUND_PHOTO_URL = 'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png';
+const HEADER_TITLE = "ENGR 498 CAPSTONE PROJECT - TEAM 23062";
 
 module.exports = {
     getS3PreSignedUrl: function getS3PreSignedUrl(s3ObjectKey) {
@@ -68,7 +69,7 @@ module.exports = {
                         },
                         headerTitle: {
                             type: "PlainText",
-                            text: "ENGR 498 CAPSTONE PROJECT - TEAM 23062"
+                            text: HEADER_TITLE,
                         },
                     },
                     logoUrl: LOGO_URL,
