@@ -14,12 +14,13 @@ module.exports = {
             params: {
                 user_id: userId, 
             },
-            timeout: 6500,
+            timeout: 20000,
             responseType: 'json', 
             decompress: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
+                'Accept-Encoding': '*',
             },
         };
         try {
