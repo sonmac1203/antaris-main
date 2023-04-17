@@ -20,6 +20,7 @@ module.exports = {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
+                'Accept-Encoding': '*',
             },
         };
         try {
