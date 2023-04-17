@@ -171,7 +171,7 @@ const ChooseStudyIntentHandler = {
             
             const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
             const verbalStatement = `You chose study ${surveyNameSlotValue}.`;
-            const subStatement = `Say "Activate fantastic health survey" to start.`;
+            const subStatement = `Say "Begin survey" to start.`;
             // TODO: Fix this APL
             // if (
             //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -237,7 +237,7 @@ const StudySelectionEventHandler = {
             ]
         ) {
             const statement = `You chose study ${chosenStudy.antaris_id}.`;
-            const subStatement = `Say "Activate fantastic health survey" to start.`;
+            const subStatement = `Say "Begin survey" to start.`;
             const aplDirective = utils.getBasicAnnouncementAplDirective(
                 statement,
                 subStatement
@@ -248,7 +248,7 @@ const StudySelectionEventHandler = {
             .speak(
                 `You chose study ${logic.getVerbalFormat(
                     chosenStudy.antaris_id
-                )}. Say activate fantastic health survey to start.`
+                )}. Say begin survey to start.`
             )
             .getResponse();
     },
