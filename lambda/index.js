@@ -259,6 +259,7 @@ const StudySelectionEventHandler = {
 
         const chosenIndex = handlerInput.requestEnvelope.request.arguments[1];
         console.log("TEST CHOSEN INDEX");
+        console.log(handlerInput.requestEnvelope.request.arguments);
         console.log(chosenIndex);
         
         const existingSurvey = surveys[chosenIndex];
