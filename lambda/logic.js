@@ -8,6 +8,7 @@ module.exports = {
     async fetchParticipantInfo(secondaryId, userId) {
         // const apiRoute = `${host}/api/participants/${participantID}?fields=antaris_id,name,studies`;
         console.log(userId);
+        console.log(secondaryId);
         const route = `${host}/api/dev/skill/participants/${secondaryId}`;
         const config = {
             params: {
@@ -18,6 +19,7 @@ module.exports = {
         };
         try {
             const { data } = await axios.get(route, config);
+            console.log(data);
             const stringifiedData = zlib.gunzipSync(data).toString();
             console.log("IM IN FETCH");
             console.log(JSON.parse(stringifiedData));
