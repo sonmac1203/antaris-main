@@ -17,6 +17,7 @@ module.exports = {
             timeout: 6500,
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
         };
         try {
