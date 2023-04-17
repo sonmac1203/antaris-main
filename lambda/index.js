@@ -160,10 +160,6 @@ const ChooseStudyIntentHandler = {
         const existingSurvey = surveys.find(survey => survey.name.toLowerCase() === surveyNameSlotValue);
         
 
-        // const studyExists = studies
-        //     .map((s) => s.antaris_id)
-        //     .includes(studyIDSlotValue);
-
         if (existingSurvey) {
             sessionAttributes.chosenSurvey = existingSurvey;
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
@@ -171,18 +167,18 @@ const ChooseStudyIntentHandler = {
             const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
             const verbalStatement = `You chose study ${surveyNameSlotValue}.`;
             const subStatement = `Say "Begin survey" to start.`;
-            // TODO: Fix this APL
-            // if (
-            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-            //         'Alexa.Presentation.APL'
-            //     ]
-            // ) {
-            //     const aplDirective = utils.getBasicAnnouncementAplDirective(
-            //         visualStatement,
-            //         subStatement
-            //     );
-            //     handlerInput.responseBuilder.addDirective(aplDirective);
-            // }
+
+            if (
+                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                    'Alexa.Presentation.APL'
+                ]
+            ) {
+                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                    visualStatement,
+                    subStatement
+                );
+                handlerInput.responseBuilder.addDirective(aplDirective);
+            }
             
             return handlerInput.responseBuilder
                 .speak(`${verbalStatement} ${subStatement}`)
