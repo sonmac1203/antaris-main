@@ -143,7 +143,6 @@ const UserAuthenticationIntentHandler = {
                 //     },
                 //     datasources: datasource
                 // };
-                console.log(participantName);
                 const aplDirective = utils.getSurveyListAplDirective(
                     surveys,
                     participantName,
