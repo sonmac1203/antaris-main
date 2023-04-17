@@ -26,7 +26,7 @@ module.exports = {
             // console.log("IM IN FETCH");
             // console.log(JSON.parse(stringifiedData));
             console.log(data);
-            return JSON.parse(data);
+            return data;
         } catch (error) {
             console.log("IM IN FETCH ERROR");
             console.log('ERROR', error);
