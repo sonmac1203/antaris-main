@@ -134,6 +134,8 @@ module.exports = {
                     ]
                 }
         }))
+        console.log("IM IN API UTILS");
+        console.log(listItems);
         const surveyNumber = surveys.length;
         const plural = surveyNumber > 1 ? 's' : '';
         const DOCUMENT_ID = 'SurveySelection';
