@@ -133,10 +133,7 @@ module.exports = {
                 "primaryText": s.name,
                 "primaryAction": {
                     "type": "SendEvent",
-                    "arguments": [
-                        "SurveySelected",
-                        "${ordinal}"
-                    ]
+                    "arguments": ["SurveySelected", "${ordinal}"]
                 }
             }))
         
