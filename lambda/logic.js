@@ -14,16 +14,19 @@ module.exports = {
             params: {
                 user_id: userId, 
             },
-            timeout: 20000,
-            responseType: 'arraybuffer',
+            timeout: 6500,
+            headers: {
+                'Content-Type': 'application/json',
+            },
         };
         try {
             const { data } = await axios.get(route, config);
+            // console.log(data);
+            // const stringifiedData = zlib.gunzipSync(data).toString();
+            // console.log("IM IN FETCH");
+            // console.log(JSON.parse(stringifiedData));
             console.log(data);
-            const stringifiedData = zlib.gunzipSync(data).toString();
-            console.log("IM IN FETCH");
-            console.log(JSON.parse(stringifiedData));
-            return JSON.parse(stringifiedData);
+            return JSON.parse(data);
         } catch (error) {
             console.log("IM IN FETCH ERROR");
             console.log('ERROR', error);
