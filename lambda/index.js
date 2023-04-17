@@ -275,7 +275,7 @@ const StudySelectionEventHandler = {
         }
         return handlerInput.responseBuilder
             .speak(
-                `You chose ${existingSurvey.name}. Say begin survey to start.`
+                `You chose ${existingSurvey.name}. Say "Begin survey" to start.`
             )
             .getResponse();
     },
