@@ -124,19 +124,21 @@ module.exports = {
     },
     
     getSurveyListAplDirective(surveys, participantName) {
-        // const listItems = surveys.map(s => ({
-        //     primaryText: s.name,
-        //     primaryAction: {
-        //             type: "SendEvent",
-        //             "arguments": [
-        //                 "SurveySelected",
-        //                 "${ordinal}"
-        //             ]
-        //         }
-        // }))
         const surveyNumber = surveys.length;
         const plural = surveyNumber > 1 ? 's' : '';
         const surveyNumberInText = `${surveyNumber} survey${plural}`;
+        
+        const listItems = surveys.map(s => (
+            {
+                "primaryText": s.name,
+                "primaryAction": {
+                    "type": "SendEvent",
+                    "arguments": [
+                        "SurveySelected",
+                        "${ordinal}"
+                    ]
+                }
+            }))
         
         const DOCUMENT_ID = 'SurveySelection';
         
@@ -159,28 +161,7 @@ module.exports = {
                     "participantName": participantName,
                     "surveyNumber": surveyNumberInText,
                 },
-                "listItems": [
-                    {
-                        "primaryText": "Peonies & Petals Nursery",
-                        "primaryAction": {
-                            "type": "SendEvent",
-                            "arguments": [
-                                "SurveySelected",
-                                "${ordinal}"
-                            ]
-                        }
-                    },
-                    {
-                        "primaryText": "Peonies & Petals Nursery",
-                        "primaryAction": {
-                            "type": "SendEvent",
-                            "arguments": [
-                                "SurveySelected",
-                                "${ordinal}"
-                            ]
-                        }
-                    }
-                ],
+                "listItems": listItems,
                 "logoUrl": "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI"
             }
         };
