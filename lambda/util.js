@@ -124,18 +124,18 @@ module.exports = {
     },
     
     getSurveyListAplDirective(surveys, participantName) {
-        const listItems = surveys.map(s => ({
-            primaryText: s.name,
-            primaryAction: {
-                    type: "SendEvent",
-                    "arguments": [
-                        "SurveySelected",
-                        "${ordinal}"
-                    ]
-                }
-        }))
-        const surveyNumber = surveys.length;
-        const plural = surveyNumber > 1 ? 's' : '';
+        // const listItems = surveys.map(s => ({
+        //     primaryText: s.name,
+        //     primaryAction: {
+        //             type: "SendEvent",
+        //             "arguments": [
+        //                 "SurveySelected",
+        //                 "${ordinal}"
+        //             ]
+        //         }
+        // }))
+        // const surveyNumber = surveys.length;
+        // const plural = surveyNumber > 1 ? 's' : '';
         const DOCUMENT_ID = 'SurveySelection';
         
         const dataSources = {
