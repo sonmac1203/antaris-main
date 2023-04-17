@@ -20,7 +20,7 @@ const LaunchRequestHandler = {
         const verbalStatement = `Welcome to the Antaris health survey by team ${logic.getVerbalFormat(
             '23062'
         )}.`;
-        const visualStatement = 'Welcome to the Antaris health survey.';
+        const visualStatement = 'Welcome to the Antaris.';
         const subStatement = `Say "Do authentication" to continue.`;
 
         const accessToken =
@@ -39,7 +39,6 @@ const LaunchRequestHandler = {
             );
             handlerInput.responseBuilder.addDirective(aplDirective);
         }
-
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt(speakOutput)
