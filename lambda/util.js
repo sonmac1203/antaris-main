@@ -125,7 +125,7 @@ module.exports = {
     
     getSurveyListAplDirective(surveys, participantName) {
         const listItems = surveys.map(s => ({
-            primaryText: s.surveyName,
+            primaryText: s.name,
             primaryAction: {
                     type: "SendEvent",
                     "arguments": [
