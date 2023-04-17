@@ -155,11 +155,11 @@ module.exports = {
                             }
                         ]
                     },
-                    headerContent: {
-                        participantName,
-                        surveyNumber: `${surveyNumber} survey${plural}`,
+                    "headerContent": {
+                        "participantName": "Wesley",
+                        "surveyNumber": "3 surveys"
                     },
-                    listItems: [
+                    "listItems": [
                         {
                             "primaryText": "Peonies & Petals Nursery",
                             "primaryAction": {
