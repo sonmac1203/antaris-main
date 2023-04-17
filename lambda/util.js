@@ -154,7 +154,7 @@ module.exports = {
                     ]
                 },
                 "headerContent": {
-                    "participantName": "Wesley",
+                    "participantName": participantName,
                     "surveyNumber": "3 surveys"
                 },
                 "listItems": [
