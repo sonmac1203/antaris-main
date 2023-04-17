@@ -8,6 +8,7 @@ const s3SigV4Client = new AWS.S3({
 const LOGO_URL = "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI";
 const BACKGROUND_PHOTO_URL = 'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png';
 const SECONDARY_BACKGROUND_PHOTO_URL = 'https://drive.google.com/uc?id=1iO9wfcV_NfJvosJtUEEVQ30HLqQi2WrA';
+const THIRD_BACKGROUND_PHOTO_URL = 'https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_';
 const HEADER_TITLE = "ENGR 498 CAPSTONE PROJECT - TEAM 23062";
 const QUESTION_HINT_TEXT = 'Always start with "My answer is ..."';
 
@@ -120,5 +121,51 @@ module.exports = {
         
         const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, "documentToken");
         return payload;
+    },
+    
+    getSurveyListAplDirective(surveyList, participantName) {
+        const listItems = surveyList.map(s => ({
+            primaryText: s.surveyName,
+            primaryAction: {
+                    type: "SendEvent",
+                    "arguments": [
+                        "SurveySelected",
+                        "${ordinal}"
+                    ]
+                }
+        }))
+        const surveyNumber = surveyList.length;
+        const plural = surveyNumber > 1 ? 's' : '';
+        const DOCUMENT_ID = 'SurveySelection';
+        const dataSources = {
+            surveyListData: {
+                type: "object",
+                objectId: "SurveySelectionList",
+                properties: {
+                    backgroundImage: {
+                        "contentDescription": null,
+                        "smallSourceUrl": null,
+                        "largeSourceUrl": null,
+                        "sources": [
+                            {
+                                url: THIRD_BACKGROUND_PHOTO_URL,
+                                "size": "large"
+                            }
+                        ]
+                    },
+                    headerContent: {
+                        participantName,
+                        surveyNumber: `${surveyNumber} survey${plural}`,
+                    },
+                    listItems,
+                    logoUrl: LOGO_URL,
+                },
+            }
+        };
+        
+        const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, "documentToken");
+        return payload;
     }
+    
+    
 };
