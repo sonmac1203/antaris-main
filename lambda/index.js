@@ -89,64 +89,64 @@ const UserAuthenticationIntentHandler = {
                 ]
             ) {
                 
-                const datasource = {
-                    "surveyListData": {
-                        "type": "object",
-                        "objectId": "SurveySelectionList",
-                        "backgroundImage": {
-                            "contentDescription": null,
-                            "smallSourceUrl": null,
-                            "largeSourceUrl": null,
-                            "sources": [
-                                {
-                                    "url": "https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_",
-                                    "size": "large"
-                                }
-                            ]
-                        },
-                        "headerContent": {
-                            "participantName": "Wesley",
-                            "surveyNumber": "3 surveys"
-                        },
-                        "listItems": [
-                            {
-                                "primaryText": "Peonies & Petals Nursery",
-                                "primaryAction": {
-                                    "type": "SendEvent",
-                                    "arguments": [
-                                        "SurveySelected",
-                                        "${ordinal}"
-                                    ]
-                                }
-                            },
-                            {
-                                "primaryText": "Peonies & Petals Nursery",
-                                "primaryAction": {
-                                    "type": "SendEvent",
-                                    "arguments": [
-                                        "SurveySelected",
-                                        "${ordinal}"
-                                    ]
-                                }
-                            }
-                        ],
-                        "logoUrl": "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI"
-                    }
-                };
+                // const datasource = {
+                //     "surveyListData": {
+                //         "type": "object",
+                //         "objectId": "SurveySelectionList",
+                //         "backgroundImage": {
+                //             "contentDescription": null,
+                //             "smallSourceUrl": null,
+                //             "largeSourceUrl": null,
+                //             "sources": [
+                //                 {
+                //                     "url": "https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_",
+                //                     "size": "large"
+                //                 }
+                //             ]
+                //         },
+                //         "headerContent": {
+                //             "participantName": "Wesley",
+                //             "surveyNumber": "3 surveys"
+                //         },
+                //         "listItems": [
+                //             {
+                //                 "primaryText": "Peonies & Petals Nursery",
+                //                 "primaryAction": {
+                //                     "type": "SendEvent",
+                //                     "arguments": [
+                //                         "SurveySelected",
+                //                         "${ordinal}"
+                //                     ]
+                //                 }
+                //             },
+                //             {
+                //                 "primaryText": "Peonies & Petals Nursery",
+                //                 "primaryAction": {
+                //                     "type": "SendEvent",
+                //                     "arguments": [
+                //                         "SurveySelected",
+                //                         "${ordinal}"
+                //                     ]
+                //                 }
+                //             }
+                //         ],
+                //         "logoUrl": "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI"
+                //     }
+                // };
             
-                const aplDirective = {
-                    type: "Alexa.Presentation.APL.RenderDocument",
-                    token: 'documentToken',
-                    document: {
-                        type: "Link",
-                        src: "doc://alexa/apl/documents/" + "SurveySelection"
-                    },
-                    datasources: datasource
-                };
-                // const aplDirective = utils.getSurveyListAplDirective(
-                //     surveys,
-                //     participantName,
-                // );
+                // const aplDirective = {
+                //     type: "Alexa.Presentation.APL.RenderDocument",
+                //     token: 'documentToken',
+                //     document: {
+                //         type: "Link",
+                //         src: "doc://alexa/apl/documents/" + "SurveySelection"
+                //     },
+                //     datasources: datasource
+                // };
+                const aplDirective = utils.getSurveyListAplDirective(
+                    surveys,
+                    participantName,
+                );
                 handlerInput.responseBuilder.addDirective(aplDirective);
             }
             const greeting = `Hi ${participantName}`;
