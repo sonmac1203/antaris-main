@@ -130,11 +130,7 @@ module.exports = {
         
         const listItems = surveys.map(s => (
             {
-                "primaryText": s.name,
-                "primaryAction": {
-                    "type": "SendEvent",
-                    "arguments": ["SurveySelected", "${ordinal}"]
-                }
+                "primaryText": s.name
             }))
         
         const DOCUMENT_ID = 'SurveySelection';
