@@ -7,7 +7,9 @@ const s3SigV4Client = new AWS.S3({
 
 const LOGO_URL = "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI";
 const BACKGROUND_PHOTO_URL = 'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png';
+const SECONDARY_BACKGROUND_PHOTO_URL = 'https://drive.google.com/uc?id=1iO9wfcV_NfJvosJtUEEVQ30HLqQi2WrA';
 const HEADER_TITLE = "ENGR 498 CAPSTONE PROJECT - TEAM 23062";
+const QUESTION_HINT_TEXT = 'Always start with "My answer is ..."';
 
 module.exports = {
     getS3PreSignedUrl: function getS3PreSignedUrl(s3ObjectKey) {
@@ -81,40 +83,42 @@ module.exports = {
         return payload;
     },
 
-    getBasicQuestionAplDirective(question, studyName) {
+    getBasicQuestionAplDirective(question, surveyName) {
         const { questionNumber, questionText } = question;
         const DOCUMENT_ID = 'QuestionDisplay';
         const dataSources = {
             questionData: {
-                studyName: studyName,
-                questionNumber: questionNumber,
-                questionText: questionText,
-                type: 'object',
-                objectId: 'questionDisplay',
-                logoUrl:
-                    'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/logo/logo-modern-botanical-white.png',
-                hintText: 'Always start with "My answer is ..."',
-                backgroundImage: {
-                    contentDescription: null,
-                    smallSourceUrl: null,
-                    largeSourceUrl: null,
-                    sources: [
-                        {
-                            url: 'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png',
-                            size: 'large',
-                        },
-                    ],
+                type: "object",
+                objectId: "questionDisplay",
+                properties: {
+                    backgroundImage: {
+                        "contentDescription": null,
+                        "smallSourceUrl": null,
+                        "largeSourceUrl": null,
+                        "sources": [
+                            {
+                                url: SECONDARY_BACKGROUND_PHOTO_URL,
+                                "size": "large"
+                            }
+                        ]
+                    },
+                    headerContent: {
+                        questionNumber,
+                        surveyName,
+                    },
+                    textContent: {
+                        primaryText: {
+                            type: "PlainText",
+                            text: questionText,
+                        }
+                    },
+                    logoUrl: LOGO_URL,
+                    hintText: QUESTION_HINT_TEXT,
                 },
-            },
+            }
         };
-        return {
-            type: 'Alexa.Presentation.APL.RenderDocument',
-            token: 'documentToken',
-            document: {
-                type: 'Link',
-                src: 'doc://alexa/apl/documents/' + DOCUMENT_ID,
-            },
-            datasources: dataSources,
-        };
+        
+        const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, "documentToken");
+        return payload;
     }
 };
