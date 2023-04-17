@@ -28,7 +28,7 @@ module.exports = {
             console.log(data);
             return data;
         } catch (error) {
-            console.log("IM IN FETCH ERROR");
+            console.log("IM IN FETCH ERROR HAHA");
             console.log('ERROR', error);
             return error.response.data;
         }
