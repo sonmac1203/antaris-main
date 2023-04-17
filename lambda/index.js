@@ -184,22 +184,22 @@ const ChooseStudyIntentHandler = {
                 .speak(`${verbalStatement} ${subStatement}`)
                 .getResponse();
         } else {
-            const statement = 'I cannot find any assigned study with that name.';
-            const subStatement = 'What is the study name again?';
-            // if (
-            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-            //         'Alexa.Presentation.APL'
-            //     ]
-            // ) {
-            //     const aplDirective = utils.getBasicAnnouncementAplDirective(
-            //         statement,
-            //         subStatement
-            //     );
-            //     handlerInput.responseBuilder.addDirective(aplDirective);
-            // }
+            const statement = 'I cannot find any assigned survey with that name.';
+            const subStatement = 'What is the survey name again?';
+            if (
+                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                    'Alexa.Presentation.APL'
+                ]
+            ) {
+                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                    statement,
+                    subStatement
+                );
+                handlerInput.responseBuilder.addDirective(aplDirective);
+            }
             return handlerInput.responseBuilder
                 .speak(
-                    `That does not match with any of your assigned studies. What is the study name again?`
+                    `That does not match with any of your assigned surveys. What is the survey name again?`
                 )
                 .addElicitSlotDirective(surveyNameSlotName).getResponse();
         }
@@ -261,15 +261,8 @@ const BeginSurveyIntentHandler = {
 
     async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        
         const {name: surveyName, content} = sessionAttributes.chosenSurvey;
         
-        // const { data } = await logic.fetchStudyInfo(studyID);
-        // const { global_variables: globalVariables, meta_data: metaData } =
-        //     data.study_data;
-
-        // sessionAttributes.studyName = globalVariables.study_name;
-        // sessionAttributes.questions = metaData.questions;
         
         const questions = content.questions;
         const numberOfQuestions = questions.length;
@@ -282,21 +275,21 @@ const BeginSurveyIntentHandler = {
         
         // TODO: Fix this APL
 
-        // if (
-        //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-        //         'Alexa.Presentation.APL'
-        //     ]
-        // ) {
-        //     const statement = `Welcome to ${globalVariables.study_name}. There are ${metaData.questions.length} questions in this survey.`;
-        //     const subStatement = `Say \"Read all questions\" to start.`;
-        //     const aplDirective = utils.getBasicAnnouncementAplDirective(
-        //         statement,
-        //         subStatement
-        //     );
-        //     handlerInput.responseBuilder.addDirective(aplDirective);
-        // }
+        if (
+            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                'Alexa.Presentation.APL'
+            ]
+        ) {
+            const statement = `Welcome to ${surveyName}. There are ${numberOfQuestions} questions in this survey.`;
+            const subStatement = `Say "Read all questions" to start.`;
+            const aplDirective = utils.getBasicAnnouncementAplDirective(
+                statement,
+                subStatement
+            );
+            handlerInput.responseBuilder.addDirective(aplDirective);
+        }
 
-        const speakOutput = `Welcome to the ${surveyName}. You have ${numberOfQuestions} questions in this survey. Please now say read all questions to start.`;
+        const speakOutput = `Welcome to ${surveyName}. You have ${numberOfQuestions} questions in this survey. Please now say read all questions to start.`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt('You can ask me to start reading the questions.')
