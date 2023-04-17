@@ -17,9 +17,9 @@ const LaunchRequestHandler = {
     },
     handle(handlerInput) {
         const aplResponse = apl.launchRequest;
-        const verbalStatement = `Welcome to the Antaris health survey by ${logic.getVerbalFormat(
+        const verbalStatement = `Welcome to the Antaris health survey by team ${logic.getVerbalFormat(
             '23062'
-        )} team.`;
+        )}.`;
         const visualStatement = 'Welcome to the Antaris health survey.';
         const subStatement = `Say "Do authentication" to continue.`;
 
@@ -133,7 +133,7 @@ const UserAuthenticationIntentHandler = {
             // }
 
             const speakOutput =
-                'Sorry, no participant is associated with this id. What is your participant id again?';
+                'Sorry, no participant is associated with this I D. What is your participant I D again?';
             return handlerInput.responseBuilder
                 .speak(speakOutput)
                 .addElicitSlotDirective(secondaryIdSlotName)
@@ -189,8 +189,8 @@ const ChooseStudyIntentHandler = {
                 .speak(`${verbalStatement} ${subStatement}`)
                 .getResponse();
         } else {
-            const statement = 'I cannot find any assigned study with that id.';
-            const subStatement = 'What is the study id again?';
+            const statement = 'I cannot find any assigned study with that name.';
+            const subStatement = 'What is the study name again?';
             // if (
             //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
             //         'Alexa.Presentation.APL'
@@ -204,7 +204,7 @@ const ChooseStudyIntentHandler = {
             // }
             return handlerInput.responseBuilder
                 .speak(
-                    `That does not match with any of your assigned studies. What is the study ID again?`
+                    `That does not match with any of your assigned studies. What is the study name again?`
                 )
                 .addElicitSlotDirective(surveyNameSlotName).getResponse();
         }
