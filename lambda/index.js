@@ -73,7 +73,7 @@ const UserAuthenticationIntentHandler = {
         // determine response logics
         if (response.success) {
             const { demographics, assigned_surveys: surveys, project_id: projectId, participant_identifier } = response.data;
-            const name = `${demographics.first_name}`;
+            const participantName = `${demographics.first_name}`;
             
             // trigger session storage
             const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
@@ -83,35 +83,18 @@ const UserAuthenticationIntentHandler = {
             sessionAttributes.participantId = participant_identifier;
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
             
-            // if (
-            //     Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-            //         'Alexa.Presentation.APL'
-            //     ]
-            // ) { // TODO: fix this APL
-            //     const studySelectionList = studies.map((study) => ({
-            //         primaryText: study.antaris_id,
-            //         secondaryText: `Assigned by ${study.added_by}`,
-            //     }));
-            //     const aplDirective = {
-            //         type: 'Alexa.Presentation.APL.RenderDocument',
-            //         token: 'documentToken',
-            //         document: {
-            //             type: 'Link',
-            //             src: 'doc://alexa/apl/documents/StudySelectionList',
-            //         },
-            //         datasources: {
-            //             studySelectionListData: {
-            //                 participantName: participantName,
-            //                 numberOfActiveStudies: studies.length,
-            //                 backgroundImageSource:
-            //                     'https://d2o906d8ln7ui1.cloudfront.net/images/BT6_Background.png',
-            //                 listItemsToShow: studySelectionList,
-            //             },
-            //         },
-            //     };
-            //     handlerInput.responseBuilder.addDirective(aplDirective);
-            // }
-            const greeting = `Hi ${name}.`;
+            if (
+                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                    'Alexa.Presentation.APL'
+                ]
+            ) {
+                const aplDirective = utils.getSurveyListAplDirective(
+                    surveys,
+                    participantName,
+                );
+                handlerInput.responseBuilder.addDirective(aplDirective);
+            }
+            const greeting = `Hi ${participantName}.`;
             const surveyList = logic.getVerbalSurveyList(surveys);
             const numberOfSurveys = surveys.length;
             const plural = numberOfSurveys === 1 ? '' : 's';
@@ -216,14 +199,15 @@ const StudySelectionEventHandler = {
         );
     },
     handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        const studies = sessionAttributes.studies;
-        const chosenIndex =
-            handlerInput.requestEnvelope.request.arguments[1] - 1;
-        const chosenStudy = studies[chosenIndex];
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const surveys = sessionAttributes.surveys;
 
-        sessionAttributes.choosenStudyID = chosenStudy.antaris_id;
+        const chosenIndex = handlerInput.requestEnvelope.request.arguments[1] - 1;
+        console.log("TEST CHOSEN INDEX");
+        console.log(chosenIndex);
+        
+        const existingSurvey = surveys[chosenIndex];
+        sessionAttributes.chosenSurvey = existingSurvey;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         if (
@@ -231,19 +215,14 @@ const StudySelectionEventHandler = {
                 'Alexa.Presentation.APL'
             ]
         ) {
-            const statement = `You chose study ${chosenStudy.antaris_id}.`;
+            const statement = `You chose ${existingSurvey.name}.`;
             const subStatement = `Say "Begin survey" to start.`;
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
-                statement,
-                subStatement
-            );
+            const aplDirective = utils.getBasicAnnouncementAplDirective(statement, subStatement);
             handlerInput.responseBuilder.addDirective(aplDirective);
         }
         return handlerInput.responseBuilder
             .speak(
-                `You chose study ${logic.getVerbalFormat(
-                    chosenStudy.antaris_id
-                )}. Say begin survey to start.`
+                `You chose survey ${existingSurvey.name}. Say begin survey to start.`
             )
             .getResponse();
     },
