@@ -86,7 +86,6 @@ module.exports = {
     
     async uploadResponse(question, surveyId, participantId, projectId) {
         const {text: question_text, identifier: question_identifier, answer: answer_text} = question;
-        
         const requestBody = {answer_text, question_text, question_identifier};
         const requestParams = {
             params: {
