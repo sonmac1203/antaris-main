@@ -123,8 +123,8 @@ module.exports = {
         return payload;
     },
     
-    getSurveyListAplDirective(surveyList, participantName) {
-        const listItems = surveyList.map(s => ({
+    getSurveyListAplDirective(surveys, participantName) {
+        const listItems = surveys.map(s => ({
             primaryText: s.surveyName,
             primaryAction: {
                     type: "SendEvent",
@@ -134,7 +134,7 @@ module.exports = {
                     ]
                 }
         }))
-        const surveyNumber = surveyList.length;
+        const surveyNumber = surveys.length;
         const plural = surveyNumber > 1 ? 's' : '';
         const DOCUMENT_ID = 'SurveySelection';
         const dataSources = {
