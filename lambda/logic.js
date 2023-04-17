@@ -20,20 +20,12 @@ module.exports = {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Accept-Encoding': '*',
             },
         };
         try {
-            console.log("IM IN FETCH NORMAL");
             const { data } = await axios.get(route, config);
-            // console.log(data);
-            // const stringifiedData = zlib.gunzipSync(data).toString();
-            // console.log("IM IN FETCH");
-            // console.log(JSON.parse(stringifiedData));
-            console.log(data);
             return data;
         } catch (error) {
-            console.log("IM IN FETCH ERROR HAHA");
             console.log('ERROR', error);
             return error.response.data;
         }
