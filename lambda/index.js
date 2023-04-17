@@ -257,11 +257,8 @@ const StudySelectionEventHandler = {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const surveys = sessionAttributes.surveys;
 
-        const chosenIndex = handlerInput.requestEnvelope.request.arguments[1];
-        console.log("TEST CHOSEN INDEX");
-        console.log(handlerInput.requestEnvelope.request.arguments);
-        console.log(chosenIndex);
-        
+        const chosenIndex = parseInt(handlerInput.requestEnvelope.request.arguments[1]) - 1;
+
         const existingSurvey = surveys[chosenIndex];
         sessionAttributes.chosenSurvey = existingSurvey;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
@@ -278,7 +275,7 @@ const StudySelectionEventHandler = {
         }
         return handlerInput.responseBuilder
             .speak(
-                `You chose survey ${existingSurvey.name}. Say begin survey to start.`
+                `You chose ${existingSurvey.name}. Say begin survey to start.`
             )
             .getResponse();
     },
