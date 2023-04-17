@@ -23,6 +23,7 @@ module.exports = {
             },
         };
         try {
+            console.log("IM IN FETCH NORMAL");
             const { data } = await axios.get(route, config);
             // console.log(data);
             // const stringifiedData = zlib.gunzipSync(data).toString();
