@@ -5,6 +5,9 @@ const s3SigV4Client = new AWS.S3({
     region: process.env.S3_PERSISTENCE_REGION,
 });
 
+const LOGO_URL = "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI";
+const BACKGROUND_PHOTO_URL = 'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png';
+
 module.exports = {
     getS3PreSignedUrl: function getS3PreSignedUrl(s3ObjectKey) {
         const bucketName = process.env.S3_PERSISTENCE_BUCKET;
@@ -23,6 +26,7 @@ module.exports = {
         const rawText = text.replace(/\r|\n/g, '');
         return rawText;
     },
+    
     createDirectivePayload(
         aplDocumentId,
         dataSources = {},
@@ -42,9 +46,9 @@ module.exports = {
     getBasicAnnouncementAplDirective(text, hintText) {
         const DOCUMENT_ID = 'BasicAnnouncement';
         const dataSources = {
-            headlineTemplateData: {
+            templateData: {
                 type: 'object',
-                objectId: 'headlineSample',
+                objectId: "headline",
                 properties: {
                     backgroundImage: {
                         contentDescription: null,
@@ -52,7 +56,7 @@ module.exports = {
                         largeSourceUrl: null,
                         sources: [
                             {
-                                url: 'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png',
+                                url: BACKGROUND_PHOTO_URL,
                                 size: 'large',
                             },
                         ],
@@ -62,22 +66,19 @@ module.exports = {
                             type: 'PlainText',
                             text: text,
                         },
+                        headerTitle: {
+                            type: "PlainText",
+                            text: "ENGR 498 CAPSTONE PROJECT - TEAM 23062"
+                        },
                     },
-                    logoUrl: '',
+                    logoUrl: LOGO_URL,
                     hintText: hintText,
                 },
             },
         };
-
-        return {
-            type: 'Alexa.Presentation.APL.RenderDocument',
-            token: 'documentToken',
-            document: {
-                type: 'Link',
-                src: 'doc://alexa/apl/documents/' + DOCUMENT_ID,
-            },
-            datasources: dataSources,
-        };
+        
+        const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, 'documentToken');
+        return payload;
     },
 
     getBasicQuestionAplDirective(question, studyName) {
