@@ -125,14 +125,14 @@ const UserAuthenticationIntentHandler = {
                 ]
             ) {
                 const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    'No articipant is associated with this id.',
+                    'No articipant is found with this id.',
                     'Try telling me your participant id again.'
                 );
                 handlerInput.responseBuilder.addDirective(aplDirective);
             }
 
             const speakOutput =
-                'Sorry, no participant is associated with this I D. What is your participant I D again?';
+                'Sorry, no participant is found with this i d. What is your secondary i d again?';
             return handlerInput.responseBuilder
                 .speak(speakOutput)
                 .addElicitSlotDirective(secondaryIdSlotName)
