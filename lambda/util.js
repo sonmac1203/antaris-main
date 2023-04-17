@@ -159,7 +159,28 @@ module.exports = {
                         participantName,
                         surveyNumber: `${surveyNumber} survey${plural}`,
                     },
-                    listItems,
+                    listItems: [
+                        {
+                            "primaryText": "Peonies & Petals Nursery",
+                            "primaryAction": {
+                                "type": "SendEvent",
+                                "arguments": [
+                                    "SurveySelected",
+                                    "${ordinal}"
+                                ]
+                            }
+                        },
+                        {
+                            "primaryText": "Peonies & Petals Nursery",
+                            "primaryAction": {
+                                "type": "SendEvent",
+                                "arguments": [
+                                    "SurveySelected",
+                                    "${ordinal}"
+                                ]
+                            }
+                        }
+                    ],
                     logoUrl: LOGO_URL,
                 },
             }
