@@ -257,7 +257,7 @@ const StudySelectionEventHandler = {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const surveys = sessionAttributes.surveys;
 
-        const chosenIndex = handlerInput.requestEnvelope.request.arguments[1] - 1;
+        const chosenIndex = handlerInput.requestEnvelope.request.arguments[1];
         console.log("TEST CHOSEN INDEX");
         console.log(chosenIndex);
         
