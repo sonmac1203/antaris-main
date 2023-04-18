@@ -2,27 +2,36 @@ const { getRequestType, getSupportedInterfaces } = require('ask-sdk-core');
 const { welcomeStatements } = require('../statements');
 const { getBasicAnnouncementAplDirective } = require('../util');
 
+const Alexa = require('ask-sdk-core');
+const utils = require('../util');
+
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
-        return getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
+        return (
+            Alexa.getRequestType(handlerInput.requestEnvelope) ===
+            'LaunchRequest'
+        );
     },
     handle(handlerInput) {
-        const { requestEnvelope, responseBuilder } = handlerInput;
-        const { verbalMain, verbalSub, visualMain, visualSub } =
-            welcomeStatements;
-        const speakOutput = `${verbalMain} ${verbalSub}`;
+        // const { verbalMain, verbalSub, visualMain, visualSub } =
+        //     welcomeStatements;
 
-        const supportsAPL =
-            getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL'];
+        // console.log(verbalMain);
 
-        if (supportsAPL) {
-            const aplDirective = getBasicAnnouncementAplDirective(
-                visualMain,
-                visualSub
+        const speakOutput = `HOHO`;
+
+        if (
+            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                'Alexa.Presentation.APL'
+            ]
+        ) {
+            const aplDirective = utils.getBasicAnnouncementAplDirective(
+                'HAHA',
+                'HIHI'
             );
-            responseBuilder.addDirective(aplDirective);
+            handlerInput.responseBuilder.addDirective(aplDirective);
         }
-        return responseBuilder
+        return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt(speakOutput)
             .getResponse();
