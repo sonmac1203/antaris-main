@@ -44,9 +44,17 @@ const beginSurveyStatements = {
     visualSub: 'Say "Read all questions" to start.',
 };
 
+const answerStatements = {
+    verbalMain: 'You have answered all questions.',
+    verbalSub: 'Say, exit to stop the survey.',
+    visualMain: 'You have answered all questions.',
+    visualSub: 'Say "Exit" to stop the survey.',
+};
+
 module.exports = {
     welcomeStatements,
     authenticationStatements,
     chooseSurveyStatements,
     beginSurveyStatements,
+    answerStatements,
 };

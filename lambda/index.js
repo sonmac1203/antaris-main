@@ -4,8 +4,8 @@
  * session persistence, api calls, and more.
  * */
 const Alexa = require('ask-sdk-core');
-const logic = require('./logic');
-const utils = require('./util');
+// const logic = require('./logic');
+// const utils = require('./util');
 const { LaunchRequestHandler } = require('./handlers/LaunchRequestHandler');
 const {
     UserAuthenticationHandler,
@@ -16,95 +16,96 @@ const {
 } = require('./handlers/ChooseSurveyFromAplHandler');
 const { BeginSurveyHandler } = require('./handlers/BeginSurveyHandler');
 const { QuestionHandler } = require('./handlers/QuestionHandler');
+const { AnswerHandler } = require('./handlers/AnswerHandler');
 
-const AnswerIntentHandler = {
-    canHandle(handlerInput) {
-        return (
-            Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'IntentRequest' &&
-            Alexa.getIntentName(handlerInput.requestEnvelope) === 'AnswerIntent'
-        );
-    },
+// const AnswerIntentHandler = {
+//     canHandle(handlerInput) {
+//         return (
+//             Alexa.getRequestType(handlerInput.requestEnvelope) ===
+//                 'IntentRequest' &&
+//             Alexa.getIntentName(handlerInput.requestEnvelope) === 'AnswerIntent'
+//         );
+//     },
 
-    async handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
+//     async handle(handlerInput) {
+//         const sessionAttributes =
+//             handlerInput.attributesManager.getSessionAttributes();
 
-        const { intent } = handlerInput.requestEnvelope.request;
-        const { value: answerIDSlotValue } = intent.slots.answer;
+//         const { intent } = handlerInput.requestEnvelope.request;
+//         const { value: answerIDSlotValue } = intent.slots.answer;
 
-        const currentQuestionIndex = sessionAttributes.questionCounter;
-        const numberOfQuestions = sessionAttributes.numberOfQuestions;
+//         const currentQuestionIndex = sessionAttributes.questionCounter;
+//         const numberOfQuestions = sessionAttributes.numberOfQuestions;
 
-        const { name: surveyName } = sessionAttributes.chosenSurvey;
+//         const { name: surveyName } = sessionAttributes.chosenSurvey;
 
-        sessionAttributes.chosenSurvey.content.questions[
-            currentQuestionIndex - 1
-        ]['answer'] = answerIDSlotValue;
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+//         sessionAttributes.chosenSurvey.content.questions[
+//             currentQuestionIndex - 1
+//         ]['answer'] = answerIDSlotValue;
+//         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-        const question =
-            sessionAttributes.chosenSurvey.content.questions[
-                currentQuestionIndex - 1
-            ];
-        const surveyId = sessionAttributes.chosenSurvey.surveyID;
-        const projectId = sessionAttributes.projectId;
-        const participantId = sessionAttributes.participantId;
+//         const question =
+//             sessionAttributes.chosenSurvey.content.questions[
+//                 currentQuestionIndex - 1
+//             ];
+//         const surveyId = sessionAttributes.chosenSurvey.surveyID;
+//         const projectId = sessionAttributes.projectId;
+//         const participantId = sessionAttributes.participantId;
 
-        const apiResponse = await logic.uploadResponse(
-            question,
-            surveyId,
-            participantId,
-            projectId
-        );
+//         const apiResponse = await logic.uploadResponse(
+//             question,
+//             surveyId,
+//             participantId,
+//             projectId
+//         );
 
-        if (currentQuestionIndex === numberOfQuestions) {
-            // const apiResponse = await logic.uploadResponses(sessionAttributes);
+//         if (currentQuestionIndex === numberOfQuestions) {
+//             // const apiResponse = await logic.uploadResponses(sessionAttributes);
 
-            // TODO: Fix this APL
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const statement = 'You have answered all the questions.';
-                const subStatement = 'Say "Exit" to stop the survey.';
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    statement,
-                    subStatement
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
+//             // TODO: Fix this APL
+//             if (
+//                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+//                     'Alexa.Presentation.APL'
+//                 ]
+//             ) {
+//                 const statement = 'You have answered all the questions.';
+//                 const subStatement = 'Say "Exit" to stop the survey.';
+//                 const aplDirective = utils.getBasicAnnouncementAplDirective(
+//                     statement,
+//                     subStatement
+//                 );
+//                 handlerInput.responseBuilder.addDirective(aplDirective);
+//             }
 
-            const speakOutput = `You have answered all the questions. ${apiResponse.message}. Say exit to stop.`;
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .getResponse();
-        } else {
-            const { question: questionText, index } = askQuestion(handlerInput);
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const questionObj = {
-                    questionNumber: index + 1,
-                    questionText,
-                };
-                const aplDirective = utils.getBasicQuestionAplDirective(
-                    questionObj,
-                    surveyName
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
-            const speakOutput = `Question ${index + 1}: ${questionText}`;
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt(questionText)
-                .getResponse();
-        }
-    },
-};
+//             const speakOutput = `You have answered all the questions. ${apiResponse.message}. Say exit to stop.`;
+//             return handlerInput.responseBuilder
+//                 .speak(speakOutput)
+//                 .getResponse();
+//         } else {
+//             const { question: questionText, index } = askQuestion(handlerInput);
+//             if (
+//                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+//                     'Alexa.Presentation.APL'
+//                 ]
+//             ) {
+//                 const questionObj = {
+//                     questionNumber: index + 1,
+//                     questionText,
+//                 };
+//                 const aplDirective = utils.getBasicQuestionAplDirective(
+//                     questionObj,
+//                     surveyName
+//                 );
+//                 handlerInput.responseBuilder.addDirective(aplDirective);
+//             }
+//             const speakOutput = `Question ${index + 1}: ${questionText}`;
+//             return handlerInput.responseBuilder
+//                 .speak(speakOutput)
+//                 .reprompt(questionText)
+//                 .getResponse();
+//         }
+//     },
+// };
 
 const ProactiveEventHandler = {
     canHandle(handlerInput) {
@@ -292,7 +293,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         ChooseSurveyFromAplHandler,
         BeginSurveyHandler,
         QuestionHandler,
-        AnswerIntentHandler,
+        AnswerHandler,
         ProactiveEventHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
