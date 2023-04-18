@@ -25,9 +25,9 @@ const authenticationStatements = {
 };
 
 const chooseSurveyStatements = {
-    verbalMain: (surveyName) => `You chose ${surveyName}`,
+    verbalMain: (surveyName) => `You chose ${surveyName}.`,
     verbalSub: 'Say, begin survey to start.',
-    visualMain: (surveyName) => `You chose ${surveyName}`,
+    visualMain: (surveyName) => `You chose ${surveyName}.`,
     visualSub: 'Say "Begin survey" to start.',
     verbalMainFail: 'That does not match with any of your assigned surveys.',
     verbalSubFail: 'What is the survey name again?',
@@ -35,8 +35,18 @@ const chooseSurveyStatements = {
     visualSubFail: 'What is the survey name again?',
 };
 
+const beginSurveyStatements = {
+    verbalMain: (surveyName, numberOfQuestions) =>
+        `Welcome to ${surveyName}. You have ${numberOfQuestions} questions in this survey.`,
+    verbalSub: 'Please now say, read all questions to start.',
+    visualMain: (surveyName, numberOfQuestions) =>
+        `Welcome to ${surveyName}. There are ${numberOfQuestions} questions in this survey.`,
+    visualSub: 'Say "Read all questions" to start.',
+};
+
 module.exports = {
     welcomeStatements,
     authenticationStatements,
     chooseSurveyStatements,
+    beginSurveyStatements,
 };

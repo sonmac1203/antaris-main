@@ -6,174 +6,15 @@
 const Alexa = require('ask-sdk-core');
 const logic = require('./logic');
 const utils = require('./util');
-const { welcomeStatements } = require('./statements');
 const { LaunchRequestHandler } = require('./handlers/LaunchRequestHandler');
 const {
     UserAuthenticationHandler,
 } = require('./handlers/UserAuthenticationHandler');
 const { ChooseSurveyHandler } = require('./handlers/ChooseSurveyHandler');
-
-// const ChooseStudyIntentHandler = {
-//     canHandle(handlerInput) {
-//         return (
-//             Alexa.getRequestType(handlerInput.requestEnvelope) ===
-//                 'IntentRequest' &&
-//             Alexa.getIntentName(handlerInput.requestEnvelope) ===
-//                 'ChooseStudyIntent'
-//         );
-//     },
-
-//     handle(handlerInput) {
-//         const sessionAttributes =
-//             handlerInput.attributesManager.getSessionAttributes();
-//         const surveys = sessionAttributes.surveys;
-
-//         const { intent } = handlerInput.requestEnvelope.request;
-//         const { name: surveyNameSlotName, value: surveyNameSlotValue } =
-//             intent.slots.surveyName;
-//         const existingSurvey = surveys.find(
-//             (survey) => survey.name.toLowerCase() === surveyNameSlotValue
-//         );
-
-//         if (existingSurvey) {
-//             sessionAttributes.chosenSurvey = existingSurvey;
-//             handlerInput.attributesManager.setSessionAttributes(
-//                 sessionAttributes
-//             );
-
-//             const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
-//             const verbalStatement = `You chose study ${surveyNameSlotValue}.`;
-//             const subStatement = `Say "Begin survey" to start.`;
-
-//             if (
-//                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-//                     'Alexa.Presentation.APL'
-//                 ]
-//             ) {
-//                 const aplDirective = utils.getBasicAnnouncementAplDirective(
-//                     visualStatement,
-//                     subStatement
-//                 );
-//                 handlerInput.responseBuilder.addDirective(aplDirective);
-//             }
-
-//             return handlerInput.responseBuilder
-//                 .speak(`${verbalStatement} ${subStatement}`)
-//                 .getResponse();
-//         } else {
-//             const statement =
-//                 'I cannot find any assigned survey with that name.';
-//             const subStatement = 'What is the survey name again?';
-//             if (
-//                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-//                     'Alexa.Presentation.APL'
-//                 ]
-//             ) {
-//                 const aplDirective = utils.getBasicAnnouncementAplDirective(
-//                     statement,
-//                     subStatement
-//                 );
-//                 handlerInput.responseBuilder.addDirective(aplDirective);
-//             }
-//             return handlerInput.responseBuilder
-//                 .speak(
-//                     `That does not match with any of your assigned surveys. What is the survey name again?`
-//                 )
-//                 .addElicitSlotDirective(surveyNameSlotName)
-//                 .getResponse();
-//         }
-//     },
-// };
-
-const StudySelectionEventHandler = {
-    canHandle(handlerInput) {
-        return (
-            Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'Alexa.Presentation.APL.UserEvent' &&
-            handlerInput.requestEnvelope.request.arguments[0] ===
-                'SurveySelected'
-        );
-    },
-    handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        const surveys = sessionAttributes.surveys;
-
-        const chosenIndex =
-            parseInt(handlerInput.requestEnvelope.request.arguments[1]) - 1;
-
-        const existingSurvey = surveys[chosenIndex];
-        sessionAttributes.chosenSurvey = existingSurvey;
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-
-        if (
-            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                'Alexa.Presentation.APL'
-            ]
-        ) {
-            const statement = `You chose ${existingSurvey.name}.`;
-            const subStatement = `Say "Begin survey" to start.`;
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
-                statement,
-                subStatement
-            );
-            handlerInput.responseBuilder.addDirective(aplDirective);
-        }
-        return handlerInput.responseBuilder
-            .speak(
-                `You chose ${existingSurvey.name}. Say "Begin survey" to start.`
-            )
-            .getResponse();
-    },
-};
-
-const BeginSurveyIntentHandler = {
-    canHandle(handlerInput) {
-        return (
-            Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'IntentRequest' &&
-            Alexa.getIntentName(handlerInput.requestEnvelope) ===
-                'BeginSurveyIntent'
-        );
-    },
-
-    async handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        const { name: surveyName, content } = sessionAttributes.chosenSurvey;
-
-        const questions = content.questions;
-        const numberOfQuestions = questions.length;
-
-        // sessionAttributes.questions = questions;
-
-        sessionAttributes.numberOfQuestions = numberOfQuestions;
-        sessionAttributes.questionCounter = 0;
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-
-        // TODO: Fix this APL
-
-        if (
-            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                'Alexa.Presentation.APL'
-            ]
-        ) {
-            const statement = `Welcome to ${surveyName}. There are ${numberOfQuestions} questions in this survey.`;
-            const subStatement = `Say "Read all questions" to start.`;
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
-                statement,
-                subStatement
-            );
-            handlerInput.responseBuilder.addDirective(aplDirective);
-        }
-
-        const speakOutput = `Welcome to ${surveyName}. You have ${numberOfQuestions} questions in this survey. Please now say read all questions to start.`;
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt('You can ask me to start reading the questions.')
-            .getResponse();
-    },
-};
+const {
+    ChooseSurveyFromAplHandler,
+} = require('./handlers/ChooseSurveyFromAplHandler');
+const { BeginSurveyHandler } = require('./handlers/BeginSurveyHandler');
 
 const QuestionIntentHandler = {
     canHandle(handlerInput) {
@@ -487,7 +328,8 @@ exports.handler = Alexa.SkillBuilders.custom()
         LaunchRequestHandler,
         UserAuthenticationHandler,
         ChooseSurveyHandler,
-        BeginSurveyIntentHandler,
+        ChooseSurveyFromAplHandler,
+        BeginSurveyHandler,
         QuestionIntentHandler,
         AnswerIntentHandler,
         ProactiveEventHandler,
@@ -495,8 +337,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         CancelAndStopIntentHandler,
         FallbackIntentHandler,
         SessionEndedRequestHandler,
-        IntentReflectorHandler,
-        StudySelectionEventHandler
+        IntentReflectorHandler
     )
     .addErrorHandlers(ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
