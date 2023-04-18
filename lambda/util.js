@@ -188,4 +188,19 @@ module.exports = {
         // const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, "documentToken");
         return aplDirective;
     },
+
+    askQuestion(attributesManager) {
+        const attributes = attributesManager.getSessionAttributes();
+        const questionIndex = attributes.questionCounter;
+        const { content } = attributes.chosenSurvey;
+        const currentQuestion = content.questions[questionIndex];
+        attributes.questionCounter += 1;
+        attributesManager.setSessionAttributes(attributes);
+
+        return {
+            question: currentQuestion.text,
+            index: questionIndex,
+            identifier: currentQuestion.identifier,
+        };
+    },
 };

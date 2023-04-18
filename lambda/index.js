@@ -15,46 +15,7 @@ const {
     ChooseSurveyFromAplHandler,
 } = require('./handlers/ChooseSurveyFromAplHandler');
 const { BeginSurveyHandler } = require('./handlers/BeginSurveyHandler');
-
-const QuestionIntentHandler = {
-    canHandle(handlerInput) {
-        return (
-            Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'IntentRequest' &&
-            Alexa.getIntentName(handlerInput.requestEnvelope) ===
-                'QuestionIntent'
-        );
-    },
-
-    handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        const { name: surveyName } = sessionAttributes.chosenSurvey;
-
-        const { question: questionText, index } = askQuestion(handlerInput);
-        // TODO: Fix this APL
-        if (
-            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                'Alexa.Presentation.APL'
-            ]
-        ) {
-            const questionObj = {
-                questionNumber: index + 1,
-                questionText,
-            };
-            const aplDirective = utils.getBasicQuestionAplDirective(
-                questionObj,
-                surveyName
-            );
-            handlerInput.responseBuilder.addDirective(aplDirective);
-        }
-        const speakOutput = `Question ${index + 1}: ${questionText}`;
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(questionText)
-            .getResponse();
-    },
-};
+const { QuestionHandler } = require('./handlers/QuestionHandler');
 
 const AnswerIntentHandler = {
     canHandle(handlerInput) {
@@ -330,7 +291,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         ChooseSurveyHandler,
         ChooseSurveyFromAplHandler,
         BeginSurveyHandler,
-        QuestionIntentHandler,
+        QuestionHandler,
         AnswerIntentHandler,
         ProactiveEventHandler,
         HelpIntentHandler,
