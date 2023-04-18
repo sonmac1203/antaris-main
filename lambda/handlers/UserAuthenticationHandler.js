@@ -1,28 +1,31 @@
-const Alexa = require('ask-sdk-core');
+const {
+    getRequestType,
+    getIntentName,
+    getSupportedInterfaces,
+} = require('ask-sdk-core');
 const utils = require('../util');
 const logic = require('../logic');
+const { authenticationStatements } = require('../statements');
 
 const UserAuthenticationHandler = {
     canHandle(handlerInput) {
         return (
-            Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'IntentRequest' &&
-            Alexa.getIntentName(handlerInput.requestEnvelope) ===
+            getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
+            getIntentName(handlerInput.requestEnvelope) ===
                 'UserAuthenticationIntent'
         );
     },
     async handle(handlerInput) {
+        const { requestEnvelope, responseBuilder, attributesManager } =
+            handlerInput;
+
         // destructure attributes
-        const { intent } = handlerInput.requestEnvelope.request;
-        const { name: secondaryIdSlotName, value: secondaryIdSlotValue } =
-            intent.slots.secondaryId;
-        const { userId } = handlerInput.requestEnvelope.context.System.user;
+        const { userId } = requestEnvelope.context.System.user;
+        const { intent } = requestEnvelope.request;
+        const { name: slotName, value: slotValue } = intent.slots.secondaryId;
 
         // fetch participant data from database
-        const response = await logic.fetchParticipantInfo(
-            secondaryIdSlotValue,
-            userId
-        );
+        const response = await logic.fetchParticipantInfo(slotValue, userId);
 
         // determine response logics
         if (response.success) {
@@ -32,21 +35,19 @@ const UserAuthenticationHandler = {
                 project_id: projectId,
                 participant_identifier,
             } = response.data;
+
             const participantName = `${demographics.first_name}`;
 
             // trigger session storage
-            const sessionAttributes =
-                handlerInput.attributesManager.getSessionAttributes();
+            const sessionAttributes = attributesManager.getSessionAttributes();
             sessionAttributes.surveys = surveys;
-            sessionAttributes.secondaryId = secondaryIdSlotValue;
+            sessionAttributes.secondaryId = slotValue;
             sessionAttributes.projectId = projectId;
             sessionAttributes.participantId = participant_identifier;
-            handlerInput.attributesManager.setSessionAttributes(
-                sessionAttributes
-            );
+            attributesManager.setSessionAttributes(sessionAttributes);
 
             if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                getSupportedInterfaces(requestEnvelope)[
                     'Alexa.Presentation.APL'
                 ]
             ) {
@@ -54,37 +55,48 @@ const UserAuthenticationHandler = {
                     surveys,
                     participantName
                 );
-                handlerInput.responseBuilder.addDirective(aplDirective);
+                responseBuilder.addDirective(aplDirective);
             }
-            const greeting = `Hi ${participantName}`;
             const surveyList = logic.getVerbalSurveyList(surveys);
-            const numberOfSurveys = surveys.length;
-            const plural = numberOfSurveys === 1 ? '' : 's';
 
-            const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${
-                plural ? 'are' : 'is'
-            } ${surveyList}. Say do survey selection to continue.`;
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .getResponse();
+            const { verbalMain, verbalSub } = authenticationStatements;
+
+            const verbalOutput = `${verbalMain(
+                participantName,
+                surveys.length,
+                surveyList
+            )} ${verbalSub}`;
+
+            // const greeting = `Hi ${participantName}`;
+
+            // const numberOfSurveys = surveys.length;
+            // const plural = numberOfSurveys === 1 ? '' : 's';
+
+            // const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${
+            //     plural ? 'are' : 'is'
+            // } ${surveyList}. Say do survey selection to continue.`;
+            return responseBuilder.speak(verbalOutput).getResponse();
         } else {
             if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+                getSupportedInterfaces(requestEnvelope)[
                     'Alexa.Presentation.APL'
                 ]
             ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    'No articipant is found with this id.',
-                    'Try telling me your participant id again.'
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
+                const { visualMainFail, visualSubFail } =
+                    authenticationStatements;
 
-            const speakOutput =
-                'Sorry, no participant is found with this i d. What is your secondary i d again?';
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .addElicitSlotDirective(secondaryIdSlotName)
+                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                    visualMainFail,
+                    visualSubFail
+                );
+                responseBuilder.addDirective(aplDirective);
+            }
+            const { verbalMainFail, verbalSubFail } = authenticationStatements;
+            const verbalOutput = `${verbalMainFail} ${verbalSubFail}`;
+
+            return responseBuilder
+                .speak(verbalOutput)
+                .addElicitSlotDirective(slotName)
                 .getResponse();
         }
     },
