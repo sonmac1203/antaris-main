@@ -67,14 +67,6 @@ const UserAuthenticationHandler = {
                 surveyList
             )} ${verbalSub}`;
 
-            // const greeting = `Hi ${participantName}`;
-
-            // const numberOfSurveys = surveys.length;
-            // const plural = numberOfSurveys === 1 ? '' : 's';
-
-            // const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${
-            //     plural ? 'are' : 'is'
-            // } ${surveyList}. Say do survey selection to continue.`;
             return responseBuilder.speak(verbalOutput).getResponse();
         } else {
             if (

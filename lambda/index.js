@@ -11,260 +11,79 @@ const { LaunchRequestHandler } = require('./handlers/LaunchRequestHandler');
 const {
     UserAuthenticationHandler,
 } = require('./handlers/UserAuthenticationHandler');
-// const { LaunchRequestHandler } = require('./intent-handlers');
+const { ChooseSurveyHandler } = require('./handlers/ChooseSurveyHandler');
 
-// const LaunchRequestHandler = {
-//     canHandle(handlerInput) {
-//         return (
-//             Alexa.getRequestType(handlerInput.requestEnvelope) ===
-//             'LaunchRequest'
-//         );
-//     },
-//     handle(handlerInput) {
-//         const { verbalMain, verbalSub, visualMain, visualSub } =
-//             welcomeStatements;
-
-//         console.log(verbalMain);
-
-//         // const verbalStatement = `Welcome to the Antaris health survey by team ${logic.getVerbalFormat(
-//         //     '23062'
-//         // )}.`;
-//         // const visualStatement = 'Welcome to Antaris.';
-//         // const subStatement = `Say "Do authentication" to continue.`;
-//         const speakOutput = `${verbalMain} ${verbalSub}`;
-
-//         if (
-//             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-//                 'Alexa.Presentation.APL'
-//             ]
-//         ) {
-//             const aplDirective = utils.getBasicAnnouncementAplDirective(
-//                 visualMain,
-//                 visualSub
-//             );
-//             handlerInput.responseBuilder.addDirective(aplDirective);
-//         }
-//         return handlerInput.responseBuilder
-//             .speak(speakOutput)
-//             .reprompt(speakOutput)
-//             .getResponse();
-//     },
-// };
-
-// const UserAuthenticationIntentHandler = {
+// const ChooseStudyIntentHandler = {
 //     canHandle(handlerInput) {
 //         return (
 //             Alexa.getRequestType(handlerInput.requestEnvelope) ===
 //                 'IntentRequest' &&
 //             Alexa.getIntentName(handlerInput.requestEnvelope) ===
-//                 'UserAuthenticationIntent'
+//                 'ChooseStudyIntent'
 //         );
 //     },
-//     async handle(handlerInput) {
-//         // destructure attributes
+
+//     handle(handlerInput) {
+//         const sessionAttributes =
+//             handlerInput.attributesManager.getSessionAttributes();
+//         const surveys = sessionAttributes.surveys;
+
 //         const { intent } = handlerInput.requestEnvelope.request;
-//         const { name: secondaryIdSlotName, value: secondaryIdSlotValue } =
-//             intent.slots.secondaryId;
-
-//         const { userId } = handlerInput.requestEnvelope.context.System.user;
-
-//         // fetch participant data from database
-//         const response = await logic.fetchParticipantInfo(
-//             secondaryIdSlotValue,
-//             userId
+//         const { name: surveyNameSlotName, value: surveyNameSlotValue } =
+//             intent.slots.surveyName;
+//         const existingSurvey = surveys.find(
+//             (survey) => survey.name.toLowerCase() === surveyNameSlotValue
 //         );
 
-//         // determine response logics
-//         if (response.success) {
-//             const {
-//                 demographics,
-//                 assigned_surveys: surveys,
-//                 project_id: projectId,
-//                 participant_identifier,
-//             } = response.data;
-//             const participantName = `${demographics.first_name}`;
-
-//             // trigger session storage
-//             const sessionAttributes =
-//                 handlerInput.attributesManager.getSessionAttributes();
-//             sessionAttributes.surveys = surveys;
-//             sessionAttributes.secondaryId = secondaryIdSlotValue;
-//             sessionAttributes.projectId = projectId;
-//             sessionAttributes.participantId = participant_identifier;
+//         if (existingSurvey) {
+//             sessionAttributes.chosenSurvey = existingSurvey;
 //             handlerInput.attributesManager.setSessionAttributes(
 //                 sessionAttributes
 //             );
 
-//             if (
-//                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-//                     'Alexa.Presentation.APL'
-//                 ]
-//             ) {
-//                 // const datasource = {
-//                 //     "surveyListData": {
-//                 //         "type": "object",
-//                 //         "objectId": "SurveySelectionList",
-//                 //         "backgroundImage": {
-//                 //             "contentDescription": null,
-//                 //             "smallSourceUrl": null,
-//                 //             "largeSourceUrl": null,
-//                 //             "sources": [
-//                 //                 {
-//                 //                     "url": "https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_",
-//                 //                     "size": "large"
-//                 //                 }
-//                 //             ]
-//                 //         },
-//                 //         "headerContent": {
-//                 //             "participantName": "Wesley",
-//                 //             "surveyNumber": "3 surveys"
-//                 //         },
-//                 //         "listItems": [
-//                 //             {
-//                 //                 "primaryText": "Peonies & Petals Nursery",
-//                 //                 "primaryAction": {
-//                 //                     "type": "SendEvent",
-//                 //                     "arguments": [
-//                 //                         "SurveySelected",
-//                 //                         "${ordinal}"
-//                 //                     ]
-//                 //                 }
-//                 //             },
-//                 //             {
-//                 //                 "primaryText": "Peonies & Petals Nursery",
-//                 //                 "primaryAction": {
-//                 //                     "type": "SendEvent",
-//                 //                     "arguments": [
-//                 //                         "SurveySelected",
-//                 //                         "${ordinal}"
-//                 //                     ]
-//                 //                 }
-//                 //             }
-//                 //         ],
-//                 //         "logoUrl": "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI"
-//                 //     }
-//                 // };
+//             const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
+//             const verbalStatement = `You chose study ${surveyNameSlotValue}.`;
+//             const subStatement = `Say "Begin survey" to start.`;
 
-//                 // const aplDirective = {
-//                 //     type: "Alexa.Presentation.APL.RenderDocument",
-//                 //     token: 'documentToken',
-//                 //     document: {
-//                 //         type: "Link",
-//                 //         src: "doc://alexa/apl/documents/" + "SurveySelection"
-//                 //     },
-//                 //     datasources: datasource
-//                 // };
-//                 const aplDirective = utils.getSurveyListAplDirective(
-//                     surveys,
-//                     participantName
-//                 );
-//                 handlerInput.responseBuilder.addDirective(aplDirective);
-//             }
-//             const greeting = `Hi ${participantName}`;
-//             const surveyList = logic.getVerbalSurveyList(surveys);
-//             const numberOfSurveys = surveys.length;
-//             const plural = numberOfSurveys === 1 ? '' : 's';
-
-//             const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${
-//                 plural ? 'are' : 'is'
-//             } ${surveyList}. Say do survey selection to continue.`;
-//             return handlerInput.responseBuilder
-//                 .speak(speakOutput)
-//                 .getResponse();
-//         } else {
 //             if (
 //                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
 //                     'Alexa.Presentation.APL'
 //                 ]
 //             ) {
 //                 const aplDirective = utils.getBasicAnnouncementAplDirective(
-//                     'No articipant is found with this id.',
-//                     'Try telling me your participant id again.'
+//                     visualStatement,
+//                     subStatement
 //                 );
 //                 handlerInput.responseBuilder.addDirective(aplDirective);
 //             }
 
-//             const speakOutput =
-//                 'Sorry, no participant is found with this i d. What is your secondary i d again?';
 //             return handlerInput.responseBuilder
-//                 .speak(speakOutput)
-//                 .addElicitSlotDirective(secondaryIdSlotName)
+//                 .speak(`${verbalStatement} ${subStatement}`)
+//                 .getResponse();
+//         } else {
+//             const statement =
+//                 'I cannot find any assigned survey with that name.';
+//             const subStatement = 'What is the survey name again?';
+//             if (
+//                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+//                     'Alexa.Presentation.APL'
+//                 ]
+//             ) {
+//                 const aplDirective = utils.getBasicAnnouncementAplDirective(
+//                     statement,
+//                     subStatement
+//                 );
+//                 handlerInput.responseBuilder.addDirective(aplDirective);
+//             }
+//             return handlerInput.responseBuilder
+//                 .speak(
+//                     `That does not match with any of your assigned surveys. What is the survey name again?`
+//                 )
+//                 .addElicitSlotDirective(surveyNameSlotName)
 //                 .getResponse();
 //         }
 //     },
 // };
-
-const ChooseStudyIntentHandler = {
-    canHandle(handlerInput) {
-        return (
-            Alexa.getRequestType(handlerInput.requestEnvelope) ===
-                'IntentRequest' &&
-            Alexa.getIntentName(handlerInput.requestEnvelope) ===
-                'ChooseStudyIntent'
-        );
-    },
-
-    handle(handlerInput) {
-        const sessionAttributes =
-            handlerInput.attributesManager.getSessionAttributes();
-        const surveys = sessionAttributes.surveys;
-
-        const { intent } = handlerInput.requestEnvelope.request;
-        const { name: surveyNameSlotName, value: surveyNameSlotValue } =
-            intent.slots.surveyName;
-        const existingSurvey = surveys.find(
-            (survey) => survey.name.toLowerCase() === surveyNameSlotValue
-        );
-
-        if (existingSurvey) {
-            sessionAttributes.chosenSurvey = existingSurvey;
-            handlerInput.attributesManager.setSessionAttributes(
-                sessionAttributes
-            );
-
-            const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
-            const verbalStatement = `You chose study ${surveyNameSlotValue}.`;
-            const subStatement = `Say "Begin survey" to start.`;
-
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    visualStatement,
-                    subStatement
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
-
-            return handlerInput.responseBuilder
-                .speak(`${verbalStatement} ${subStatement}`)
-                .getResponse();
-        } else {
-            const statement =
-                'I cannot find any assigned survey with that name.';
-            const subStatement = 'What is the survey name again?';
-            if (
-                Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
-                    statement,
-                    subStatement
-                );
-                handlerInput.responseBuilder.addDirective(aplDirective);
-            }
-            return handlerInput.responseBuilder
-                .speak(
-                    `That does not match with any of your assigned surveys. What is the survey name again?`
-                )
-                .addElicitSlotDirective(surveyNameSlotName)
-                .getResponse();
-        }
-    },
-};
 
 const StudySelectionEventHandler = {
     canHandle(handlerInput) {
@@ -667,7 +486,7 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
         UserAuthenticationHandler,
-        ChooseStudyIntentHandler,
+        ChooseSurveyHandler,
         BeginSurveyIntentHandler,
         QuestionIntentHandler,
         AnswerIntentHandler,
