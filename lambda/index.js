@@ -18,6 +18,8 @@ const LaunchRequestHandler = {
     handle(handlerInput) {
         const { verbalMain, verbalSub, visualMain, visualSub } =
             welcomeStatements;
+            
+        console.log(verbalMain);
 
         // const verbalStatement = `Welcome to the Antaris health survey by team ${logic.getVerbalFormat(
         //     '23062'
