@@ -5,6 +5,8 @@ const { welcomeStatements } = require('../statements');
 const Alexa = require('ask-sdk-core');
 const utils = require('../util');
 
+const {getBasicAnnouncementAplDirective} = utils;
+
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return (
@@ -25,7 +27,7 @@ const LaunchRequestHandler = {
                 'Alexa.Presentation.APL'
             ]
         ) {
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
+            const aplDirective = getBasicAnnouncementAplDirective(
                 'HAHA',
                 'HIHI'
             );
