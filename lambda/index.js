@@ -7,44 +7,45 @@ const Alexa = require('ask-sdk-core');
 const logic = require('./logic');
 const utils = require('./util');
 const { welcomeStatements } = require('./statements');
+const { LaunchRequestHandler } = require('./handlers/LaunchRequestHandler');
 
-const LaunchRequestHandler = {
-    canHandle(handlerInput) {
-        return (
-            Alexa.getRequestType(handlerInput.requestEnvelope) ===
-            'LaunchRequest'
-        );
-    },
-    handle(handlerInput) {
-        const { verbalMain, verbalSub, visualMain, visualSub } =
-            welcomeStatements;
-            
-        console.log(verbalMain);
+// const LaunchRequestHandler = {
+//     canHandle(handlerInput) {
+//         return (
+//             Alexa.getRequestType(handlerInput.requestEnvelope) ===
+//             'LaunchRequest'
+//         );
+//     },
+//     handle(handlerInput) {
+//         const { verbalMain, verbalSub, visualMain, visualSub } =
+//             welcomeStatements;
 
-        // const verbalStatement = `Welcome to the Antaris health survey by team ${logic.getVerbalFormat(
-        //     '23062'
-        // )}.`;
-        // const visualStatement = 'Welcome to Antaris.';
-        // const subStatement = `Say "Do authentication" to continue.`;
-        const speakOutput = `${verbalMain} ${verbalSub}`;
+//         console.log(verbalMain);
 
-        if (
-            Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
-                'Alexa.Presentation.APL'
-            ]
-        ) {
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
-                visualMain,
-                visualSub
-            );
-            handlerInput.responseBuilder.addDirective(aplDirective);
-        }
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    },
-};
+//         // const verbalStatement = `Welcome to the Antaris health survey by team ${logic.getVerbalFormat(
+//         //     '23062'
+//         // )}.`;
+//         // const visualStatement = 'Welcome to Antaris.';
+//         // const subStatement = `Say "Do authentication" to continue.`;
+//         const speakOutput = `${verbalMain} ${verbalSub}`;
+
+//         if (
+//             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
+//                 'Alexa.Presentation.APL'
+//             ]
+//         ) {
+//             const aplDirective = utils.getBasicAnnouncementAplDirective(
+//                 visualMain,
+//                 visualSub
+//             );
+//             handlerInput.responseBuilder.addDirective(aplDirective);
+//         }
+//         return handlerInput.responseBuilder
+//             .speak(speakOutput)
+//             .reprompt(speakOutput)
+//             .getResponse();
+//     },
+// };
 
 const UserAuthenticationIntentHandler = {
     canHandle(handlerInput) {
