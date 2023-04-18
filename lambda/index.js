@@ -5,9 +5,8 @@
  * */
 const Alexa = require('ask-sdk-core');
 const logic = require('./logic');
-const apl = require('./apl');
 const utils = require('./util');
-import { welcomeStatements } from './statements';
+const { welcomeStatements } = require('./statements');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {

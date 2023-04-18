@@ -1,19 +1,18 @@
-import logic from './logic';
-import { getVerbalFormat } from './util';
+const { getVerbalFormat } = require('./util');
 
 const teamName = getVerbalFormat('23062');
 
 const plural = (count) => (count > 1 ? 's' : '');
 const pluralToBe = (count) => (count > 1 ? 'are' : 'is');
 
-export const welcomeStatements = {
+const welcomeStatements = {
     verbalMain: `Welcome to Antaris by team ${teamName}.`,
     verbalSub: 'Say, do authentication to continue.',
     visualMain: 'Welcome to Antaris.',
     visualSub: 'Say "Do authentication" to continue.',
 };
 
-export const authenticationStatements = {
+const authenticationStatements = {
     verbalMain: (participantName, numberOfSurveys, surveyList) =>
         `Hi ${participantName}. You have ${numberOfSurveys} survey${plural(
             numberOfSurveys
@@ -25,7 +24,7 @@ export const authenticationStatements = {
     visualSubFail: 'Try telling me your participant id again.',
 };
 
-export const chooseSurveyStatements = {
+const chooseSurveyStatements = {
     verbalMain: (surveyName) => `You chose ${surveyName}`,
     verbalSub: 'Say, begin survey to start.',
     visualMain: (surveyName) => `You chose ${surveyName}`,
@@ -34,4 +33,10 @@ export const chooseSurveyStatements = {
     verbalSubFail: 'What is the survey name again?',
     visualMainFail: "I can't find any survey with that name.",
     visualSubFail: 'What is the survey name again?',
+};
+
+module.exports = {
+    welcomeStatements,
+    authenticationStatements,
+    chooseSurveyStatements,
 };
