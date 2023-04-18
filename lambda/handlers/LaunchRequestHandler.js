@@ -1,13 +1,10 @@
 const { welcomeStatements } = require('../statements');
-const Alexa = require('ask-sdk-core');
+const { getRequestType, getSupportedInterfaces } = require('ask-sdk-core');
 const utils = require('../util');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
-        return (
-            Alexa.getRequestType(handlerInput.requestEnvelope) ===
-            'LaunchRequest'
-        );
+        return getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
         const { requestEnvelope, responseBuilder } = handlerInput;
@@ -15,11 +12,7 @@ const LaunchRequestHandler = {
             welcomeStatements;
         const verbalOutput = `${verbalMain} ${verbalSub}`;
 
-        if (
-            Alexa.getSupportedInterfaces(requestEnvelope)[
-                'Alexa.Presentation.APL'
-            ]
-        ) {
+        if (getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL']) {
             const aplDirective = utils.getBasicAnnouncementAplDirective(
                 visualMain,
                 visualSub

@@ -8,6 +8,9 @@ const logic = require('./logic');
 const utils = require('./util');
 const { welcomeStatements } = require('./statements');
 const { LaunchRequestHandler } = require('./handlers/LaunchRequestHandler');
+const {
+    UserAuthenticationHandler,
+} = require('./handlers/UserAuthenticationHandler');
 // const { LaunchRequestHandler } = require('./intent-handlers');
 
 // const LaunchRequestHandler = {
