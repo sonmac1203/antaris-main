@@ -5,14 +5,22 @@ const s3SigV4Client = new AWS.S3({
     region: process.env.S3_PERSISTENCE_REGION,
 });
 
-const LOGO_URL = "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI";
-const BACKGROUND_PHOTO_URL = 'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png';
-const SECONDARY_BACKGROUND_PHOTO_URL = 'https://drive.google.com/uc?id=1iO9wfcV_NfJvosJtUEEVQ30HLqQi2WrA';
-const THIRD_BACKGROUND_PHOTO_URL = 'https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_';
-const HEADER_TITLE = "ENGR 498 CAPSTONE PROJECT - TEAM 23062";
+const LOGO_URL =
+    'https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI';
+const BACKGROUND_PHOTO_URL =
+    'https://d2o906d8ln7ui1.cloudfront.net/images/templates_v3/headline/HeadlineBackground_Dark.png';
+const SECONDARY_BACKGROUND_PHOTO_URL =
+    'https://drive.google.com/uc?id=1iO9wfcV_NfJvosJtUEEVQ30HLqQi2WrA';
+const THIRD_BACKGROUND_PHOTO_URL =
+    'https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_';
+const HEADER_TITLE = 'ENGR 498 CAPSTONE PROJECT - TEAM 23062';
 const QUESTION_HINT_TEXT = 'Always start with "My answer is ..."';
 
 module.exports = {
+    getVerbalFormat(number) {
+        return number.split('').join(' ');
+    },
+
     getS3PreSignedUrl: function getS3PreSignedUrl(s3ObjectKey) {
         const bucketName = process.env.S3_PERSISTENCE_BUCKET;
         const s3PreSignedUrl = s3SigV4Client.getSignedUrl('getObject', {
@@ -30,7 +38,7 @@ module.exports = {
         const rawText = text.replace(/\r|\n/g, '');
         return rawText;
     },
-    
+
     createDirectivePayload(
         aplDocumentId,
         dataSources = {},
@@ -52,7 +60,7 @@ module.exports = {
         const dataSources = {
             templateData: {
                 type: 'object',
-                objectId: "headline",
+                objectId: 'headline',
                 properties: {
                     backgroundImage: {
                         contentDescription: null,
@@ -71,7 +79,7 @@ module.exports = {
                             text: text,
                         },
                         headerTitle: {
-                            type: "PlainText",
+                            type: 'PlainText',
                             text: HEADER_TITLE,
                         },
                     },
@@ -80,7 +88,11 @@ module.exports = {
                 },
             },
         };
-        const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, 'documentToken');
+        const payload = this.createDirectivePayload(
+            DOCUMENT_ID,
+            dataSources,
+            'documentToken'
+        );
         return payload;
     },
 
@@ -89,19 +101,19 @@ module.exports = {
         const DOCUMENT_ID = 'QuestionDisplay';
         const dataSources = {
             questionData: {
-                type: "object",
-                objectId: "questionDisplay",
+                type: 'object',
+                objectId: 'questionDisplay',
                 properties: {
                     backgroundImage: {
-                        "contentDescription": null,
-                        "smallSourceUrl": null,
-                        "largeSourceUrl": null,
-                        "sources": [
+                        contentDescription: null,
+                        smallSourceUrl: null,
+                        largeSourceUrl: null,
+                        sources: [
                             {
                                 url: SECONDARY_BACKGROUND_PHOTO_URL,
-                                "size": "large"
-                            }
-                        ]
+                                size: 'large',
+                            },
+                        ],
                     },
                     headerContent: {
                         questionNumber,
@@ -109,69 +121,71 @@ module.exports = {
                     },
                     textContent: {
                         primaryText: {
-                            type: "PlainText",
+                            type: 'PlainText',
                             text: questionText,
-                        }
+                        },
                     },
                     logoUrl: LOGO_URL,
                     hintText: QUESTION_HINT_TEXT,
                 },
-            }
+            },
         };
-        
-        const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, "documentToken");
+
+        const payload = this.createDirectivePayload(
+            DOCUMENT_ID,
+            dataSources,
+            'documentToken'
+        );
         return payload;
     },
-    
+
     getSurveyListAplDirective(surveys, participantName) {
         const surveyNumber = surveys.length;
         const plural = surveyNumber > 1 ? 's' : '';
         const surveyNumberInText = `${surveyNumber} survey${plural}`;
-        
-        const listItems = surveys.map(s => (
-            {
-                "primaryText": s.name
-            }))
-        
+
+        const listItems = surveys.map((s) => ({
+            primaryText: s.name,
+        }));
+
         const DOCUMENT_ID = 'SurveySelection';
-        
+
         const dataSources = {
-            "surveyListData": {
-                "type": "object",
-                "objectId": "SurveySelectionList",
-                "backgroundImage": {
-                    "contentDescription": null,
-                    "smallSourceUrl": null,
-                    "largeSourceUrl": null,
-                    "sources": [
+            surveyListData: {
+                type: 'object',
+                objectId: 'SurveySelectionList',
+                backgroundImage: {
+                    contentDescription: null,
+                    smallSourceUrl: null,
+                    largeSourceUrl: null,
+                    sources: [
                         {
-                            "url": "https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_",
-                            "size": "large"
-                        }
-                    ]
+                            url: 'https://drive.google.com/uc?id=1Lxpj5z1TxXJcQO_JprXBBfxasp0Kzf8_',
+                            size: 'large',
+                        },
+                    ],
                 },
-                "headerContent": {
-                    "participantName": participantName,
-                    "surveyNumber": surveyNumberInText,
+                headerContent: {
+                    participantName: participantName,
+                    surveyNumber: surveyNumberInText,
                 },
-                "listItems": listItems,
-                "logoUrl": "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI"
-            }
+                listItems: listItems,
+                logoUrl:
+                    'https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI',
+            },
         };
-        
+
         const aplDirective = {
-            type: "Alexa.Presentation.APL.RenderDocument",
+            type: 'Alexa.Presentation.APL.RenderDocument',
             token: 'documentToken',
             document: {
-                type: "Link",
-                src: "doc://alexa/apl/documents/" + "SurveySelection"
+                type: 'Link',
+                src: 'doc://alexa/apl/documents/' + 'SurveySelection',
             },
             datasources: dataSources,
         };
-        
+
         // const payload = this.createDirectivePayload(DOCUMENT_ID, dataSources, "documentToken");
         return aplDirective;
-    }
-    
-    
+    },
 };

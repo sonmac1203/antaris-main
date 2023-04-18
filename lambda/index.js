@@ -7,6 +7,7 @@ const Alexa = require('ask-sdk-core');
 const logic = require('./logic');
 const apl = require('./apl');
 const utils = require('./util');
+import { welcomeStatements } from './statements';
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -16,17 +17,15 @@ const LaunchRequestHandler = {
         );
     },
     handle(handlerInput) {
-        const aplResponse = apl.launchRequest;
-        const verbalStatement = `Welcome to the Antaris health survey by team ${logic.getVerbalFormat(
-            '23062'
-        )}.`;
-        const visualStatement = 'Welcome to Antaris.';
-        const subStatement = `Say "Do authentication" to continue.`;
+        const { verbalMain, verbalSub, visualMain, visualSub } =
+            welcomeStatements;
 
-        const accessToken =
-            handlerInput.requestEnvelope.context.System.user.accessToken;
-
-        const speakOutput = `${verbalStatement} ${subStatement}`;
+        // const verbalStatement = `Welcome to the Antaris health survey by team ${logic.getVerbalFormat(
+        //     '23062'
+        // )}.`;
+        // const visualStatement = 'Welcome to Antaris.';
+        // const subStatement = `Say "Do authentication" to continue.`;
+        const speakOutput = `${verbalMain} ${verbalSub}`;
 
         if (
             Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -34,8 +33,8 @@ const LaunchRequestHandler = {
             ]
         ) {
             const aplDirective = utils.getBasicAnnouncementAplDirective(
-                visualStatement,
-                subStatement
+                visualMain,
+                visualSub
             );
             handlerInput.responseBuilder.addDirective(aplDirective);
         }
@@ -60,35 +59,41 @@ const UserAuthenticationIntentHandler = {
         const { intent } = handlerInput.requestEnvelope.request;
         const { name: secondaryIdSlotName, value: secondaryIdSlotValue } =
             intent.slots.secondaryId;
-            
-        const {userId} = handlerInput.requestEnvelope.context.System.user;
+
+        const { userId } = handlerInput.requestEnvelope.context.System.user;
 
         // fetch participant data from database
-        const response = await logic.fetchParticipantInfo(secondaryIdSlotValue, userId);
-        
-
-
-        // const aplResponse = apl.authenticationIntent;
+        const response = await logic.fetchParticipantInfo(
+            secondaryIdSlotValue,
+            userId
+        );
 
         // determine response logics
         if (response.success) {
-            const { demographics, assigned_surveys: surveys, project_id: projectId, participant_identifier } = response.data;
+            const {
+                demographics,
+                assigned_surveys: surveys,
+                project_id: projectId,
+                participant_identifier,
+            } = response.data;
             const participantName = `${demographics.first_name}`;
-            
+
             // trigger session storage
-            const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+            const sessionAttributes =
+                handlerInput.attributesManager.getSessionAttributes();
             sessionAttributes.surveys = surveys;
             sessionAttributes.secondaryId = secondaryIdSlotValue;
             sessionAttributes.projectId = projectId;
             sessionAttributes.participantId = participant_identifier;
-            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-            
+            handlerInput.attributesManager.setSessionAttributes(
+                sessionAttributes
+            );
+
             if (
                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
                     'Alexa.Presentation.APL'
                 ]
             ) {
-                
                 // const datasource = {
                 //     "surveyListData": {
                 //         "type": "object",
@@ -133,7 +138,7 @@ const UserAuthenticationIntentHandler = {
                 //         "logoUrl": "https://drive.google.com/uc?id=1pHAgpzA_vlhZa291LLjlvO9R--0nhbQI"
                 //     }
                 // };
-            
+
                 // const aplDirective = {
                 //     type: "Alexa.Presentation.APL.RenderDocument",
                 //     token: 'documentToken',
@@ -145,7 +150,7 @@ const UserAuthenticationIntentHandler = {
                 // };
                 const aplDirective = utils.getSurveyListAplDirective(
                     surveys,
-                    participantName,
+                    participantName
                 );
                 handlerInput.responseBuilder.addDirective(aplDirective);
             }
@@ -153,9 +158,13 @@ const UserAuthenticationIntentHandler = {
             const surveyList = logic.getVerbalSurveyList(surveys);
             const numberOfSurveys = surveys.length;
             const plural = numberOfSurveys === 1 ? '' : 's';
-            
-            const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${plural ? 'are' : 'is'} ${surveyList}. Say do survey selection to continue.`;
-            return handlerInput.responseBuilder.speak(speakOutput).getResponse();
+
+            const speakOutput = `${greeting}. You have ${numberOfSurveys} survey${plural} assigned, which ${
+                plural ? 'are' : 'is'
+            } ${surveyList}. Say do survey selection to continue.`;
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .getResponse();
         } else {
             if (
                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -190,18 +199,23 @@ const ChooseStudyIntentHandler = {
     },
 
     handle(handlerInput) {
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const sessionAttributes =
+            handlerInput.attributesManager.getSessionAttributes();
         const surveys = sessionAttributes.surveys;
 
         const { intent } = handlerInput.requestEnvelope.request;
-        const { name: surveyNameSlotName, value: surveyNameSlotValue } = intent.slots.surveyName;
-        const existingSurvey = surveys.find(survey => survey.name.toLowerCase() === surveyNameSlotValue);
-        
+        const { name: surveyNameSlotName, value: surveyNameSlotValue } =
+            intent.slots.surveyName;
+        const existingSurvey = surveys.find(
+            (survey) => survey.name.toLowerCase() === surveyNameSlotValue
+        );
 
         if (existingSurvey) {
             sessionAttributes.chosenSurvey = existingSurvey;
-            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-            
+            handlerInput.attributesManager.setSessionAttributes(
+                sessionAttributes
+            );
+
             const visualStatement = `You chose survey ${surveyNameSlotValue}.`;
             const verbalStatement = `You chose study ${surveyNameSlotValue}.`;
             const subStatement = `Say "Begin survey" to start.`;
@@ -217,12 +231,13 @@ const ChooseStudyIntentHandler = {
                 );
                 handlerInput.responseBuilder.addDirective(aplDirective);
             }
-            
+
             return handlerInput.responseBuilder
                 .speak(`${verbalStatement} ${subStatement}`)
                 .getResponse();
         } else {
-            const statement = 'I cannot find any assigned survey with that name.';
+            const statement =
+                'I cannot find any assigned survey with that name.';
             const subStatement = 'What is the survey name again?';
             if (
                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -239,7 +254,8 @@ const ChooseStudyIntentHandler = {
                 .speak(
                     `That does not match with any of your assigned surveys. What is the survey name again?`
                 )
-                .addElicitSlotDirective(surveyNameSlotName).getResponse();
+                .addElicitSlotDirective(surveyNameSlotName)
+                .getResponse();
         }
     },
 };
@@ -254,10 +270,12 @@ const StudySelectionEventHandler = {
         );
     },
     handle(handlerInput) {
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const sessionAttributes =
+            handlerInput.attributesManager.getSessionAttributes();
         const surveys = sessionAttributes.surveys;
 
-        const chosenIndex = parseInt(handlerInput.requestEnvelope.request.arguments[1]) - 1;
+        const chosenIndex =
+            parseInt(handlerInput.requestEnvelope.request.arguments[1]) - 1;
 
         const existingSurvey = surveys[chosenIndex];
         sessionAttributes.chosenSurvey = existingSurvey;
@@ -270,7 +288,10 @@ const StudySelectionEventHandler = {
         ) {
             const statement = `You chose ${existingSurvey.name}.`;
             const subStatement = `Say "Begin survey" to start.`;
-            const aplDirective = utils.getBasicAnnouncementAplDirective(statement, subStatement);
+            const aplDirective = utils.getBasicAnnouncementAplDirective(
+                statement,
+                subStatement
+            );
             handlerInput.responseBuilder.addDirective(aplDirective);
         }
         return handlerInput.responseBuilder
@@ -292,19 +313,19 @@ const BeginSurveyIntentHandler = {
     },
 
     async handle(handlerInput) {
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        const {name: surveyName, content} = sessionAttributes.chosenSurvey;
-        
-        
+        const sessionAttributes =
+            handlerInput.attributesManager.getSessionAttributes();
+        const { name: surveyName, content } = sessionAttributes.chosenSurvey;
+
         const questions = content.questions;
         const numberOfQuestions = questions.length;
-        
+
         // sessionAttributes.questions = questions;
-        
+
         sessionAttributes.numberOfQuestions = numberOfQuestions;
         sessionAttributes.questionCounter = 0;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-        
+
         // TODO: Fix this APL
 
         if (
@@ -340,9 +361,10 @@ const QuestionIntentHandler = {
     },
 
     handle(handlerInput) {
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        const {name: surveyName} = sessionAttributes.chosenSurvey;
-        
+        const sessionAttributes =
+            handlerInput.attributesManager.getSessionAttributes();
+        const { name: surveyName } = sessionAttributes.chosenSurvey;
+
         const { question: questionText, index } = askQuestion(handlerInput);
         // TODO: Fix this APL
         if (
@@ -353,8 +375,11 @@ const QuestionIntentHandler = {
             const questionObj = {
                 questionNumber: index + 1,
                 questionText,
-            }
-            const aplDirective = utils.getBasicQuestionAplDirective(questionObj, surveyName);
+            };
+            const aplDirective = utils.getBasicQuestionAplDirective(
+                questionObj,
+                surveyName
+            );
             handlerInput.responseBuilder.addDirective(aplDirective);
         }
         const speakOutput = `Question ${index + 1}: ${questionText}`;
@@ -375,31 +400,40 @@ const AnswerIntentHandler = {
     },
 
     async handle(handlerInput) {
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const sessionAttributes =
+            handlerInput.attributesManager.getSessionAttributes();
 
         const { intent } = handlerInput.requestEnvelope.request;
         const { value: answerIDSlotValue } = intent.slots.answer;
 
         const currentQuestionIndex = sessionAttributes.questionCounter;
         const numberOfQuestions = sessionAttributes.numberOfQuestions;
-        
-        const {name: surveyName} = sessionAttributes.chosenSurvey;
 
-        sessionAttributes.chosenSurvey.content.questions[currentQuestionIndex - 1]['answer'] = answerIDSlotValue;
+        const { name: surveyName } = sessionAttributes.chosenSurvey;
+
+        sessionAttributes.chosenSurvey.content.questions[
+            currentQuestionIndex - 1
+        ]['answer'] = answerIDSlotValue;
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-        
-        const question = sessionAttributes.chosenSurvey.content.questions[currentQuestionIndex - 1];
+
+        const question =
+            sessionAttributes.chosenSurvey.content.questions[
+                currentQuestionIndex - 1
+            ];
         const surveyId = sessionAttributes.chosenSurvey.surveyID;
         const projectId = sessionAttributes.projectId;
         const participantId = sessionAttributes.participantId;
-        
-        
-        const apiResponse = await logic.uploadResponse(question, surveyId, participantId, projectId);
-        
+
+        const apiResponse = await logic.uploadResponse(
+            question,
+            surveyId,
+            participantId,
+            projectId
+        );
 
         if (currentQuestionIndex === numberOfQuestions) {
             // const apiResponse = await logic.uploadResponses(sessionAttributes);
-            
+
             // TODO: Fix this APL
             if (
                 Alexa.getSupportedInterfaces(handlerInput.requestEnvelope)[
@@ -429,8 +463,11 @@ const AnswerIntentHandler = {
                 const questionObj = {
                     questionNumber: index + 1,
                     questionText,
-                }
-                const aplDirective = utils.getBasicQuestionAplDirective(questionObj, surveyName);
+                };
+                const aplDirective = utils.getBasicQuestionAplDirective(
+                    questionObj,
+                    surveyName
+                );
                 handlerInput.responseBuilder.addDirective(aplDirective);
             }
             const speakOutput = `Question ${index + 1}: ${questionText}`;
@@ -603,12 +640,16 @@ const ErrorHandler = {
 const askQuestion = (handlerInput) => {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const questionIndex = attributes.questionCounter;
-    const {content} = attributes.chosenSurvey;
+    const { content } = attributes.chosenSurvey;
     const currentQuestion = content.questions[questionIndex];
     attributes.questionCounter += 1;
     handlerInput.attributesManager.setSessionAttributes(attributes);
 
-    return { question: currentQuestion.text, index: questionIndex, identifier: currentQuestion.identifier };
+    return {
+        question: currentQuestion.text,
+        index: questionIndex,
+        identifier: currentQuestion.identifier,
+    };
 };
 
 /**
