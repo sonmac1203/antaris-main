@@ -23,9 +23,13 @@ const BeginSurveyHandler = {
 
         const questions = content.questions;
         const numberOfQuestions = questions.length;
+        
+        const firstUnansweredQuestionIndex = questions.findIndex(
+          (question) => !question.answered
+        );
 
         sessionAttributes.numberOfQuestions = numberOfQuestions;
-        sessionAttributes.questionCounter = 0;
+        sessionAttributes.questionCounter = firstUnansweredQuestionIndex !== -1 ? firstUnansweredQuestionIndex : 0;
         attributesManager.setSessionAttributes(sessionAttributes);
 
         const { verbalMain, verbalSub, visualMain, visualSub } =
