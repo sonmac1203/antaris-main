@@ -35,39 +35,57 @@ const UserAuthenticationHandler = {
                 project_id: projectId,
                 participant_identifier,
             } = response.data;
-
-            const participantName = `${demographics.first_name}`;
-
-            // trigger session storage
-            const sessionAttributes = attributesManager.getSessionAttributes();
-            sessionAttributes.surveys = surveys;
-            sessionAttributes.secondaryId = slotValue;
-            sessionAttributes.projectId = projectId;
-            sessionAttributes.participantId = participant_identifier;
-            attributesManager.setSessionAttributes(sessionAttributes);
-
-            if (
-                getSupportedInterfaces(requestEnvelope)[
-                    'Alexa.Presentation.APL'
-                ]
-            ) {
-                const aplDirective = utils.getSurveyListAplDirective(
-                    surveys,
-                    participantName
-                );
-                responseBuilder.addDirective(aplDirective);
+            
+            if (surveys.length === 0) {
+                if (
+                    getSupportedInterfaces(requestEnvelope)[
+                        'Alexa.Presentation.APL'
+                    ]
+                ) {
+                    const aplDirective = utils.getBasicAnnouncementAplDirective(
+                        "You have no surveys assigned.",
+                        'Say "Exit" to stop.'
+                    );
+                    responseBuilder.addDirective(aplDirective);
+                }
+                
             }
-            const surveyList = logic.getVerbalSurveyList(surveys);
+            else {
+                const participantName = `${demographics.first_name}`;
+    
+                // trigger session storage
+                const sessionAttributes = attributesManager.getSessionAttributes();
+                sessionAttributes.surveys = surveys;
+                sessionAttributes.secondaryId = slotValue;
+                sessionAttributes.projectId = projectId;
+                sessionAttributes.participantId = participant_identifier;
+                attributesManager.setSessionAttributes(sessionAttributes);
+    
+                if (
+                    getSupportedInterfaces(requestEnvelope)[
+                        'Alexa.Presentation.APL'
+                    ]
+                ) {
+                    const aplDirective = utils.getSurveyListAplDirective(
+                        surveys,
+                        participantName
+                    );
+                    responseBuilder.addDirective(aplDirective);
+                }
+                const surveyList = logic.getVerbalSurveyList(surveys);
+    
+                const { verbalMain, verbalSub } = authenticationStatements;
+    
+                const verbalOutput = `${verbalMain(
+                    participantName,
+                    surveys.length,
+                    surveyList
+                )} ${verbalSub}`;
+    
+                return responseBuilder.speak(verbalOutput).reprompt(verbalSub).getResponse();
+                
+            }
 
-            const { verbalMain, verbalSub } = authenticationStatements;
-
-            const verbalOutput = `${verbalMain(
-                participantName,
-                surveys.length,
-                surveyList
-            )} ${verbalSub}`;
-
-            return responseBuilder.speak(verbalOutput).reprompt(verbalSub).getResponse();
         } else {
             if (
                 getSupportedInterfaces(requestEnvelope)[
