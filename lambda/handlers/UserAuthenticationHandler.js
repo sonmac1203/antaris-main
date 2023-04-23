@@ -37,17 +37,21 @@ const UserAuthenticationHandler = {
             } = response.data;
             
             if (surveys.length === 0) {
+                const { verbalMainEmpty, verbalSubEmpty, visualMainEmpty, visualSubEmpty } = authenticationStatements;
                 if (
                     getSupportedInterfaces(requestEnvelope)[
                         'Alexa.Presentation.APL'
                     ]
                 ) {
                     const aplDirective = utils.getBasicAnnouncementAplDirective(
-                        "You have no surveys assigned.",
-                        'Say "Exit" to stop.'
+                        visualMainEmpty,
+                        visualSubEmpty
                     );
                     responseBuilder.addDirective(aplDirective);
                 }
+                
+                const verbalOutput = `${verbalMainEmpty} ${verbalSubEmpty}`;
+                return responseBuilder.speak(verbalOutput).getResponse();
                 
             }
             else {
