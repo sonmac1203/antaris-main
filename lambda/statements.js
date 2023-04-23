@@ -37,7 +37,7 @@ const chooseSurveyStatements = {
     visualMainFail: "I can't find any survey with that name.",
     visualSubFail: 'What is the survey name again?',
     visualMainEmpty: 'You have no surveys assigned.',
-    visualSubEmpty: 'Say "exit" to  stop.'
+    visualSubEmpty: 'Say "exit" to stop.'
 };
 
 const beginSurveyStatements = {
