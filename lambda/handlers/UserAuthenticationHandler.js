@@ -35,6 +35,7 @@ const UserAuthenticationHandler = {
                 project_id: projectId,
                 participant_identifier,
             } = response.data;
+            const participantName = `${demographics.first_name}`;
             
             if (surveys.length === 0) {
                 const { verbalMainEmpty, verbalSubEmpty, visualMainEmpty, visualSubEmpty } = authenticationStatements;
@@ -44,7 +45,7 @@ const UserAuthenticationHandler = {
                     ]
                 ) {
                     const aplDirective = utils.getBasicAnnouncementAplDirective(
-                        visualMainEmpty,
+                        visualMainEmpty(participantName),
                         visualSubEmpty
                     );
                     responseBuilder.addDirective(aplDirective);
@@ -54,7 +55,6 @@ const UserAuthenticationHandler = {
                 return responseBuilder.speak(verbalOutput).getResponse();
             }
             else {
-                const participantName = `${demographics.first_name}`;
     
                 // trigger session storage
                 const sessionAttributes = attributesManager.getSessionAttributes();
