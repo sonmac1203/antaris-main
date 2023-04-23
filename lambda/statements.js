@@ -44,6 +44,8 @@ const beginSurveyStatements = {
     verbalMain: (surveyName, numberOfQuestions) =>
         `Welcome to ${surveyName}. You have ${numberOfQuestions} questions in this survey.`,
     verbalSub: 'Please now say, read all questions to start.',
+    verbalMainStarted: (surveyName, numberOfQuestions) =>
+        `Welcome to ${surveyName}. You have ${numberOfQuestions} unanswered questions in this survey.`,
     visualMain: (surveyName, numberOfQuestions) =>
         `Welcome to ${surveyName}. There are ${numberOfQuestions} questions in this survey.`,
     visualSub: 'Say "Read all questions" to start.',
