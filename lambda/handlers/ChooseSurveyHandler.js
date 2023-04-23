@@ -48,7 +48,7 @@ const ChooseSurveyHandler = {
             }
 
             const verbalOutput = `${verbalMain(slotValue)} ${verbalSub}`;
-            return responseBuilder.speak(verbalOutput).getResponse();
+            return responseBuilder.speak(verbalOutput).reprompt(verbalSub).getResponse();
         } else {
             const {
                 verbalMainFail,
