@@ -50,9 +50,7 @@ const UserAuthenticationHandler = {
                     );
                     responseBuilder.addDirective(aplDirective);
                 }
-                
-                const verbalOutput = `${verbalMainEmpty(participantName)}`;
-                return responseBuilder.speak(verbalOutput).getResponse();
+                return responseBuilder.speak(verbalMainEmpty(participantName)).getResponse();
             }
             else {
     
