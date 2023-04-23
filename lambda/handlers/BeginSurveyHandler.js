@@ -39,8 +39,6 @@ const BeginSurveyHandler = {
 
         if (getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL']) {
             const actualNumberOfQuestions = surveyHasStarted ? numberOfQuestions - firstUnansweredQuestionIndex : numberOfQuestions;
-            
-            
             const aplDirective = utils.getBasicAnnouncementAplDirective(
                 surveyHasStarted ? visualMainStarted(surveyName, actualNumberOfQuestions) : visualMain(surveyName, actualNumberOfQuestions),
                 visualSub
