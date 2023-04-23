@@ -51,7 +51,7 @@ const UserAuthenticationHandler = {
                     responseBuilder.addDirective(aplDirective);
                 }
                 
-                const verbalOutput = `${verbalMainEmpty} ${verbalSubEmpty}`;
+                const verbalOutput = `${verbalMainEmpty(participantName)} ${verbalSubEmpty}`;
                 return responseBuilder.speak(verbalOutput).getResponse();
             }
             else {
