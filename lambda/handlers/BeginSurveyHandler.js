@@ -34,11 +34,11 @@ const BeginSurveyHandler = {
         attributesManager.setSessionAttributes(sessionAttributes);
         
 
+        const actualNumberOfQuestions = surveyHasStarted ? numberOfQuestions - firstUnansweredQuestionIndex : numberOfQuestions;
         const { verbalMain, verbalSub, visualMain, visualSub, verbalMainStarted, visualMainStarted } =
             beginSurveyStatements;
 
         if (getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL']) {
-            const actualNumberOfQuestions = surveyHasStarted ? numberOfQuestions - firstUnansweredQuestionIndex : numberOfQuestions;
             const aplDirective = utils.getBasicAnnouncementAplDirective(
                 surveyHasStarted ? visualMainStarted(surveyName, actualNumberOfQuestions) : visualMain(surveyName, actualNumberOfQuestions),
                 visualSub
@@ -46,9 +46,9 @@ const BeginSurveyHandler = {
             responseBuilder.addDirective(aplDirective);
         }
 
-        const verbalOutput = `${verbalMain(
+        const verbalOutput = `${surveyHasStarted ? verbalMainStarted(surveyName, actualNumberOfQuestions) : verbalMain(
             surveyName,
-            numberOfQuestions
+            actualNumberOfQuestions
         )} ${verbalSub}`;
         return responseBuilder
             .speak(verbalOutput)
