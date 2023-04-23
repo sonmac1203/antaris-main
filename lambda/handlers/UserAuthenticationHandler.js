@@ -52,7 +52,6 @@ const UserAuthenticationHandler = {
                 
                 const verbalOutput = `${verbalMainEmpty} ${verbalSubEmpty}`;
                 return responseBuilder.speak(verbalOutput).getResponse();
-                
             }
             else {
                 const participantName = `${demographics.first_name}`;
