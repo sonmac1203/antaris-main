@@ -27,17 +27,22 @@ const BeginSurveyHandler = {
         const firstUnansweredQuestionIndex = questions.findIndex(
           (question) => !question.answered
         );
+        const surveyHasStarted = firstUnansweredQuestionIndex !== -1
 
         sessionAttributes.numberOfQuestions = numberOfQuestions;
-        sessionAttributes.questionCounter = firstUnansweredQuestionIndex !== -1 ? firstUnansweredQuestionIndex : 0;
+        sessionAttributes.questionCounter = surveyHasStarted ? firstUnansweredQuestionIndex : 0;
         attributesManager.setSessionAttributes(sessionAttributes);
+        
 
         const { verbalMain, verbalSub, visualMain, visualSub, verbalMainStarted, visualMainStarted } =
             beginSurveyStatements;
 
         if (getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL']) {
+            const actualNumberOfQuestions = surveyHasStarted ? numberOfQuestions - firstUnansweredQuestionIndex : numberOfQuestions;
+            
+            
             const aplDirective = utils.getBasicAnnouncementAplDirective(
-                visualMain(surveyName, numberOfQuestions),
+                surveyHasStarted ? visualMainStarted(surveyName, actualNumberOfQuestions) : visualMain(surveyName, actualNumberOfQuestions),
                 visualSub
             );
             responseBuilder.addDirective(aplDirective);
