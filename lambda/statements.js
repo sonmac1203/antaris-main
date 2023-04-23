@@ -25,6 +25,8 @@ const authenticationStatements = {
     verbalSubEmpty: 'Say, exit to stop',
     visualMainFail: 'No articipant is found with this id.',
     visualSubFail: 'Try telling me your participant id again.',
+    visualMainEmpty: 'You have no surveys assigned.',
+    visualSubEmpty: 'Say "exit" to stop.'
 };
 
 const chooseSurveyStatements = {
@@ -36,8 +38,6 @@ const chooseSurveyStatements = {
     verbalSubFail: 'What is the survey name again?',
     visualMainFail: "I can't find any survey with that name.",
     visualSubFail: 'What is the survey name again?',
-    visualMainEmpty: 'You have no surveys assigned.',
-    visualSubEmpty: 'Say "exit" to stop.'
 };
 
 const beginSurveyStatements = {
