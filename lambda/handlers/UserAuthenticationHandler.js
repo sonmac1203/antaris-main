@@ -67,7 +67,7 @@ const UserAuthenticationHandler = {
                 surveyList
             )} ${verbalSub}`;
 
-            return responseBuilder.speak(verbalOutput).getResponse();
+            return responseBuilder.speak(verbalOutput).reprompt(verbalSub).getResponse();
         } else {
             if (
                 getSupportedInterfaces(requestEnvelope)[
