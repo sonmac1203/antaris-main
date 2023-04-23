@@ -20,6 +20,9 @@ const authenticationStatements = {
     verbalSub: 'Say, do survey selection to continue.',
     verbalMainFail: 'Sorry, no participant is found with this i d.',
     verbalSubFail: 'What is your secondary i d again?',
+    verbalMainEmpty: (participantName) =>
+        `Hi ${participantName}. You don't have any surveys assigned.`,
+    verbalSubEmpty: 'Say, exit to stop',
     visualMainFail: 'No articipant is found with this id.',
     visualSubFail: 'Try telling me your participant id again.',
 };
