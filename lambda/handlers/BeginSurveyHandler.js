@@ -32,7 +32,7 @@ const BeginSurveyHandler = {
         sessionAttributes.questionCounter = firstUnansweredQuestionIndex !== -1 ? firstUnansweredQuestionIndex : 0;
         attributesManager.setSessionAttributes(sessionAttributes);
 
-        const { verbalMain, verbalSub, visualMain, visualSub } =
+        const { verbalMain, verbalSub, visualMain, visualSub, verbalMainStarted, visualMainStarted } =
             beginSurveyStatements;
 
         if (getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL']) {
