@@ -38,7 +38,7 @@ const ChooseSurveyFromAplHandler = {
         }
 
         const verbalOutput = `${verbalMain(chosenSurvey.name)} ${verbalSub}`;
-        return responseBuilder.speak(verbalOutput).getResponse();
+        return responseBuilder.speak(verbalOutput).reprompt(verbalSub).getResponse();
     },
 };
 
