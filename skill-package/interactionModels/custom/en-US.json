@@ -46,12 +46,13 @@
           "name": "UserAuthenticationIntent",
           "slots": [
             {
-              "name": "participantID",
+              "name": "secondaryId",
               "type": "AMAZON.SearchQuery",
               "samples": [
-                "{participantID}",
-                "Participant id is {participantID}",
-                "My participant id is {participantID}"
+                "The secondary id is {secondaryId}",
+                "{secondaryId}",
+                "Secondary id is {secondaryId}",
+                "My secondary id is {secondaryId}"
               ]
             }
           ],
@@ -65,15 +66,17 @@
             "authenticate me for the health study",
             "identify me for the health survey",
             "do the health survey identification",
-            "Start the survey for participant {participantID}",
-            "My id is {participantID}",
-            "My participant id is {participantID}"
+            "Start the survey for participant {secondaryId}",
+            "My id is {secondaryId}",
+            "My participant id is {secondaryId}"
           ]
         },
         {
           "name": "BeginSurveyIntent",
           "slots": [],
           "samples": [
+            "begin health survey",
+            "begin survey",
             "activate the health study",
             "start the health assessment survey",
             "play the health survey",
@@ -90,23 +93,23 @@
           "name": "ChooseStudyIntent",
           "slots": [
             {
-              "name": "studyID",
+              "name": "surveyName",
               "type": "AMAZON.SearchQuery",
               "samples": [
-                "Do study {studyID}",
-                "Please start with study {studyID}",
-                "I would choose study {studyID}",
-                "{studyID}",
-                "I choose study {studyID}"
+                "I choose survey {surveyName}",
+                "Please start with survey {surveyName}",
+                "Do survey {surveyName}",
+                "I would choose survey {surveyName}",
+                "{surveyName}"
               ]
             }
           ],
           "samples": [
-            "Ask me to provide the study id",
-            "Ask me which study I want to choose",
-            "Study selection",
-            "Ask me the study I want to choose",
-            "Do the study selection"
+            "Choose survey",
+            "Ask me the survey I want to choose",
+            "Survey selection",
+            "Ask me to provide the survey name.",
+            "Do survey selection"
           ]
         },
         {
@@ -152,7 +155,7 @@
           "prompts": {},
           "slots": [
             {
-              "name": "participantID",
+              "name": "secondaryId",
               "type": "AMAZON.SearchQuery",
               "elicitationRequired": true,
               "confirmationRequired": false,
@@ -160,7 +163,8 @@
                 "elicitation": "Elicit.Slot.764004223273.195629036659"
               }
             }
-          ]
+          ],
+          "delegationStrategy": "ALWAYS"
         },
         {
           "name": "ChooseStudyIntent",
@@ -168,7 +172,7 @@
           "prompts": {},
           "slots": [
             {
-              "name": "studyID",
+              "name": "surveyName",
               "type": "AMAZON.SearchQuery",
               "elicitationRequired": true,
               "confirmationRequired": false,
@@ -201,19 +205,19 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "Can you tell me your participant ID?"
+            "value": "Can you tell me your secondary id?"
           },
           {
             "type": "PlainText",
-            "value": "Participant ID?"
+            "value": "What is your secondary id ?"
           },
           {
             "type": "PlainText",
-            "value": "Tell me your Antaris ID"
+            "value": "Secondary id ?"
           },
           {
             "type": "PlainText",
-            "value": "What is your participant ID?"
+            "value": "Tell me your secondary id."
           }
         ]
       },
@@ -222,31 +226,27 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "What study ID do you want to choose?"
+            "value": "Tell me the name of the survey you choose"
           },
           {
             "type": "PlainText",
-            "value": "Which study do you choose?"
+            "value": "What is the survey name?"
           },
           {
             "type": "PlainText",
-            "value": "Tell me what study you choose"
+            "value": "Which survey do you want to choose?"
           },
           {
             "type": "PlainText",
-            "value": "Which study do you want to choose?"
+            "value": "Tell me which survey you choose"
           },
           {
             "type": "PlainText",
-            "value": "Let me know the study ID"
+            "value": "Which survey do you choose?"
           },
           {
             "type": "PlainText",
-            "value": "Tell me the study ID"
-          },
-          {
-            "type": "PlainText",
-            "value": "What is the study identification number?"
+            "value": "What survey do you choose?"
           }
         ]
       },
@@ -265,5 +265,5 @@
       }
     ]
   },
-  "version": "37"
+  "version": "47"
 }
