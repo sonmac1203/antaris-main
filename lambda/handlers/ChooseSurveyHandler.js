@@ -4,7 +4,7 @@ const {
     getSupportedInterfaces,
 } = require('ask-sdk-core');
 const aplUtils = require('../utils/apl.utils');
-const { chooseSurveyStatements } = require('../statements');
+const { chooseSurveyStatements } = require('../utils/statements.utils');
 
 const ChooseSurveyHandler = {
     canHandle(handlerInput) {

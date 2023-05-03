@@ -3,10 +3,9 @@ const {
     getIntentName,
     getSupportedInterfaces,
 } = require('ask-sdk-core');
-const logic = require('../logic');
 const aplUtils = require('../utils/apl.utils');
 const skillUtils = require('../utils/skill.utils');
-const { authenticationStatements } = require('../statements');
+const { authenticationStatements } = require('../utils/statements.utils');
 const { fetchParticipantInfo } = require('../services/fetch-participant-info');
 
 const UserAuthenticationHandler = {

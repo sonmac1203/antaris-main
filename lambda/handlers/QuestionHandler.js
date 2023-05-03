@@ -3,7 +3,6 @@ const {
     getIntentName,
     getSupportedInterfaces,
 } = require('ask-sdk-core');
-const utils = require('../util');
 const aplUtils = require('../utils/apl.utils');
 const skillUtils = require('../utils/skill.utils');
 

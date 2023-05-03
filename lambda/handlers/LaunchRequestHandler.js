@@ -1,5 +1,5 @@
 const aplUtils = require('../utils/apl.utils');
-const { welcomeStatements } = require('../statements');
+const { welcomeStatements } = require('../utils/statements.utils');
 const { getRequestType, getSupportedInterfaces } = require('ask-sdk-core');
 
 const LaunchRequestHandler = {

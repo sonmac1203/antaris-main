@@ -5,7 +5,7 @@ const {
 } = require('ask-sdk-core');
 const aplUtils = require('../utils/apl.utils');
 const skillUtils = require('../utils/skill.utils');
-const { answerStatements } = require('../statements');
+const { answerStatements } = require('../utils/statements.utils');
 const { uploadResponse } = require('../services/upload-response');
 
 const AnswerHandler = {
