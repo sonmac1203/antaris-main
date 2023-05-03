@@ -1,6 +1,4 @@
-const { getVerbalFormat } = require('./util');
-
-const teamName = getVerbalFormat('23062');
+const teamName = '2 3 0 6 2';
 
 const plural = (count) => (count > 1 ? 's' : '');
 const pluralToBe = (count) => (count > 1 ? 'are' : 'is');
@@ -26,7 +24,7 @@ const authenticationStatements = {
     visualMainFail: 'No articipant is found with this id.',
     visualSubFail: 'Try telling me your participant id again.',
     visualMainEmpty: 'You have no surveys assigned.',
-    visualSubEmpty: 'Say "exit" to stop.'
+    visualSubEmpty: 'Say "exit" to stop.',
 };
 
 const chooseSurveyStatements = {
