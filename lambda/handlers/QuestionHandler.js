@@ -5,6 +5,7 @@ const {
 } = require('ask-sdk-core');
 const utils = require('../util');
 const aplUtils = require('../utils/apl.utils');
+const skillUtils = require('../utils/skill.utils');
 
 const QuestionHandler = {
     canHandle(handlerInput) {
@@ -22,7 +23,7 @@ const QuestionHandler = {
         const { name: surveyName } = sessionAttributes.chosenSurvey;
 
         const { question: questionText, index } =
-            utils.askQuestion(attributesManager);
+            skillUtils.askQuestion(attributesManager);
 
         if (getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL']) {
             const questionObj = {

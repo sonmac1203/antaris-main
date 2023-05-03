@@ -3,8 +3,8 @@ const {
     getIntentName,
     getSupportedInterfaces,
 } = require('ask-sdk-core');
-const utils = require('../util');
 const aplUtils = require('../utils/apl.utils');
+const skillUtils = require('../utils/skill.utils');
 const logic = require('../logic');
 const { answerStatements } = require('../statements');
 
@@ -71,7 +71,7 @@ const AnswerHandler = {
             return responseBuilder.speak(verbalOutput).getResponse();
         } else {
             const { question: questionText, index } =
-                utils.askQuestion(attributesManager);
+                skillUtils.askQuestion(attributesManager);
             if (
                 getSupportedInterfaces(requestEnvelope)[
                     'Alexa.Presentation.APL'

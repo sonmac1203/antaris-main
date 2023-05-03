@@ -5,6 +5,7 @@ const {
 } = require('ask-sdk-core');
 const logic = require('../logic');
 const aplUtils = require('../utils/apl.utils');
+const skillUtils = require('../utils/skill.utils');
 const { authenticationStatements } = require('../statements');
 
 const UserAuthenticationHandler = {
@@ -80,7 +81,7 @@ const UserAuthenticationHandler = {
                     );
                     responseBuilder.addDirective(aplDirective);
                 }
-                const surveyList = logic.getVerbalSurveyList(surveys);
+                const surveyList = skillUtils.getVerbalSurveyList(surveys);
 
                 const { verbalMain, verbalSub } = authenticationStatements;
 
