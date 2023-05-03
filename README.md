@@ -9,6 +9,8 @@ _Table of contents:_
   - [Interation models](#interation-models)
   - [Multimodal Responses](#multimodal-responses)
 - [Intent handlers](#intent-handlers)
+- [External communications](#external-communications)
+- [Version control](#version-control)
 
 
 ## Software concept and explanation
