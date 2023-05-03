@@ -5,8 +5,8 @@ const {
 } = require('ask-sdk-core');
 const aplUtils = require('../utils/apl.utils');
 const skillUtils = require('../utils/skill.utils');
-const logic = require('../logic');
 const { answerStatements } = require('../statements');
+const { uploadResponse } = require('../services/upload-response');
 
 const AnswerHandler = {
     canHandle(handlerInput) {
@@ -44,12 +44,7 @@ const AnswerHandler = {
 
         const question = surveyContent.questions[currentIndex - 1];
 
-        await logic.uploadResponse(
-            question,
-            surveyId,
-            participantId,
-            projectId
-        );
+        await uploadResponse(question, surveyId, participantId, projectId);
 
         const { verbalMain, verbalSub, visualMain, visualSub } =
             answerStatements;

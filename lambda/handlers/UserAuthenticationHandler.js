@@ -7,6 +7,7 @@ const logic = require('../logic');
 const aplUtils = require('../utils/apl.utils');
 const skillUtils = require('../utils/skill.utils');
 const { authenticationStatements } = require('../statements');
+const { fetchParticipantInfo } = require('../services/fetch-participant-info');
 
 const UserAuthenticationHandler = {
     canHandle(handlerInput) {
@@ -26,7 +27,7 @@ const UserAuthenticationHandler = {
         const { name: slotName, value: slotValue } = intent.slots.secondaryId;
 
         // fetch participant data from database
-        const response = await logic.fetchParticipantInfo(slotValue, userId);
+        const response = await fetchParticipantInfo(slotValue, userId);
 
         // determine response logics
         if (response.success) {
