@@ -3,7 +3,7 @@ const {
     getIntentName,
     getSupportedInterfaces,
 } = require('ask-sdk-core');
-const utils = require('../util');
+const aplUtils = require('../utils/apl.utils');
 const { chooseSurveyStatements } = require('../statements');
 
 const ChooseSurveyHandler = {
@@ -40,7 +40,7 @@ const ChooseSurveyHandler = {
                     'Alexa.Presentation.APL'
                 ]
             ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                const aplDirective = aplUtils.getBasicAnnouncementAplDirective(
                     visualMain(slotValue),
                     visualSub
                 );
@@ -48,7 +48,10 @@ const ChooseSurveyHandler = {
             }
 
             const verbalOutput = `${verbalMain(slotValue)} ${verbalSub}`;
-            return responseBuilder.speak(verbalOutput).reprompt(verbalSub).getResponse();
+            return responseBuilder
+                .speak(verbalOutput)
+                .reprompt(verbalSub)
+                .getResponse();
         } else {
             const {
                 verbalMainFail,
@@ -62,7 +65,7 @@ const ChooseSurveyHandler = {
                     'Alexa.Presentation.APL'
                 ]
             ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                const aplDirective = aplUtils.getBasicAnnouncementAplDirective(
                     visualMainFail,
                     visualSubFail
                 );

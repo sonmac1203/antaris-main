@@ -3,8 +3,8 @@ const {
     getIntentName,
     getSupportedInterfaces,
 } = require('ask-sdk-core');
-const utils = require('../util');
 const logic = require('../logic');
+const aplUtils = require('../utils/apl.utils');
 const { authenticationStatements } = require('../statements');
 
 const UserAuthenticationHandler = {
@@ -36,57 +36,65 @@ const UserAuthenticationHandler = {
                 participant_identifier,
             } = response.data;
             const participantName = `${demographics.first_name}`;
-            
+
             if (surveys.length === 0) {
-                const { verbalMainEmpty, verbalSubEmpty, visualMainEmpty, visualSubEmpty } = authenticationStatements;
+                const {
+                    verbalMainEmpty,
+                    verbalSubEmpty,
+                    visualMainEmpty,
+                    visualSubEmpty,
+                } = authenticationStatements;
                 if (
                     getSupportedInterfaces(requestEnvelope)[
                         'Alexa.Presentation.APL'
                     ]
                 ) {
-                    const aplDirective = utils.getBasicAnnouncementAplDirective(
-                        visualMainEmpty(participantName),
-                        visualSubEmpty
-                    );
+                    const aplDirective =
+                        aplUtils.getBasicAnnouncementAplDirective(
+                            visualMainEmpty(participantName),
+                            visualSubEmpty
+                        );
                     responseBuilder.addDirective(aplDirective);
                 }
-                return responseBuilder.speak(verbalMainEmpty(participantName)).getResponse();
-            }
-            else {
-    
+                return responseBuilder
+                    .speak(verbalMainEmpty(participantName))
+                    .getResponse();
+            } else {
                 // trigger session storage
-                const sessionAttributes = attributesManager.getSessionAttributes();
+                const sessionAttributes =
+                    attributesManager.getSessionAttributes();
                 sessionAttributes.surveys = surveys;
                 sessionAttributes.secondaryId = slotValue;
                 sessionAttributes.projectId = projectId;
                 sessionAttributes.participantId = participant_identifier;
                 attributesManager.setSessionAttributes(sessionAttributes);
-    
+
                 if (
                     getSupportedInterfaces(requestEnvelope)[
                         'Alexa.Presentation.APL'
                     ]
                 ) {
-                    const aplDirective = utils.getSurveyListAplDirective(
+                    const aplDirective = aplUtils.getSurveyListAplDirective(
                         surveys,
                         participantName
                     );
                     responseBuilder.addDirective(aplDirective);
                 }
                 const surveyList = logic.getVerbalSurveyList(surveys);
-    
+
                 const { verbalMain, verbalSub } = authenticationStatements;
-    
+
                 const verbalOutput = `${verbalMain(
                     participantName,
                     surveys.length,
                     surveyList
                 )} ${verbalSub}`;
-    
-                return responseBuilder.speak(verbalOutput).reprompt(verbalSub).getResponse();
-                
-            }
 
+                return responseBuilder
+                    .speak(verbalOutput)
+                    .reprompt(verbalSub)
+                    .getResponse();
+            }
         } else {
             if (
                 getSupportedInterfaces(requestEnvelope)[
@@ -96,7 +104,7 @@ const UserAuthenticationHandler = {
                 const { visualMainFail, visualSubFail } =
                     authenticationStatements;
 
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                const aplDirective = aplUtils.getBasicAnnouncementAplDirective(
                     visualMainFail,
                     visualSubFail
                 );

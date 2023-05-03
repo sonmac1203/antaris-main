@@ -4,6 +4,7 @@ const {
     getSupportedInterfaces,
 } = require('ask-sdk-core');
 const utils = require('../util');
+const aplUtils = require('../utils/apl.utils');
 const logic = require('../logic');
 const { answerStatements } = require('../statements');
 
@@ -59,7 +60,7 @@ const AnswerHandler = {
                     'Alexa.Presentation.APL'
                 ]
             ) {
-                const aplDirective = utils.getBasicAnnouncementAplDirective(
+                const aplDirective = aplUtils.getBasicAnnouncementAplDirective(
                     visualMain,
                     visualSub
                 );
@@ -80,7 +81,7 @@ const AnswerHandler = {
                     questionNumber: index + 1,
                     questionText,
                 };
-                const aplDirective = utils.getBasicQuestionAplDirective(
+                const aplDirective = aplUtils.getBasicQuestionAplDirective(
                     questionObj,
                     surveyName
                 );

@@ -1,6 +1,6 @@
-const { getRequestType, getSupportedInterfaces } = require('ask-sdk-core');
-const utils = require('../util');
+const aplUtils = require('../utils/apl.utils');
 const { chooseSurveyStatements } = require('../statements');
+const { getRequestType, getSupportedInterfaces } = require('ask-sdk-core');
 
 const ChooseSurveyFromAplHandler = {
     canHandle(handlerInput) {
@@ -30,7 +30,7 @@ const ChooseSurveyFromAplHandler = {
             chooseSurveyStatements;
 
         if (getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL']) {
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
+            const aplDirective = aplUtils.getBasicAnnouncementAplDirective(
                 visualMain(chosenSurvey.name),
                 visualSub
             );
@@ -38,7 +38,10 @@ const ChooseSurveyFromAplHandler = {
         }
 
         const verbalOutput = `${verbalMain(chosenSurvey.name)} ${verbalSub}`;
-        return responseBuilder.speak(verbalOutput).reprompt(verbalSub).getResponse();
+        return responseBuilder
+            .speak(verbalOutput)
+            .reprompt(verbalSub)
+            .getResponse();
     },
 };
 

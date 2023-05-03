@@ -3,7 +3,7 @@ const {
     getIntentName,
     getSupportedInterfaces,
 } = require('ask-sdk-core');
-const utils = require('../util');
+const aplUtils = require('../utils/apl.utils');
 const { beginSurveyStatements } = require('../statements');
 
 const BeginSurveyHandler = {
@@ -23,33 +23,45 @@ const BeginSurveyHandler = {
 
         const questions = content.questions;
         const numberOfQuestions = questions.length;
-        
+
         const firstUnansweredQuestionIndex = questions.findIndex(
-          (question) => !question.answered
+            (question) => !question.answered
         );
-        const surveyHasStarted = firstUnansweredQuestionIndex !== -1
+        const surveyHasStarted = firstUnansweredQuestionIndex !== -1;
 
         sessionAttributes.numberOfQuestions = numberOfQuestions;
-        sessionAttributes.questionCounter = surveyHasStarted ? firstUnansweredQuestionIndex : 0;
+        sessionAttributes.questionCounter = surveyHasStarted
+            ? firstUnansweredQuestionIndex
+            : 0;
         attributesManager.setSessionAttributes(sessionAttributes);
-        
 
-        const actualNumberOfQuestions = surveyHasStarted ? numberOfQuestions - firstUnansweredQuestionIndex : numberOfQuestions;
-        const { verbalMain, verbalSub, visualMain, visualSub, verbalMainStarted, visualMainStarted } =
-            beginSurveyStatements;
+        const actualNumberOfQuestions = surveyHasStarted
+            ? numberOfQuestions - firstUnansweredQuestionIndex
+            : numberOfQuestions;
+        const {
+            verbalMain,
+            verbalSub,
+            visualMain,
+            visualSub,
+            verbalMainStarted,
+            visualMainStarted,
+        } = beginSurveyStatements;
 
         if (getSupportedInterfaces(requestEnvelope)['Alexa.Presentation.APL']) {
-            const aplDirective = utils.getBasicAnnouncementAplDirective(
-                surveyHasStarted ? visualMainStarted(surveyName, actualNumberOfQuestions) : visualMain(surveyName, actualNumberOfQuestions),
+            const aplDirective = aplUtils.getBasicAnnouncementAplDirective(
+                surveyHasStarted
+                    ? visualMainStarted(surveyName, actualNumberOfQuestions)
+                    : visualMain(surveyName, actualNumberOfQuestions),
                 visualSub
             );
             responseBuilder.addDirective(aplDirective);
         }
 
-        const verbalOutput = `${surveyHasStarted ? verbalMainStarted(surveyName, actualNumberOfQuestions) : verbalMain(
-            surveyName,
-            actualNumberOfQuestions
-        )} ${verbalSub}`;
+        const verbalOutput = `${
+            surveyHasStarted
+                ? verbalMainStarted(surveyName, actualNumberOfQuestions)
+                : verbalMain(surveyName, actualNumberOfQuestions)
+        } ${verbalSub}`;
         return responseBuilder
             .speak(verbalOutput)
             .reprompt('You can ask me to start reading the questions.')

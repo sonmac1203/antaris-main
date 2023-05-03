@@ -4,6 +4,7 @@ const {
     getSupportedInterfaces,
 } = require('ask-sdk-core');
 const utils = require('../util');
+const aplUtils = require('../utils/apl.utils');
 
 const QuestionHandler = {
     canHandle(handlerInput) {
@@ -28,7 +29,7 @@ const QuestionHandler = {
                 questionNumber: index + 1,
                 questionText,
             };
-            const aplDirective = utils.getBasicQuestionAplDirective(
+            const aplDirective = aplUtils.getBasicQuestionAplDirective(
                 questionObj,
                 surveyName
             );
