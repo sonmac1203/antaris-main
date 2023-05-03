@@ -48,3 +48,11 @@ Each intent described in [Interation models](#interation-models) above requires 
 For instance, at `@/lambda/handlers/UserAuthenticationHandler.js` we have the handler function for the UserAuthenticationIntent. 
 
 All handler functions have to be imported into the index file at `@/lambda/index.js`, which serves as the entry point of all handlers, to be added to the `SkillBuilders` module from the `ask-sdk-core` package.
+
+## External communications
+
+This skill communicates with Antaris-web server in order to fetch participant data as well as to upload the response to MongoDB Atlas connected to Antaris-web server. At the moment, the functions to make the HTTP requests to Antaris-web's RESTful APIs are located at `@/lambda/services` and the configurations are located at `@/lambda/config/api.config.js`.
+
+## Version control
+
+During development, this skill is setup with Git and is configured to fetch from the Amazon Developer Console and to push to both the Amazon Developer Console and a Github repository (antaris-main). Please check out [this video](https://youtu.be/88AsF_xJsj0) to learn more about this setup.

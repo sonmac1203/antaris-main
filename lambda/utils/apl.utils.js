@@ -145,16 +145,6 @@ module.exports = {
             dataSources,
             'documentToken'
         );
-
-        // const aplDirective = {
-        //     type: 'Alexa.Presentation.APL.RenderDocument',
-        //     token: 'documentToken',
-        //     document: {
-        //         type: 'Link',
-        //         src: 'doc://alexa/apl/documents/SurveySelection',
-        //     },
-        //     datasources: dataSources,
-        // };
         return payload;
     },
 };
